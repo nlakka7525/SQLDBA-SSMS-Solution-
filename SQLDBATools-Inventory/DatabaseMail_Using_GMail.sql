@@ -55,6 +55,12 @@ EXECUTE msdb.dbo.sysmail_add_profileaccount_sp
     @account_name = 'SQLGMailAgent',
     @sequence_number = 1 ;
 END --IF EXISTS associate accounts to profiles
+
+-- Set the mail profile to be default global
+EXECUTE msdb.dbo.sysmail_add_principalprofile_sp  
+			@profile_name = 'gmail',  
+			@principal_name = 'public',
+			@is_default = 1 ;
 --#################################################################################################
 -- Drop Settings For admin
 
