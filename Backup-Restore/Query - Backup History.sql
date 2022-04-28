@@ -27,4 +27,5 @@ SELECT TOP 100 CONVERT(CHAR(100), SERVERPROPERTY('Servername')) AS SERVER
 FROM msdb.dbo.backupmediafamily AS bmf
 INNER JOIN msdb.dbo.backupset AS bs ON bmf.media_set_id = bs.media_set_id
 --WHERE database_name = 'StagingTurkey'
+where bs.type in ('D')
 ORDER BY bs.backup_finish_date DESC

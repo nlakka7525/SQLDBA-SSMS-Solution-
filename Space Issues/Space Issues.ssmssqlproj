@@ -2,7 +2,20 @@
 <SqlWorkbenchSqlProject xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Name="Space Issues">
   <Items>
     <LogicalFolder Name="Connections" Type="2" Sorted="true">
-      <Items />
+      <Items>
+        <ConnectionNode Name="196.1.115.182:E84947">
+          <Created>2022-04-28T16:36:18.5048472+05:30</Created>
+          <Type>SQL</Type>
+          <Server>196.1.115.182</Server>
+          <UserName>E84947</UserName>
+          <Authentication>SQL</Authentication>
+          <InitialDB>master</InitialDB>
+          <LoginTimeout>30</LoginTimeout>
+          <ExecutionTimeout>0</ExecutionTimeout>
+          <ConnectionProtocol>NotSpecified</ConnectionProtocol>
+          <ApplicationName>Microsoft SQL Server Management Studio - Query</ApplicationName>
+        </ConnectionNode>
+      </Items>
     </LogicalFolder>
     <LogicalFolder Name="Queries" Type="0" Sorted="true">
       <Items>
@@ -19,9 +32,9 @@
           <FullPath>Files on Disk Vs Database Files.sql</FullPath>
         </FileNode>
         <FileNode Name="Get-DbSize.sql">
-          <AssociatedConnectionMoniker />
-          <AssociatedConnSrvName />
-          <AssociatedConnUserName />
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:196.1.115.182:False:E84947</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>196.1.115.182</AssociatedConnSrvName>
+          <AssociatedConnUserName>E84947</AssociatedConnUserName>
           <FullPath>Get-DbSize.sql</FullPath>
         </FileNode>
         <FileNode Name="Get-LogFile-Space-Usage.sql">
@@ -73,9 +86,9 @@
           <FullPath>Purge-Records-In-Chunks.sql</FullPath>
         </FileNode>
         <FileNode Name="QRY-Get-All-Db-Files-Details.sql">
-          <AssociatedConnectionMoniker />
-          <AssociatedConnSrvName />
-          <AssociatedConnUserName />
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:196.1.115.182:False:E84947</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>196.1.115.182</AssociatedConnSrvName>
+          <AssociatedConnUserName>E84947</AssociatedConnUserName>
           <FullPath>QRY-Get-All-Db-Files-Details.sql</FullPath>
         </FileNode>
         <FileNode Name="Shrink Log Files.sql">
@@ -85,9 +98,9 @@
           <FullPath>Shrink Log Files.sql</FullPath>
         </FileNode>
         <FileNode Name="srv-space-usage.sql">
-          <AssociatedConnectionMoniker />
-          <AssociatedConnSrvName />
-          <AssociatedConnUserName />
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:196.1.115.182:False:E84947</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>196.1.115.182</AssociatedConnSrvName>
+          <AssociatedConnUserName>E84947</AssociatedConnUserName>
           <FullPath>srv-space-usage.sql</FullPath>
         </FileNode>
       </Items>

@@ -1,10 +1,25 @@
 set nocount on;
 
+set quoted_identifier off;
 declare @dbname varchar(200);
-declare @sql varchar(max);
+declare @sql nvarchar(max);
 if object_id('tempdb..#Dbs') is not null
 	drop table #Dbs;
-create table #Dbs (DatabaseName varchar(200), LogicalName varchar(200), type_desc varchar(20), physical_name varchar(500), size_MB numeric(20,2), size_GB numeric(20,2));
+CREATE TABLE #Dbs
+(
+	[db_name] [nvarchar](128) NULL,
+	[type_desc] [nvarchar](60) NULL,
+	[file_group] [sysname] NULL,
+	[name] [sysname] NULL,
+	[physical_name] [nvarchar](500) NULL,
+	[size_GB] [numeric](23, 11) NULL,
+	[max_size] [int] NULL,
+	[growth] [int] NULL,
+	[SpaceUsed_gb] [numeric](38, 11) NULL,
+	[FreeSpace_GB] [numeric](38, 11) NULL,
+	[Used_Percentage] [decimal](20, 2) NULL,
+	[log_reuse_wait_desc] [nvarchar](255) NULL
+);
 
 declare cur_db cursor forward_only for
 	select name from sys.databases d where database_id > 4;
@@ -14,13 +29,16 @@ fetch next from cur_db into @dbname;
 while @@FETCH_STATUS = 0
 begin
 
-	set @sql = '
-use ['+@dbname+'];
---	Find used/free space in Database Files
-select DB_NAME() as DatabaseName, f.name as LogicalName, f.type_desc, f.physical_name, (f.size*8.0)/1024 as size_MB, (f.size*8.0)/1024/1024 as size_GB
-from sys.database_files f
-order by f.data_space_id;
-'
+	set @sql = "
+use ["+@dbname+"];
+select DB_NAME() AS [db_name], f.type_desc, fg.name as file_group, f.name, f.physical_name, (f.size*8.0)/1024/1024 as size_GB, f.max_size, f.growth, 
+	CAST(FILEPROPERTY(f.name, 'SpaceUsed') as BIGINT)/128.0/1024 AS SpaceUsed_gb
+		,(size/128.0 -CAST(FILEPROPERTY(f.name,'SpaceUsed') AS INT)/128.0)/1024 AS FreeSpace_GB
+		,cast((FILEPROPERTY(f.name,'SpaceUsed')*100.0)/size as decimal(20,2)) as Used_Percentage
+		,CASE WHEN f.type_desc = 'LOG' THEN (select d.log_reuse_wait_desc from sys.databases as d where d.name = DB_NAME()) ELSE NULL END as log_reuse_wait_desc
+from sys.database_files f left join sys.filegroups fg on fg.data_space_id = f.data_space_id
+order by FreeSpace_GB desc;
+"
 	insert #Dbs
 	execute (@sql)
 
@@ -29,5 +47,5 @@ end
 close cur_db;
 deallocate cur_db;
 
-select sysutcdatetime() as CollectionTime_UTC, '$ServerInstance' as ServerInstance, *
+select sysdatetime() as CollectionTime_UTC, SERVERPROPERTY('MachineName') as ServerInstance, *
 from #Dbs;
