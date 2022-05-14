@@ -15,7 +15,7 @@
           <ConnectionProtocol>NotSpecified</ConnectionProtocol>
           <ApplicationName>Microsoft SQL Server Management Studio - Query</ApplicationName>
         </ConnectionNode>
-        <ConnectionNode Name="localhost:21L-LTPABL-1187\Ajay">
+        <ConnectionNode Name="localhost:LAB\adwivedi">
           <Created>2022-03-21T09:43:18.4319273+05:30</Created>
           <Type>SQL</Type>
           <Server>localhost</Server>
@@ -63,7 +63,7 @@
           <ConnectionProtocol>NotSpecified</ConnectionProtocol>
           <ApplicationName>Microsoft SQL Server Management Studio - Query</ApplicationName>
         </ConnectionNode>
-        <ConnectionNode Name="sqlprod1:21L-LTPABL-1187\Ajay">
+        <ConnectionNode Name="sqlprod1:LAB\adwivedi">
           <Created>2021-12-07T09:03:31.9599777+05:30</Created>
           <Type>SQL</Type>
           <Server>sqlprod1</Server>
@@ -104,8 +104,8 @@
           <FullPath>Baselining-With-WhoIsActive-CPU.sql</FullPath>
         </FileNode>
         <FileNode Name="BenchMarking-Storage-Network.sql">
-          <AssociatedConnectionMoniker />
-          <AssociatedConnSrvName />
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:localhost:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>localhost</AssociatedConnSrvName>
           <AssociatedConnUserName />
           <FullPath>BenchMarking-Storage-Network.sql</FullPath>
         </FileNode>
@@ -242,8 +242,8 @@
           <FullPath>SCH-Job-[(dba) Collect Metrics - WhoIsActive].sql</FullPath>
         </FileNode>
         <FileNode Name="SCH-ResourcePool-CPU-Collection-Partitioned.sql">
-          <AssociatedConnectionMoniker />
-          <AssociatedConnSrvName />
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:localhost:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>localhost</AssociatedConnSrvName>
           <AssociatedConnUserName />
           <FullPath>SCH-ResourcePool-CPU-Collection-Partitioned.sql</FullPath>
         </FileNode>
