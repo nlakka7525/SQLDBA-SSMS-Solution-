@@ -47,5 +47,19 @@ end
 close cur_db;
 deallocate cur_db;
 
-select sysdatetime() as CollectionTime_UTC, SERVERPROPERTY('MachineName') as ServerInstance, *
-from #Dbs;
+--select * from #Dbs;
+
+;with t_files_category as (
+select f.db_name as [Database], [type_desc], [size_gb] = sum(size_GB)
+from #Dbs f
+where f.db_name in ('risk','Ebroking','CTCL1.1','MISC','MIS','ROLEMGM','SCCS','Test_db','SBAudit','Adv_chart_Activation','CMS','Accounts','Bond','SMS','Testdb','uploader-db')
+group by f.db_name, [type_desc]
+)
+select [Database], convert(numeric(20,2),[ROWS]) as [MDF size(gb)], convert(numeric(20,2),[LOG]) as [LDF size(gb)]
+from (
+	select *
+	from t_files_category fc
+) p
+pivot ( sum (size_gb) for type_desc in ([ROWS], [LOG]) ) as pvt;
+
+

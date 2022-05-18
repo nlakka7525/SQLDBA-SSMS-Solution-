@@ -3,6 +3,30 @@
   <Items>
     <LogicalFolder Name="Connections" Type="2" Sorted="true">
       <Items>
+        <ConnectionNode Name="172.31.15.250:E84947">
+          <Created>2022-05-10T09:48:41.3579502+05:30</Created>
+          <Type>SQL</Type>
+          <Server>172.31.15.250</Server>
+          <UserName>E84947</UserName>
+          <Authentication>SQL</Authentication>
+          <InitialDB>master</InitialDB>
+          <LoginTimeout>30</LoginTimeout>
+          <ExecutionTimeout>0</ExecutionTimeout>
+          <ConnectionProtocol>NotSpecified</ConnectionProtocol>
+          <ApplicationName>Microsoft SQL Server Management Studio - Query</ApplicationName>
+        </ConnectionNode>
+        <ConnectionNode Name="localhost:21L-LTPABL-1187\Ajay">
+          <Created>2022-05-12T10:19:50.7199948+05:30</Created>
+          <Type>SQL</Type>
+          <Server>localhost</Server>
+          <UserName />
+          <Authentication>Windows Authentication</Authentication>
+          <InitialDB />
+          <LoginTimeout>30</LoginTimeout>
+          <ExecutionTimeout>0</ExecutionTimeout>
+          <ConnectionProtocol>NotSpecified</ConnectionProtocol>
+          <ApplicationName>Microsoft SQL Server Management Studio - Query</ApplicationName>
+        </ConnectionNode>
         <ConnectionNode Name="sqla:sa">
           <Created>2020-04-20T18:41:08.1726728+05:30</Created>
           <Type>SQL</Type>
@@ -80,9 +104,9 @@
           <FullPath>Error-Trying-2-Load-Assembly.sql</FullPath>
         </FileNode>
         <FileNode Name="Find Long Running Query.sql">
-          <AssociatedConnectionMoniker />
-          <AssociatedConnSrvName />
-          <AssociatedConnUserName />
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:172.31.15.250:False:E84947</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>172.31.15.250</AssociatedConnSrvName>
+          <AssociatedConnUserName>E84947</AssociatedConnUserName>
           <FullPath>Find Long Running Query.sql</FullPath>
         </FileNode>
         <FileNode Name="FOR XML PATH.sql">
@@ -162,6 +186,12 @@
           <AssociatedConnSrvName />
           <AssociatedConnUserName />
           <FullPath>QRY-AlwaysOn-Health.sql</FullPath>
+        </FileNode>
+        <FileNode Name="Qry-Find-pattern-in-All-Database-Objects.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:localhost:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>localhost</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>Qry-Find-pattern-in-All-Database-Objects.sql</FullPath>
         </FileNode>
         <FileNode Name="Replace-Words-In-Body-Text-HTML.sql">
           <AssociatedConnectionMoniker />

@@ -68,6 +68,8 @@ SELECT	i.cpu_count as [Logical_CPU_Count], physical_memory_kb/1024 as [Physical 
 		,i.sqlserver_start_time
 FROM	sys.dm_os_sys_info as i;
 
+select * from sys.dm_os_schedulers s where status = 'VISIBLE ONLINE' and is_online = 1
+
 --	Check Enabled Trace Flags
 DBCC TRACESTATUS(-1);
 
