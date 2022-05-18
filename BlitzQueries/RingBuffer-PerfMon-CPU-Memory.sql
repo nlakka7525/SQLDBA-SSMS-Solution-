@@ -17,7 +17,6 @@ DECLARE @get_blitz_analysis BIT = 0;
 DECLARE @only_X_resultset smallint = -1;
 DECLARE @show_plan TINYINT = 1; /* 0 = no plan, 1 = query plan, 2 = batch plan */
 
-
 DECLARE @current_time_UTC datetime = sysutcdatetime();
 -- Capture running sessions for Blocking
 IF OBJECT_ID('tempdb..#SysProcesses') IS NOT NULL
@@ -113,6 +112,9 @@ WHERE	s.session_id != @@SPID
 
 
 /* Get Metrics related to Memory/Blockings */
+declare @object_name varchar(255);
+set @object_name = (case when @@SERVICENAME = 'MSSQLSERVER' then 'SQLServer' else 'MSSQL$'+@@SERVICENAME end);
+
 ;with t_PerfMon as
 (
 	--Total amount of RAM consumed by database data (Buffer Pool). This should be the highest usage of Memory on the server.
@@ -120,11 +122,11 @@ WHERE	s.session_id != @@SPID
 		   --Total amount of RAM used by SQL Server memory clerks (includes Buffer Pool)
 		   , SQLAllMemoryClerksUsedMemoryMB = (Select SUM(pages_kb)/1024 AS [SPA Mem, Mb] FROM sys.dm_os_memory_clerks WITH (NOLOCK))
 		   --How long in seconds since data was removed from the Buffer Pool, to be replaced with data from disk. (Key indicator of memory pressure when below 300 consistently)
-		   ,[PageLifeExpectancy] = (SELECT cntr_value FROM sys.dm_os_performance_counters WITH (NOLOCK) WHERE [object_name] LIKE N'%Buffer Manager%' AND counter_name = N'Page life expectancy' )
+		   ,[PageLifeExpectancy] = (SELECT cntr_value FROM sys.dm_os_performance_counters WITH (NOLOCK) WHERE [object_name] like (@object_name+':Buffer Manager%') AND counter_name = N'Page life expectancy' )
 		   --How many memory operations are Pending (should always be 0, anything above 0 for extended periods of time is a very high sign of memory pressure)
-		   ,[MemoryGrantsPending] = (SELECT cntr_value FROM sys.dm_os_performance_counters WITH (NOLOCK) WHERE [object_name] LIKE N'%Memory Manager%' AND counter_name = N'Memory Grants Pending' )
+		   ,[MemoryGrantsPending] = (SELECT cntr_value FROM sys.dm_os_performance_counters WITH (NOLOCK) WHERE [object_name] LIKE (@object_name+':%Memory Manager%') AND counter_name = N'Memory Grants Pending' )
 		   --How many memory operations are Outstanding (should always be 0, anything above 0 for extended periods of time is a very high sign of memory pressure)
-		   ,[MemoryGrantsOutstanding] = (SELECT cntr_value FROM sys.dm_os_performance_counters WITH (NOLOCK) WHERE [object_name] LIKE N'%Memory Manager%' AND counter_name = N'Memory Grants Outstanding' )
+		   ,[MemoryGrantsOutstanding] = (SELECT cntr_value FROM sys.dm_os_performance_counters WITH (NOLOCK) WHERE [object_name] LIKE (@object_name+':Memory Manager%') AND counter_name = N'Memory Grants Outstanding' )
 )
 select  'Memory-Status' as RunningQuery, [Domain] = DEFAULT_DOMAIN(), [ServerName] = @@servername, [IP] = CONNECTIONPROPERTY('local_net_address'),
 --		[IsClustered/IsHadrEnabled] = (select CONVERT(varchar,SERVERPROPERTY('IsClustered'))+' / '+CONVERT(varchar,SERVERPROPERTY('IsHadrEnabled'))
@@ -133,7 +135,7 @@ select  'Memory-Status' as RunningQuery, [Domain] = DEFAULT_DOMAIN(), [ServerNam
 		[**Blocking-Count**] = (select count(*) from #SysProcesses sp where sp.blocking_session_id <> 0 and sp.blocking_session_id <> sp.session_id),
 		[PageLifeExpectancy],
 		[CPU Count] = (select count(*) from sys.dm_os_schedulers as dos where dos.status IN ('VISIBLE ONLINE')),
-		cast(sm.total_physical_memory_kb * 1.0 / 1024 / 1024 as numeric(20,0)) as SqlServer_Process_memory_gb, 
+		cast(sm.total_physical_memory_kb * 1.0 / 1024 / 1024 as numeric(20,0)) as total_box_memory_gb, 
 		cast(sm.available_physical_memory_kb * 1.0 / 1024 / 1024 as numeric(20,2)) as available_physical_memory_gb, 
 		cast((sm.total_page_file_kb - sm.available_page_file_kb) * 1.0 / 1024 / 1024 as numeric(20,0)) as used_page_file_gb,
 		cast(sm.system_cache_kb * 1.0 / 1024 /1024 as numeric(20,2)) as system_cache_gb, 
@@ -236,8 +238,6 @@ where rpl.scheduler_id is NULL and dos.status = 'VISIBLE ONLINE';
 /* End Code to find Resource Pool Scheduler Affinity */
 
 
-declare @object_name varchar(255);
-set @object_name = (case when @@SERVICENAME = 'MSSQLSERVER' then 'SQLServer' else 'MSSQL$'+@@SERVICENAME end);
 IF EXISTS (select * from sys.resource_governor_configuration where is_enabled = 1)
 BEGIN
 	;WITH T_Pools AS (
