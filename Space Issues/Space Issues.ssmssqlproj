@@ -3,6 +3,66 @@
   <Items>
     <LogicalFolder Name="Connections" Type="2" Sorted="true">
       <Items>
+        <ConnectionNode Name="172.31.15.154:E84947">
+          <Created>2022-05-19T11:22:27.1471299+05:30</Created>
+          <Type>SQL</Type>
+          <Server>172.31.15.154</Server>
+          <UserName>E84947</UserName>
+          <Authentication>SQL</Authentication>
+          <InitialDB />
+          <LoginTimeout>30</LoginTimeout>
+          <ExecutionTimeout>0</ExecutionTimeout>
+          <ConnectionProtocol>NotSpecified</ConnectionProtocol>
+          <ApplicationName>Microsoft SQL Server Management Studio - Query</ApplicationName>
+        </ConnectionNode>
+        <ConnectionNode Name="172.31.15.250:E84947">
+          <Created>2022-05-19T11:14:50.7664221+05:30</Created>
+          <Type>SQL</Type>
+          <Server>172.31.15.250</Server>
+          <UserName>E84947</UserName>
+          <Authentication>SQL</Authentication>
+          <InitialDB />
+          <LoginTimeout>30</LoginTimeout>
+          <ExecutionTimeout>0</ExecutionTimeout>
+          <ConnectionProtocol>NotSpecified</ConnectionProtocol>
+          <ApplicationName>Microsoft SQL Server Management Studio - Query</ApplicationName>
+        </ConnectionNode>
+        <ConnectionNode Name="172.31.15.253:E84947">
+          <Created>2022-05-19T11:15:43.7795669+05:30</Created>
+          <Type>SQL</Type>
+          <Server>172.31.15.253</Server>
+          <UserName>E84947</UserName>
+          <Authentication>SQL</Authentication>
+          <InitialDB />
+          <LoginTimeout>30</LoginTimeout>
+          <ExecutionTimeout>0</ExecutionTimeout>
+          <ConnectionProtocol>NotSpecified</ConnectionProtocol>
+          <ApplicationName>Microsoft SQL Server Management Studio - Query</ApplicationName>
+        </ConnectionNode>
+        <ConnectionNode Name="172.31.15.46:E84947">
+          <Created>2022-05-19T11:20:39.8765368+05:30</Created>
+          <Type>SQL</Type>
+          <Server>172.31.15.46</Server>
+          <UserName>E84947</UserName>
+          <Authentication>SQL</Authentication>
+          <InitialDB />
+          <LoginTimeout>30</LoginTimeout>
+          <ExecutionTimeout>0</ExecutionTimeout>
+          <ConnectionProtocol>NotSpecified</ConnectionProtocol>
+          <ApplicationName>Microsoft SQL Server Management Studio - Query</ApplicationName>
+        </ConnectionNode>
+        <ConnectionNode Name="172.31.15.69:E84947">
+          <Created>2022-05-19T11:21:09.6192662+05:30</Created>
+          <Type>SQL</Type>
+          <Server>172.31.15.69</Server>
+          <UserName>E84947</UserName>
+          <Authentication>SQL</Authentication>
+          <InitialDB />
+          <LoginTimeout>30</LoginTimeout>
+          <ExecutionTimeout>0</ExecutionTimeout>
+          <ConnectionProtocol>NotSpecified</ConnectionProtocol>
+          <ApplicationName>Microsoft SQL Server Management Studio - Query</ApplicationName>
+        </ConnectionNode>
         <ConnectionNode Name="196.1.115.132:E84947">
           <Created>2022-05-18T17:54:07.2637869+05:30</Created>
           <Type>SQL</Type>
@@ -34,6 +94,30 @@
           <UserName>E84947</UserName>
           <Authentication>SQL</Authentication>
           <InitialDB>master</InitialDB>
+          <LoginTimeout>30</LoginTimeout>
+          <ExecutionTimeout>0</ExecutionTimeout>
+          <ConnectionProtocol>NotSpecified</ConnectionProtocol>
+          <ApplicationName>Microsoft SQL Server Management Studio - Query</ApplicationName>
+        </ConnectionNode>
+        <ConnectionNode Name="196.1.115.196:E84947">
+          <Created>2022-05-25T11:50:48.5362783+05:30</Created>
+          <Type>SQL</Type>
+          <Server>196.1.115.196</Server>
+          <UserName>E84947</UserName>
+          <Authentication>SQL</Authentication>
+          <InitialDB />
+          <LoginTimeout>30</LoginTimeout>
+          <ExecutionTimeout>0</ExecutionTimeout>
+          <ConnectionProtocol>NotSpecified</ConnectionProtocol>
+          <ApplicationName>Microsoft SQL Server Management Studio - Query</ApplicationName>
+        </ConnectionNode>
+        <ConnectionNode Name="196.1.115.228:E84947">
+          <Created>2022-05-25T11:50:11.3323901+05:30</Created>
+          <Type>SQL</Type>
+          <Server>196.1.115.228</Server>
+          <UserName>E84947</UserName>
+          <Authentication>SQL</Authentication>
+          <InitialDB>DBA_Admin</InitialDB>
           <LoginTimeout>30</LoginTimeout>
           <ExecutionTimeout>0</ExecutionTimeout>
           <ConnectionProtocol>NotSpecified</ConnectionProtocol>
@@ -110,10 +194,22 @@
           <FullPath>Purge-Records-In-Chunks.sql</FullPath>
         </FileNode>
         <FileNode Name="QRY-Get-All-Db-Files-Details.sql">
-          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:196.1.115.132:False:E84947</AssociatedConnectionMoniker>
-          <AssociatedConnSrvName>196.1.115.132</AssociatedConnSrvName>
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:172.31.15.154:False:E84947</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>172.31.15.154</AssociatedConnSrvName>
           <AssociatedConnUserName>E84947</AssociatedConnUserName>
           <FullPath>QRY-Get-All-Db-Files-Details.sql</FullPath>
+        </FileNode>
+        <FileNode Name="QRY-Log-Files-Space-On-Drive.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:196.1.115.196:False:E84947</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>196.1.115.196</AssociatedConnSrvName>
+          <AssociatedConnUserName>E84947</AssociatedConnUserName>
+          <FullPath>QRY-Log-Files-Space-On-Drive.sql</FullPath>
+        </FileNode>
+        <FileNode Name="QRY-Space-Estimate-Using-SQLMonitor.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:196.1.115.228:False:E84947</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>196.1.115.228</AssociatedConnSrvName>
+          <AssociatedConnUserName>E84947</AssociatedConnUserName>
+          <FullPath>QRY-Space-Estimate-Using-SQLMonitor.sql</FullPath>
         </FileNode>
         <FileNode Name="Shrink Log Files.sql">
           <AssociatedConnectionMoniker />

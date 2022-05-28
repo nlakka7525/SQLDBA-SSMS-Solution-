@@ -22,7 +22,9 @@ CREATE TABLE #Dbs
 );
 
 declare cur_db cursor forward_only for
-	select name from sys.databases d where database_id > 4;
+	select name from sys.databases d 
+	where database_id > 4
+	--and name in ('uploader-db')
 open cur_db
 fetch next from cur_db into @dbname;
 
@@ -47,12 +49,12 @@ end
 close cur_db;
 deallocate cur_db;
 
---select * from #Dbs;
+select * from #Dbs;
 
 ;with t_files_category as (
 select f.db_name as [Database], [type_desc], [size_gb] = sum(size_GB)
 from #Dbs f
-where f.db_name in ('risk','Ebroking','CTCL1.1','MISC','MIS','ROLEMGM','SCCS','Test_db','SBAudit','Adv_chart_Activation','CMS','Accounts','Bond','SMS','Testdb','uploader-db')
+--where f.db_name in ('Genodinlimit','remisior','SB_comp','Upload')
 group by f.db_name, [type_desc]
 )
 select [Database], convert(numeric(20,2),[ROWS]) as [MDF size(gb)], convert(numeric(20,2),[LOG]) as [LDF size(gb)]

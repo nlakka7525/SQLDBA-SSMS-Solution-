@@ -27,6 +27,18 @@
           <ConnectionProtocol>NotSpecified</ConnectionProtocol>
           <ApplicationName>Microsoft SQL Server Management Studio - Query</ApplicationName>
         </ConnectionNode>
+        <ConnectionNode Name="196.1.115.228:E84947">
+          <Created>2022-05-24T21:35:46.9907242+05:30</Created>
+          <Type>SQL</Type>
+          <Server>196.1.115.228</Server>
+          <UserName>E84947</UserName>
+          <Authentication>SQL</Authentication>
+          <InitialDB />
+          <LoginTimeout>30</LoginTimeout>
+          <ExecutionTimeout>0</ExecutionTimeout>
+          <ConnectionProtocol>NotSpecified</ConnectionProtocol>
+          <ApplicationName>Microsoft SQL Server Management Studio - Query</ApplicationName>
+        </ConnectionNode>
         <ConnectionNode Name="localhost:21L-LTPABL-1187\Ajay">
           <Created>2022-03-21T09:43:12.9215372+05:30</Created>
           <Type>SQL</Type>
@@ -74,9 +86,9 @@
           <FullPath>Maintainence - Delete files older than 72 hours.sql</FullPath>
         </FileNode>
         <FileNode Name="MaintenanceSolution-Without-Jobs.sql">
-          <AssociatedConnectionMoniker />
-          <AssociatedConnSrvName />
-          <AssociatedConnUserName />
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:196.1.115.228:False:E84947</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>196.1.115.228</AssociatedConnSrvName>
+          <AssociatedConnUserName>E84947</AssociatedConnUserName>
           <FullPath>MaintenanceSolution-Without-Jobs.sql</FullPath>
         </FileNode>
         <FileNode Name="Ola Update Stats Formula.sql">
@@ -92,8 +104,8 @@
           <FullPath>Ola-Maintenance-Solution-Github.sql</FullPath>
         </FileNode>
         <FileNode Name="QRY-Delta-UpdateStats-IndexOptimize.sql">
-          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:196.1.115.167:False:E84947</AssociatedConnectionMoniker>
-          <AssociatedConnSrvName>196.1.115.167</AssociatedConnSrvName>
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:196.1.115.228:False:E84947</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>196.1.115.228</AssociatedConnSrvName>
           <AssociatedConnUserName>E84947</AssociatedConnUserName>
           <FullPath>QRY-Delta-UpdateStats-IndexOptimize.sql</FullPath>
         </FileNode>
@@ -116,9 +128,9 @@
           <FullPath>QRY-Last_Updated-Statistics.sql</FullPath>
         </FileNode>
         <FileNode Name="QRY-Statistics-State-Update-Status.sql">
-          <AssociatedConnectionMoniker />
-          <AssociatedConnSrvName />
-          <AssociatedConnUserName />
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:196.1.115.167:False:E84947</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>196.1.115.167</AssociatedConnSrvName>
+          <AssociatedConnUserName>E84947</AssociatedConnUserName>
           <FullPath>QRY-Statistics-State-Update-Status.sql</FullPath>
         </FileNode>
         <FileNode Name="Queries-Used.sql">

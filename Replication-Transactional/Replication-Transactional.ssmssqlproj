@@ -27,6 +27,18 @@
           <ConnectionProtocol>NotSpecified</ConnectionProtocol>
           <ApplicationName>Microsoft SQL Server Management Studio - Query</ApplicationName>
         </ConnectionNode>
+        <ConnectionNode Name="196.1.115.228:E84947">
+          <Created>2022-05-25T02:13:09.3914531+05:30</Created>
+          <Type>SQL</Type>
+          <Server>196.1.115.228</Server>
+          <UserName>E84947</UserName>
+          <Authentication>SQL</Authentication>
+          <InitialDB>DBA_Admin</InitialDB>
+          <LoginTimeout>30</LoginTimeout>
+          <ExecutionTimeout>0</ExecutionTimeout>
+          <ConnectionProtocol>NotSpecified</ConnectionProtocol>
+          <ApplicationName>Microsoft SQL Server Management Studio - Query</ApplicationName>
+        </ConnectionNode>
         <ConnectionNode Name="MSI:IPFreely">
           <Created>2020-12-21T23:07:12.7982429+05:30</Created>
           <Type>SQL</Type>
@@ -50,9 +62,9 @@
           <FullPath>__General Queries.sql</FullPath>
         </FileNode>
         <FileNode Name="__Issues.sql">
-          <AssociatedConnectionMoniker />
-          <AssociatedConnSrvName />
-          <AssociatedConnUserName />
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:196.1.115.228:False:E84947</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>196.1.115.228</AssociatedConnSrvName>
+          <AssociatedConnUserName>E84947</AssociatedConnUserName>
           <FullPath>__Issues.sql</FullPath>
         </FileNode>
         <FileNode Name="__Queries_4_Dummy_Data.sql">
@@ -62,9 +74,9 @@
           <FullPath>__Queries_4_Dummy_Data.sql</FullPath>
         </FileNode>
         <FileNode Name="__Resources.sql">
-          <AssociatedConnectionMoniker />
-          <AssociatedConnSrvName />
-          <AssociatedConnUserName />
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:196.1.115.228:False:E84947</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>196.1.115.228</AssociatedConnSrvName>
+          <AssociatedConnUserName>E84947</AssociatedConnUserName>
           <FullPath>__Resources.sql</FullPath>
         </FileNode>
         <FileNode Name="1 - Get Replication Jobs.sql">

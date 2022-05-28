@@ -1,4 +1,4 @@
-use master
+use DBA_Admin
 go
 
 set transaction isolation level read uncommitted;
@@ -8,7 +8,7 @@ set lock_timeout 60000; -- 60 seconds
 
 declare @execute_indexoptimize bit = 1
 declare @p_db_name sysname 
---set @p_db_name = 'DBA'
+set @p_db_name = 'distribution'
 
 if object_id('tempdb..#stats') is not null
 	drop table #stats;
@@ -21,7 +21,7 @@ create table #stats
 declare @query_get_stats nvarchar(max)
 set @query_get_stats = '
 use [?];
-if (len('''+ISNULL(@p_db_name,'')+''') = 0 or (DB_NAME() = '''+ISNULL(@p_db_name,'')+''') ) and (DB_NAME() NOT IN (''audit_archive'',''msdb''))
+if (len('''+ISNULL(@p_db_name,'')+''') = 0 or (DB_NAME() = '''+ISNULL(@p_db_name,'')+''') ) and (DB_NAME() NOT IN (''audit_archive''))
 begin
 	--print ''executing for [''+db_name()+'']'';
 	;with tStats as (

@@ -3,6 +3,18 @@
   <Items>
     <LogicalFolder Name="Connections" Type="2" Sorted="true">
       <Items>
+        <ConnectionNode Name="172.31.15.154:E84947">
+          <Created>2022-05-19T12:37:43.3450914+05:30</Created>
+          <Type>SQL</Type>
+          <Server>172.31.15.154</Server>
+          <UserName>E84947</UserName>
+          <Authentication>SQL</Authentication>
+          <InitialDB />
+          <LoginTimeout>30</LoginTimeout>
+          <ExecutionTimeout>0</ExecutionTimeout>
+          <ConnectionProtocol>NotSpecified</ConnectionProtocol>
+          <ApplicationName>Microsoft SQL Server Management Studio - Query</ApplicationName>
+        </ConnectionNode>
         <ConnectionNode Name="172.31.15.250:E84947">
           <Created>2022-05-09T16:40:22.1713335+05:30</Created>
           <Type>SQL</Type>
@@ -63,6 +75,18 @@
           <ConnectionProtocol>NotSpecified</ConnectionProtocol>
           <ApplicationName>Microsoft SQL Server Management Studio - Query</ApplicationName>
         </ConnectionNode>
+        <ConnectionNode Name="196.1.115.182:E84947">
+          <Created>2022-05-24T13:30:55.5041633+05:30</Created>
+          <Type>SQL</Type>
+          <Server>196.1.115.182</Server>
+          <UserName>E84947</UserName>
+          <Authentication>SQL</Authentication>
+          <InitialDB />
+          <LoginTimeout>30</LoginTimeout>
+          <ExecutionTimeout>0</ExecutionTimeout>
+          <ConnectionProtocol>NotSpecified</ConnectionProtocol>
+          <ApplicationName>Microsoft SQL Server Management Studio - Query</ApplicationName>
+        </ConnectionNode>
         <ConnectionNode Name="196.1.115.195:E84947">
           <Created>2022-05-17T18:23:36.2935567+05:30</Created>
           <Type>SQL</Type>
@@ -99,7 +123,19 @@
           <ConnectionProtocol>NotSpecified</ConnectionProtocol>
           <ApplicationName>Microsoft SQL Server Management Studio - Query</ApplicationName>
         </ConnectionNode>
-        <ConnectionNode Name="localhost:LAB\adwivedi">
+        <ConnectionNode Name="196.1.115.228:E84947">
+          <Created>2022-05-24T22:26:35.1578885+05:30</Created>
+          <Type>SQL</Type>
+          <Server>196.1.115.228</Server>
+          <UserName>E84947</UserName>
+          <Authentication>SQL</Authentication>
+          <InitialDB />
+          <LoginTimeout>30</LoginTimeout>
+          <ExecutionTimeout>0</ExecutionTimeout>
+          <ConnectionProtocol>NotSpecified</ConnectionProtocol>
+          <ApplicationName>Microsoft SQL Server Management Studio - Query</ApplicationName>
+        </ConnectionNode>
+        <ConnectionNode Name="localhost:21L-LTPABL-1187\Ajay">
           <Created>2022-03-21T09:12:38.8622746+05:30</Created>
           <Type>SQL</Type>
           <Server>localhost</Server>
@@ -135,7 +171,7 @@
           <ConnectionProtocol>NotSpecified</ConnectionProtocol>
           <ApplicationName>Microsoft SQL Server Management Studio - Query</ApplicationName>
         </ConnectionNode>
-        <ConnectionNode Name="SqlPractice:LAB\adwivedi">
+        <ConnectionNode Name="SqlPractice:21L-LTPABL-1187\Ajay">
           <Created>2022-05-14T19:26:30.5599433+05:30</Created>
           <Type>SQL</Type>
           <Server>SqlPractice</Server>
@@ -147,7 +183,7 @@
           <ConnectionProtocol>NotSpecified</ConnectionProtocol>
           <ApplicationName>Microsoft SQL Server Management Studio - Query</ApplicationName>
         </ConnectionNode>
-        <ConnectionNode Name="sqlprod1:LAB\adwivedi">
+        <ConnectionNode Name="sqlprod1:21L-LTPABL-1187\Ajay">
           <Created>2021-12-07T11:54:59.6010364+05:30</Created>
           <Type>SQL</Type>
           <Server>sqlprod1</Server>
@@ -266,8 +302,8 @@
           <FullPath>Plan-Cache-Analysis.sql</FullPath>
         </FileNode>
         <FileNode Name="QRY-sp_WhoIsActive-Usages.sql">
-          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:196.1.115.132:False:E84947</AssociatedConnectionMoniker>
-          <AssociatedConnSrvName>196.1.115.132</AssociatedConnSrvName>
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:196.1.115.228:False:E84947</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>196.1.115.228</AssociatedConnSrvName>
           <AssociatedConnUserName>E84947</AssociatedConnUserName>
           <FullPath>QRY-sp_WhoIsActive-Usages.sql</FullPath>
         </FileNode>
@@ -278,15 +314,9 @@
           <FullPath>Querying Deadlocks From System_Health XEvent.sql</FullPath>
         </FileNode>
         <FileNode Name="RingBuffer-PerfMon-CPU-Memory.sql">
-<<<<<<< HEAD
-          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:196.1.115.132:False:E84947</AssociatedConnectionMoniker>
-          <AssociatedConnSrvName>196.1.115.132</AssociatedConnSrvName>
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:196.1.115.228:False:E84947</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>196.1.115.228</AssociatedConnSrvName>
           <AssociatedConnUserName>E84947</AssociatedConnUserName>
-=======
-          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:SqlPractice:True</AssociatedConnectionMoniker>
-          <AssociatedConnSrvName>SqlPractice</AssociatedConnSrvName>
-          <AssociatedConnUserName />
->>>>>>> ff0b9040dd56f257f3d3dd7d6409743eb79d3122
           <FullPath>RingBuffer-PerfMon-CPU-Memory.sql</FullPath>
         </FileNode>
         <FileNode Name="SCH-sp_WhoIsActive_v11_32(Modified).sql">

@@ -28,8 +28,9 @@ SELECT top 1 WITH TIES bs.database_name,
 	BackupStartDate = bs.Backup_Start_Date,
 	BackupFinishDate = bs.Backup_Finish_Date,
 	LatestBackupLocation = bf.physical_device_name,
-	backup_size_mb = CONVERT(decimal(10, 2), bs.backup_size/1024./1024.),
-	compressed_backup_size_mb = CONVERT(decimal(10, 2), bs.compressed_backup_size/1024./1024.),
+	--backup_size_mb = CONVERT(decimal(10, 2), bs.backup_size/1024./1024.),
+	backup_size_gb = CONVERT(decimal(10, 2), bs.backup_size/1024./1024./1024),
+	compressed_backup_size_gb = CONVERT(decimal(10, 2), bs.compressed_backup_size/1024./1024./1024),
 	database_backup_lsn, -- For tlog and differential backups, this is the checkpoint_lsn of the FULL backup it is based on.
 	checkpoint_lsn,
 	begins_log_chain,
@@ -38,7 +39,10 @@ FROM msdb.dbo.backupset bs
 LEFT OUTER JOIN msdb.dbo.backupmediafamily bf ON bs.[media_set_id] = bf.[media_set_id]
 INNER JOIN msdb.dbo.backupmediaset bms ON bs.[media_set_id] = bms.[media_set_id]
 --WHERE bs.backup_start_date > DATEADD(MONTH, -2, sysdatetime()) --only look at last two months
-WHERE database_name in ('risk','Ebroking','CTCL1.1','MISC','MIS','ROLEMGM','SCCS','Test_db','SBAudit','Adv_chart_Activation','CMS','Accounts','Bond','SMS','Testdb','uploader-db')
+WHERE 1 = 1
+and database_name in ('uploader-db')
 and bs.type in ('D')
+and bf.device_type in (2)
 --ORDER BY bs.Backup_Start_Date DESC, bs.database_name ASC
 ORDER BY ROW_NUMBER()OVER(PARTITION BY bs.database_name ORDER BY bs.Backup_Start_Date DESC)
+
