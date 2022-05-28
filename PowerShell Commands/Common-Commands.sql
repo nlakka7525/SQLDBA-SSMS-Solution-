@@ -470,3 +470,21 @@ $bmp.Save($filename)
 
 Invoke-Item $filename  
 
+
+-- 42) Copy folder from Source to Remote Server maintaining director structure
+$ssn = New-PSSession -ComputerName $($sqlServerInfo.host_name) -Credential $SqlCredential
+Copy-Item $perfmonPath -Destination "C:\Perfmon" -ToSession $ssn -Recurse
+
+-- 43) Decrypt secure string
+$SqlCredential.GetNetworkCredential().password
+----------------
+$password = ConvertTo-SecureString 'P@ssw0rd' -AsPlainText -Force
+
+$Ptr = [System.Runtime.InteropServices.Marshal]::SecureStringToCoTaskMemUnicode($password)
+$result = [System.Runtime.InteropServices.Marshal]::PtrToStringUni($Ptr)
+[System.Runtime.InteropServices.Marshal]::ZeroFreeCoTaskMemUnicode($Ptr)
+$result 
+
+-- 44) 
+
+
