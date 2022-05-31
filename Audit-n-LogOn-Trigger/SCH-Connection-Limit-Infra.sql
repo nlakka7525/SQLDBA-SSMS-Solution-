@@ -164,6 +164,8 @@ BEGIN
 		RETURN;
     IF ISNULL(DATABASEPROPERTYEX('DBA', 'Status'), 'N/A') <> 'ONLINE'
 		RETURN;
+	IF ConnectionProperty('net_transport') IN ('Named pipe','Shared memory')
+		RETURN;
 
 	-- Reject connections above threshold limit defined in master.dbo.connection_limit_config
 	IF EXISTS (SELECT OBJECT_ID('master.dbo.connection_limit_config'))

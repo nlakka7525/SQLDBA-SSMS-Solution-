@@ -85,11 +85,7 @@ Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "_SQLDBATools", "_SQLDBATool
 EndProject
 Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "resource_consumption-infra", "resource_consumption-infra\resource_consumption-infra.ssmssqlproj", "{25AF6842-FB5B-4988-8A25-FF9C85EDAC5D}"
 EndProject
-Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "Org-Project-167-Queries", "Org-Project-167-Queries\Org-Project-167-Queries.ssmssqlproj", "{AC0975FA-71AB-4410-A46D-193668A55458}"
-EndProject
 Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "SQLMonitor", "SQLMonitor\SQLMonitor.ssmssqlproj", "{CF71F247-710E-49B9-A4EB-B2977FE49579}"
-EndProject
-Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "Org-Project-LogOn-Trigger", "Org-Project-LogOn-Trigger\Org-Project-LogOn-Trigger.ssmssqlproj", "{4368660B-FFF3-4465-A059-94975CBA24D6}"
 EndProject
 Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "Audit-n-LogOn-Trigger", "Audit-n-LogOn-Trigger\Audit-n-LogOn-Trigger.ssmssqlproj", "{428AB281-827E-41A5-B117-8106AACECE00}"
 EndProject
@@ -139,11 +135,9 @@ Global
 		{49DFF171-1634-4AA9-AE4C-0CD8C9EBD1A3}.Default|Default.ActiveCfg = Default
 		{A1C5E029-364F-458E-AA6B-2F652A31F008}.Default|Default.ActiveCfg = Default
 		{25AF6842-FB5B-4988-8A25-FF9C85EDAC5D}.Default|Default.ActiveCfg = Default
-		{AC0975FA-71AB-4410-A46D-193668A55458}.Default|Default.ActiveCfg = Default
 		{CF71F247-710E-49B9-A4EB-B2977FE49579}.Default|Default.ActiveCfg = Default
-		{4368660B-FFF3-4465-A059-94975CBA24D6}.Default|Default.ActiveCfg = Default
-		{55E7A0F5-542A-4895-BD39-53FF17E4A9AA}.Default|Default.ActiveCfg = Default
 		{428AB281-827E-41A5-B117-8106AACECE00}.Default|Default.ActiveCfg = Default
+		{4218EDF2-2A32-4520-B38E-DD35BA3394A5}.Default|Default.ActiveCfg = Default
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
