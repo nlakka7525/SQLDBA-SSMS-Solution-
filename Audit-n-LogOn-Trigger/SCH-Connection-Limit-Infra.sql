@@ -50,7 +50,7 @@ AS
 			deleted.[limit],
 			deleted.[reference],
 			sysdatetime(),
-			SUSER_NAME(),
+			ORIGINAL_LOGIN(),
 			'D'
 	  FROM deleted
 GO
@@ -68,7 +68,7 @@ AS
 			inserted.[limit],
 			inserted.[reference],
 			sysdatetime(),
-			SUSER_NAME(),
+			ORIGINAL_LOGIN(),
 			'I'
 	FROM inserted
 GO
@@ -86,7 +86,7 @@ INSERT INTO [dbo].[connection_limit_config_history]
 			deleted.[limit],
 			deleted.[reference],
 			sysdatetime(),
-			SUSER_NAME(),
+			ORIGINAL_LOGIN(),
 			'U'
   FROM inserted full outer join deleted
 	on inserted.login_name = deleted.login_name
@@ -108,25 +108,25 @@ GO
 USE [DBA]
 GO
 
+-- DROP TABLE [dbo].[connection_history]
 CREATE TABLE [dbo].[connection_history]
 (
+	[collection_time] [datetime2] NOT NULL default (SYSDATETIME()),
 	[session_id] [smallint] NOT NULL,
-	[host_process_id] [int] NULL,
-	[login_time] [datetime] NULL,
+	[login_name] [varchar](128) NULL,
+	[program_name] [varchar](128) NULL,
 	[host_name] [varchar](128) NULL,
 	[client_net_address] [varchar](48) NULL,
-	[program_name] [varchar](128) NULL,
-	[client_version] [int] NULL,
-	[login_name] [varchar](128) NULL,
 	[client_interface_name] [varchar](32) NULL,
 	[auth_scheme] [nvarchar](40) NULL,
-	[collection_time] [datetime2] NOT NULL default (SYSDATETIME()),
-	[is_pooled] [bit] NULL
+	[is_pooled] [bit] NULL,
+	[is_rejected_pseudo] [bit] not null default 0,
+	[reject_condition] varchar(1000) null 
 ) on ps_dba([collection_time])
 GO
 
 create index ci_connection_history on [dbo].[connection_history] 
-	([collection_time], [login_name], [program_name]) on ps_dba([collection_time])
+	([collection_time]) on ps_dba([collection_time])
 go
 
 -- =========================================================================================================
@@ -137,14 +137,15 @@ go
 USE [master]
 GO
 
-CREATE OR ALTER TRIGGER [audit_login_events] ON ALL SERVER 
+CREATE OR ALTER TRIGGER [audit_login_events] ON ALL SERVER
+WITH EXECUTE AS 'sa'
 FOR LOGON 
 AS 
 SET XACT_ABORT OFF
 BEGIN
 	-- Declare Variables
 	declare @app_name sysname = APP_NAME();
-	declare @login_name sysname = SUSER_NAME();
+	declare @login_name sysname = ORIGINAL_LOGIN();
 	declare @host_name sysname = host_name();
 	declare @data xml;
 	declare @ispooled bit;
@@ -158,14 +159,14 @@ BEGIN
 	--select [@app_name] = @app_name, [@login_name] = @login_name, [@host_name] = @host_name,	[@engine_service_account] = @engine_service_account, [@agent_service_account] = @agent_service_account;
 
 	-- Determine whether the login should be excluded from tracking in DBA.dbo._hist_sysprocesses
-    IF LOWER(@login_name) IN (@engine_service_account, @agent_service_account, 'sa','angeltrade\angeltrade_dba_team','.\sql','nt authority\system', LOWER(DEFAULT_DOMAIN()+'\'+CONVERT(nvarchar(128), SERVERPROPERTY('ComputerNamePhysicalNetBIOS'))+'$')) 
+    IF LOWER(@login_name) IN (@engine_service_account, @agent_service_account, 'sa','lab\sqldba','.\sql','nt authority\system', LOWER(DEFAULT_DOMAIN()+'\'+CONVERT(nvarchar(128), SERVERPROPERTY('ComputerNamePhysicalNetBIOS'))+'$')) 
         RETURN ;
     IF @login_name LIKE N'%_sa'
 		RETURN;
     IF ISNULL(DATABASEPROPERTYEX('DBA', 'Status'), 'N/A') <> 'ONLINE'
 		RETURN;
-	IF ConnectionProperty('net_transport') IN ('Named pipe','Shared memory')
-		RETURN;
+	--IF ConnectionProperty('net_transport') IN ('Named pipe','Shared memory')
+	--	RETURN;
 
 	-- Reject connections above threshold limit defined in master.dbo.connection_limit_config
 	IF EXISTS (SELECT OBJECT_ID('master.dbo.connection_limit_config'))
@@ -218,39 +219,46 @@ BEGIN
 	  IF (@connection_count > @connection_limit)
 	  BEGIN
 		SET @message='Connection attempt by { login || program } = {{ ' + @login_name+' || '+@app_name+' }}' + ' from host ' + @host_name +' has been rejected due to breached concurrent connection limit (' + convert(varchar, @connection_count) + '>=' + convert(varchar, @connection_limit) + ').';
-		RAISERROR (@message, 10, 1);
-		ROLLBACK;
-		RETURN;
+		--RAISERROR (@message, 10, 1);
+		--ROLLBACK;
+		--RETURN;
 	  END;
 	END;
 
-	-- Determine whether the connection is pooled
-	SET @data = EVENTDATA()
-    SET @ispooled = @data.value('(/EVENT_INSTANCE/IsPooled)[1]', 'bit');
-
 	-- Try to log the information in DBA, but allow the login even if unsuccessful.
-	BEGIN TRY
-		INSERT INTO [DBA].[dbo].[connection_history]
-		(session_id, host_process_id, login_time, host_name, client_net_address, program_name, client_version, login_name, client_interface_name, auth_scheme, is_pooled)
-		SELECT	@@SPID,  
-				des.host_process_id,     
-				des.login_time,     
-				des.host_name,     
-				dec.client_net_address,     
-				des.program_name,  
-				des.client_version,
-				@login_name,
-				des.client_interface_name,  
-				dec.auth_scheme,
-				@ispooled 
-		FROM	sys.dm_exec_sessions des
-		JOIN	sys.dm_exec_connections dec ON des.session_id=dec.session_id AND des.session_id=@@SPID and dec.net_transport <> 'Session';
-		REVERT;
-	END TRY
-	BEGIN CATCH
-		--IF @@TRANCOUNT > 0 ROLLBACK;
-		REVERT;
-	END CATCH
+		-- Record only pseudo rejections
+	IF (@connection_count > @connection_limit)
+	BEGIN
+		BEGIN TRY
+			-- Determine whether the connection is pooled
+			SET @data = EVENTDATA()
+			SET @ispooled = @data.value('(/EVENT_INSTANCE/IsPooled)[1]', 'bit');
+
+			INSERT INTO [DBA].[dbo].[connection_history]
+			(session_id, login_name, [program_name], [host_name], client_net_address, client_interface_name, auth_scheme, is_pooled, is_rejected_pseudo, reject_condition)
+			SELECT	@@SPID,
+					@login_name,
+					des.program_name,    
+					des.host_name,     
+					dec.client_net_address,
+					des.client_interface_name,  
+					dec.auth_scheme,
+					@ispooled,
+					is_rejected_pseudo = case when @connection_count > @connection_limit then 1 else 0 end,
+					reject_condition = case when @connection_count <= @connection_limit then null 
+											else '{{ login || app_name || host_name }} ~ {{ '+
+													@login_name+' || '+isnull(@app_name,'')+' || '+@host_name+' }} '+
+													'~ {{ '+convert(varchar, @connection_count)+' > '+convert(varchar, @connection_limit)+' }}'
+											end
+			FROM	sys.dm_exec_sessions des
+			JOIN	sys.dm_exec_connections dec ON des.session_id=dec.session_id AND des.session_id=@@SPID and dec.net_transport <> 'Session';
+			REVERT;
+		END TRY
+		BEGIN CATCH
+			--IF @@TRANCOUNT > 0 ROLLBACK;
+			REVERT;
+		END CATCH
+	END
 END
 GO
 

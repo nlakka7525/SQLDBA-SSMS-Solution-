@@ -1,15 +1,20 @@
-select *
-from dbo.connection_limit_config
+set nocount on;
 go
 
-declare @login_name sysname = suser_name();
+select *
+from master.dbo.connection_limit_config
+go
+
+declare @login_name sysname = 'grafana'--suser_name();
 declare @app_name sysname = 'dbatools-test';
 declare @host_name sysname = host_name();
 
 select [@login_name] = @login_name, [@app_name] = @app_name, [@host_name] = @host_name;
 
---insert dbo.connection_limit_config (login_name, program_name, host_name, limit)
---select @login_name, @app_name, @host_name, 20
+--insert master.dbo.connection_limit_config (login_name, program_name, host_name, limit)
+----select @login_name, @app_name, @host_name, 20
+--select 'grafana','*','*',20
+--update master.dbo.connection_limit_config set limit = 15 where login_name = 'grafana'
 
 DECLARE @connection_limit smallint,
 		@connection_count smallint;

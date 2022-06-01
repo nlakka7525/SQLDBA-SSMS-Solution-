@@ -19,7 +19,7 @@ BEGIN
 	select @engine_service_account = service_account from sys.dm_server_services where servicename like ('SQL Server (%)');
 	select @agent_service_account = service_account from sys.dm_server_services where servicename like ('SQL Server Agent (%)');
 
-	select [@app_name] = @app_name, [@login_name] = @login_name, [@host_name] = @host_name, [@engine_service_account] = @engine_service_account, [@agent_service_account] = @agent_service_account;
+	select [@app_name] = @app_name, [@login_name] = @login_name, [@host_name] = @host_name,	[@engine_service_account] = @engine_service_account, [@agent_service_account] = @agent_service_account;
 
 	-- Determine whether the login should be excluded from tracking in DBA.dbo._hist_sysprocesses
     IF LOWER(@login_name) IN (@engine_service_account, @agent_service_account, 'sa','angeltrade\angeltrade_dba_team','.\sql','nt authority\system', LOWER(DEFAULT_DOMAIN()+'\'+CONVERT(nvarchar(128), SERVERPROPERTY('ComputerNamePhysicalNetBIOS'))+'$')) 
@@ -28,10 +28,11 @@ BEGIN
 		RETURN;
     IF ISNULL(DATABASEPROPERTYEX('DBA', 'Status'), 'N/A') <> 'ONLINE'
 		RETURN;
-
-	select 'Crossed Login Exclusion part.' as RunningQuery;
+	--IF ConnectionProperty('net_transport') IN ('Named pipe','Shared memory')
+	--	RETURN;
 
 	-- Reject connections above threshold limit defined in master.dbo.connection_limit_config
+	print 'Check for existance of dbo.connection_limit_config';
 	IF EXISTS (SELECT OBJECT_ID('master.dbo.connection_limit_config'))
 	BEGIN
 		DECLARE @connection_limit smallint,
@@ -79,16 +80,18 @@ BEGIN
 			and (es.program_name = @config_program_name or @config_program_name = '*')
 			and (es.host_name = @config_host_name or @config_host_name = '*');
 
-		select [@connection_count] = @connection_count, [@connection_limit] = @connection_limit, [@config_login_name] = @config_login_name, [@config_program_name] = @config_program_name, [@config_host_name] = @config_host_name;
+		select [@config_login_name] = @config_login_name, [@config_program_name] = @config_program_name, [@config_host_name] = @config_host_name
+				,[@connection_count] = @connection_count, [@connection_limit] = @connection_limit;
 
-	  IF (@connection_count > @connection_limit)
-	  BEGIN
-		select 'Connection Limit Breached.' as RunningQuery;
-		SET @message='Connection attempt by { login || program } = {{ ' + @login_name+' || '+@app_name+' }}' + ' from host ' + @host_name +' has been rejected due to breached concurrent connection limit (' + convert(varchar, @connection_count) + '>=' + convert(varchar, @connection_limit) + ').';
-		RAISERROR (@message, 10, 1);
-		ROLLBACK;
-		RETURN;
-	  END;
+		IF (@connection_count > @connection_limit)
+		BEGIN
+		SELECT [@message]='Connection attempt by { login || program } = {{ ' + @login_name+' || '+@app_name+' }}' + ' from host ' + @host_name +' has been rejected due to breached concurrent connection limit (' + convert(varchar, @connection_count) + '>=' + convert(varchar, @connection_limit) + ').';
+		--RAISERROR (@message, 10, 1);
+		--ROLLBACK;
+		--RETURN;
+		END;
+
+	  SELECT [@connection_count] = @connection_count, [@connection_limit] = @connection_limit; 
 	END;
 
 	-- Determine whether the connection is pooled
@@ -96,27 +99,30 @@ BEGIN
     SET @ispooled = @data.value('(/EVENT_INSTANCE/IsPooled)[1]', 'bit');
 
 	-- Try to log the information in DBA, but allow the login even if unsuccessful.
-	BEGIN TRY
+	BEGIN --TRY
 		INSERT INTO [DBA].[dbo].[connection_history]
-		(session_id, host_process_id, login_time, host_name, client_net_address, program_name, client_version, login_name, client_interface_name, auth_scheme, is_pooled)
-		SELECT	@@SPID,  
-				des.host_process_id,     
-				des.login_time,     
-				des.host_name,     
-				dec.client_net_address,     
-				@app_name,  
-				des.client_version,
+		(session_id, login_name, [program_name], [host_name], client_net_address, client_interface_name, auth_scheme, is_pooled, is_rejected_pseudo, reject_condition)
+		SELECT	@@SPID,
 				@login_name,
+				des.program_name,    
+				des.host_name,     
+				dec.client_net_address,
 				des.client_interface_name,  
 				dec.auth_scheme,
-				@ispooled 
+				@ispooled,
+				is_rejected_pseudo = case when @connection_count > @connection_limit then 1 else 0 end,
+				reject_condition = case when @connection_count <= @connection_limit then null 
+										else '{{ login || app_name || host_name }} ~ {{ '+
+												@login_name+' || '+isnull(@app_name,'')+' || '+@host_name+' }} '+
+												'~ {{ '+convert(varchar, @connection_count)+' > '+convert(varchar, @connection_limit)+' }}'
+										end
 		FROM	sys.dm_exec_sessions des
 		JOIN	sys.dm_exec_connections dec ON des.session_id=dec.session_id AND des.session_id=@@SPID and dec.net_transport <> 'Session';
 		REVERT;
-	END TRY
-	BEGIN CATCH
-		--IF @@TRANCOUNT > 0 ROLLBACK;
-		REVERT;
-	END CATCH
+	END --TRY
+	--BEGIN CATCH
+	--	--IF @@TRANCOUNT > 0 ROLLBACK;
+	--	REVERT;
+	--END CATCH
 END
 GO
