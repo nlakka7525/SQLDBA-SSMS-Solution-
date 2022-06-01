@@ -164,7 +164,7 @@ BEGIN
 
 	--select [@app_name] = @app_name, [@login_name] = @login_name, [@host_name] = @host_name,	[@engine_service_account] = @engine_service_account, [@agent_service_account] = @agent_service_account;
 
-	-- Determine whether the login should be excluded from tracking in DBA.dbo._hist_sysprocesses
+	-- Determine whether the login should be excluded from tracking
     IF LOWER(@login_name) IN (@engine_service_account, @agent_service_account, 'sa','lab\sqldba','.\sql','nt authority\system', LOWER(DEFAULT_DOMAIN()+'\'+CONVERT(nvarchar(128), SERVERPROPERTY('ComputerNamePhysicalNetBIOS'))+'$')) 
         RETURN ;
     IF @login_name LIKE N'%_sa'
