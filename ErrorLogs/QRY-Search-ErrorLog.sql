@@ -10,7 +10,7 @@ WHERE d.name = 'tempdb';
 declare @start_time datetime, @end_time datetime, @err_msg_1 nvarchar(256) = null, @err_msg_2 nvarchar(256) = null;
 --set @start_time = '2021-05-17 18:00:00.000' --  August 22, 2020 05:16:00
 --set @time = DATEADD(HOUR,-1,getdate());
-set @start_time = DATEADD(HOUR,-12,getdate());
+set @start_time = DATEADD(HOUR,-1,getdate());
 --set @end_time = '2021-04-23 00:00:00.000';
 set @end_time = GETDATE()
 --set @end_time = DATEADD(minute,30*1,@start_time)
