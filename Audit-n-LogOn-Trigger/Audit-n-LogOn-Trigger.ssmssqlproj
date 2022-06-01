@@ -15,6 +15,18 @@
           <ConnectionProtocol>NotSpecified</ConnectionProtocol>
           <ApplicationName>Microsoft SQL Server Management Studio - Query</ApplicationName>
         </ConnectionNode>
+        <ConnectionNode Name="Localhost\SQL2014:LAB\adwivedi">
+          <Created>2022-06-01T22:43:11.7577639+05:30</Created>
+          <Type>SQL</Type>
+          <Server>Localhost\SQL2014</Server>
+          <UserName />
+          <Authentication>Windows Authentication</Authentication>
+          <InitialDB />
+          <LoginTimeout>30</LoginTimeout>
+          <ExecutionTimeout>0</ExecutionTimeout>
+          <ConnectionProtocol>NotSpecified</ConnectionProtocol>
+          <ApplicationName>Microsoft SQL Server Management Studio - Query</ApplicationName>
+        </ConnectionNode>
       </Items>
     </LogicalFolder>
     <LogicalFolder Name="Queries" Type="0" Sorted="true">
@@ -56,8 +68,8 @@
           <FullPath>QRY-Check-Limit-Connections-Live.sql</FullPath>
         </FileNode>
         <FileNode Name="QRY-History.dbo.connection_history.sql">
-          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:localhost:True</AssociatedConnectionMoniker>
-          <AssociatedConnSrvName>localhost</AssociatedConnSrvName>
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:Localhost\SQL2014:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>Localhost\SQL2014</AssociatedConnSrvName>
           <AssociatedConnUserName />
           <FullPath>QRY-History.dbo.connection_history.sql</FullPath>
         </FileNode>
@@ -68,14 +80,14 @@
           <FullPath>QRY-Logon-Trigger-Body-Testing.sql</FullPath>
         </FileNode>
         <FileNode Name="QRY-SqlServer-ErrorLog.sql">
-          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:localhost:True</AssociatedConnectionMoniker>
-          <AssociatedConnSrvName>localhost</AssociatedConnSrvName>
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:Localhost\SQL2014:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>Localhost\SQL2014</AssociatedConnSrvName>
           <AssociatedConnUserName />
           <FullPath>QRY-SqlServer-ErrorLog.sql</FullPath>
         </FileNode>
         <FileNode Name="SCH-Connection-Limit-Infra.sql">
-          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:localhost:True</AssociatedConnectionMoniker>
-          <AssociatedConnSrvName>localhost</AssociatedConnSrvName>
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:Localhost\SQL2014:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>Localhost\SQL2014</AssociatedConnSrvName>
           <AssociatedConnUserName />
           <FullPath>SCH-Connection-Limit-Infra.sql</FullPath>
         </FileNode>

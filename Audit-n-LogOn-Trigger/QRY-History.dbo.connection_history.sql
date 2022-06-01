@@ -19,9 +19,8 @@ group by convert(date,collection_time), DATEPART(hour,collection_time),
 		login_name, program_name, host_name, is_rejected_pseudo
 order by [date] desc, [hour] desc
 
---select *
---from DBA.dbo.connection_history
+-- select * from DBA.dbo.connection_history
 
 --exec sp_WhoIsActive
 
---truncate table DBA.dbo.connection_history
+-- truncate table DBA.dbo.connection_history

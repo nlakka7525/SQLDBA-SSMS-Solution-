@@ -95,9 +95,12 @@ INSERT INTO [dbo].[connection_limit_config_history]
 GO
 
 -- Insert Default Value
+-- TRUNCATE TABLE [dbo].[connection_limit_config]
 INSERT INTO [dbo].[connection_limit_config] 
 ([login_name], [program_name], [host_name], [limit])
-SELECT [login_name] = '*', [program_name] = '*', [host_name] = '*', [limit] = 300;
+SELECT [login_name] = '*', [program_name] = '*', [host_name] = '*', [limit] = 300
+UNION ALL
+SELECT [login_name] = 'grafana', [program_name] = '*', [host_name] = '*', [limit] = 20;
 
 select * from [dbo].[connection_limit_config]
 GO
@@ -117,16 +120,16 @@ CREATE TABLE [dbo].[connection_history]
 	[program_name] [varchar](128) NULL,
 	[host_name] [varchar](128) NULL,
 	[client_net_address] [varchar](48) NULL,
-	[client_interface_name] [varchar](32) NULL,
+	[net_transport] [nvarchar](40) NULL,
 	[auth_scheme] [nvarchar](40) NULL,
 	[is_pooled] [bit] NULL,
 	[is_rejected_pseudo] [bit] not null default 0,
 	[reject_condition] varchar(1000) null 
-) on ps_dba([collection_time])
+) --on ps_dba([collection_time])
 GO
 
 create index ci_connection_history on [dbo].[connection_history] 
-	([collection_time]) on ps_dba([collection_time])
+	([collection_time]) --on ps_dba([collection_time])
 go
 
 -- =========================================================================================================
@@ -137,7 +140,12 @@ go
 USE [master]
 GO
 
-CREATE OR ALTER TRIGGER [audit_login_events] ON ALL SERVER
+IF EXISTS (select 1 from sys.server_triggers where name = 'audit_login_events')
+	DROP TRIGGER [audit_login_events] ON ALL SERVER
+GO
+
+
+CREATE TRIGGER [audit_login_events] ON ALL SERVER
 WITH EXECUTE AS 'sa'
 FOR LOGON 
 AS 
@@ -234,14 +242,14 @@ BEGIN
 			SET @ispooled = @data.value('(/EVENT_INSTANCE/IsPooled)[1]', 'bit');
 
 			INSERT INTO [DBA].[dbo].[connection_history]
-			(session_id, login_name, [program_name], [host_name], client_net_address, client_interface_name, auth_scheme, is_pooled, is_rejected_pseudo, reject_condition)
+			(session_id, login_name, [program_name], [host_name], client_net_address, [net_transport], auth_scheme, is_pooled, is_rejected_pseudo, reject_condition)
 			SELECT	@@SPID,
 					@login_name,
-					des.program_name,    
-					des.host_name,     
-					dec.client_net_address,
-					des.client_interface_name,  
-					dec.auth_scheme,
+					@app_name,    
+					@host_name,     
+					CONVERT(nvarchar(40),CONNECTIONPROPERTY('client_net_address')),
+					CONVERT(nvarchar(40),CONNECTIONPROPERTY('net_transport')),
+					CONVERT(nvarchar(40),CONNECTIONPROPERTY('auth_scheme')),
 					@ispooled,
 					is_rejected_pseudo = case when @connection_count > @connection_limit then 1 else 0 end,
 					reject_condition = case when @connection_count <= @connection_limit then null 
@@ -249,13 +257,8 @@ BEGIN
 													@login_name+' || '+isnull(@app_name,'')+' || '+@host_name+' }} '+
 													'~ {{ '+convert(varchar, @connection_count)+' > '+convert(varchar, @connection_limit)+' }}'
 											end
-			FROM	sys.dm_exec_sessions des
-			JOIN	sys.dm_exec_connections dec ON des.session_id=dec.session_id AND des.session_id=@@SPID --and dec.net_transport <> 'Session';
-			--REVERT;
 		END TRY
 		BEGIN CATCH
-			--IF @@TRANCOUNT > 0 ROLLBACK;
-			--REVERT;
 			RETURN
 		END CATCH
 	END
