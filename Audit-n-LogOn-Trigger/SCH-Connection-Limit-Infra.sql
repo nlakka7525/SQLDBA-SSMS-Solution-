@@ -149,6 +149,12 @@ BEGIN
 	declare @host_name sysname = host_name();
 	declare @data xml;
 	declare @ispooled bit;
+	DECLARE @connection_limit smallint;
+	DECLARE @connection_count smallint;
+	DECLARE @config_login_name sysname;
+	DECLARE @config_program_name sysname;
+	DECLARE @config_host_name sysname;
+	DECLARE @message varchar(5000);
 
 	declare @engine_service_account sysname;
 	declare @agent_service_account sysname;
@@ -171,13 +177,6 @@ BEGIN
 	-- Reject connections above threshold limit defined in master.dbo.connection_limit_config
 	IF EXISTS (SELECT OBJECT_ID('master.dbo.connection_limit_config'))
 	BEGIN
-		DECLARE @connection_limit smallint,
-				@connection_count smallint;
-		DECLARE @config_login_name sysname;
-		DECLARE @config_program_name sysname;
-		DECLARE @config_host_name sysname;
-		DECLARE @message varchar(5000);
-
 		-- Find specific limit with all 3 parameters match
 		SELECT @connection_limit = limit, @config_login_name = [login_name], @config_program_name = [program_name], @config_host_name = [host_name]
 		FROM master.dbo.connection_limit_config WITH (NOLOCK)
@@ -252,11 +251,12 @@ BEGIN
 											end
 			FROM	sys.dm_exec_sessions des
 			JOIN	sys.dm_exec_connections dec ON des.session_id=dec.session_id AND des.session_id=@@SPID --and dec.net_transport <> 'Session';
-			REVERT;
+			--REVERT;
 		END TRY
 		BEGIN CATCH
 			--IF @@TRANCOUNT > 0 ROLLBACK;
-			REVERT;
+			--REVERT;
+			--RETURN
 		END CATCH
 	END
 END
