@@ -3,7 +3,7 @@
   <Items>
     <LogicalFolder Name="Connections" Type="2" Sorted="true">
       <Items>
-        <ConnectionNode Name="localhost:21L-LTPABL-1187\Ajay">
+        <ConnectionNode Name="localhost:LAB\adwivedi">
           <Created>2022-06-01T16:18:06.4467228+05:30</Created>
           <Type>SQL</Type>
           <Server>localhost</Server>
@@ -66,6 +66,12 @@
           <AssociatedConnSrvName>localhost</AssociatedConnSrvName>
           <AssociatedConnUserName />
           <FullPath>QRY-Logon-Trigger-Body-Testing.sql</FullPath>
+        </FileNode>
+        <FileNode Name="QRY-SqlServer-ErrorLog.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:localhost:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>localhost</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>QRY-SqlServer-ErrorLog.sql</FullPath>
         </FileNode>
         <FileNode Name="SCH-Connection-Limit-Infra.sql">
           <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:localhost:True</AssociatedConnectionMoniker>

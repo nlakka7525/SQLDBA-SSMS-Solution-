@@ -52,9 +52,14 @@ END;
 select [@connection_limit] = @connection_limit, [@config_login_name] = @config_login_name, [@config_program_name] = @config_program_name, [@config_host_name] = @config_host_name;
 
 
-select count(1) as current_connection_count
-from sys.dm_exec_sessions es
-where (@config_login_name = es.login_name or @config_login_name = '*')
-and (@config_program_name = es.program_name or @config_program_name = '*')
-and (@config_host_name = es.host_name or @config_host_name = '*')
+if @config_login_name = '*' and @config_program_name = '*' and @config_host_name = '*'
+	select [@connection_count] = count(1)
+	from sys.dm_exec_sessions es
+	where  es.login_name = @login_name
+else
+	select [@connection_count] = count(1)
+	from sys.dm_exec_sessions es
+	where (es.login_name = @login_name or @login_name = '*')
+	and (es.program_name = @config_program_name or @config_program_name = '*')
+	and (es.host_name = @config_host_name or @config_host_name = '*');
 
