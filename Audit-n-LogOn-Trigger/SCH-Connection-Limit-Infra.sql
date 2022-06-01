@@ -251,7 +251,7 @@ BEGIN
 													'~ {{ '+convert(varchar, @connection_count)+' > '+convert(varchar, @connection_limit)+' }}'
 											end
 			FROM	sys.dm_exec_sessions des
-			JOIN	sys.dm_exec_connections dec ON des.session_id=dec.session_id AND des.session_id=@@SPID and dec.net_transport <> 'Session';
+			JOIN	sys.dm_exec_connections dec ON des.session_id=dec.session_id AND des.session_id=@@SPID --and dec.net_transport <> 'Session';
 			REVERT;
 		END TRY
 		BEGIN CATCH
