@@ -140,13 +140,16 @@ go
 USE [master]
 GO
 
+GRANT VIEW SERVER STATE TO [public]
+GO
+
 IF EXISTS (select 1 from sys.server_triggers where name = 'audit_login_events')
 	DROP TRIGGER [audit_login_events] ON ALL SERVER
 GO
 
 
 CREATE TRIGGER [audit_login_events] ON ALL SERVER
-WITH EXECUTE AS 'sa'
+--WITH EXECUTE AS 'sa'
 FOR LOGON 
 AS 
 SET XACT_ABORT OFF
@@ -226,7 +229,12 @@ BEGIN
 	  IF (@connection_count > @connection_limit)
 	  BEGIN
 		SET @message='Connection attempt by { login || program } = {{ ' + @login_name+' || '+@app_name+' }}' + ' from host ' + @host_name +' has been rejected due to breached concurrent connection limit (' + convert(varchar, @connection_count) + '>=' + convert(varchar, @connection_limit) + ').';
+<<<<<<< HEAD
 		RAISERROR (@message, 10, 1);
+=======
+		--RAISERROR (@message, 16, 1) WITH LOG;
+		PRINT @message;
+>>>>>>> 7ffbd302172b0661bb2d861fa0d3341afa88739d
 		ROLLBACK;
 		--RETURN;
 	  END;
