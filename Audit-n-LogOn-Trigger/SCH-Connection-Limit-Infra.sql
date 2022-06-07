@@ -98,8 +98,8 @@ GO
 -- TRUNCATE TABLE [dbo].[connection_limit_config]
 INSERT INTO [dbo].[connection_limit_config] 
 ([login_name], [program_name], [host_name], [limit])
-SELECT [login_name] = '*', [program_name] = '*', [host_name] = '*', [limit] = 300
-UNION ALL
+--SELECT [login_name] = '*', [program_name] = '*', [host_name] = '*', [limit] = 250
+--UNION ALL
 SELECT [login_name] = 'grafana', [program_name] = '*', [host_name] = '*', [limit] = 20;
 
 select * from [dbo].[connection_limit_config]
@@ -226,8 +226,8 @@ BEGIN
 	  IF (@connection_count > @connection_limit)
 	  BEGIN
 		SET @message='Connection attempt by { login || program } = {{ ' + @login_name+' || '+@app_name+' }}' + ' from host ' + @host_name +' has been rejected due to breached concurrent connection limit (' + convert(varchar, @connection_count) + '>=' + convert(varchar, @connection_limit) + ').';
-		--RAISERROR (@message, 10, 1);
-		--ROLLBACK;
+		RAISERROR (@message, 10, 1);
+		ROLLBACK;
 		--RETURN;
 	  END;
 	END;
