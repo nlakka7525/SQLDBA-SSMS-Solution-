@@ -89,12 +89,17 @@ Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "SQLMonitor", "SQLMonitor\SQ
 EndProject
 Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "Audit-n-LogOn-Trigger", "Audit-n-LogOn-Trigger\Audit-n-LogOn-Trigger.ssmssqlproj", "{428AB281-827E-41A5-B117-8106AACECE00}"
 EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "Org-Project-167-Queries", "Org-Project-167-Queries\Org-Project-167-Queries.ssmssqlproj", "{B1DE93FE-0CFD-47A6-9D6B-8D49D7A707F9}"
+EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "Org-Project-LogOn-Trigger", "Org-Project-LogOn-Trigger\Org-Project-LogOn-Trigger.ssmssqlproj", "{DD1C9FB4-C2B2-42E6-B94A-1096C0D5A2A9}"
+EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "Org-Project-132-Queries", "Org-Project-132-Queries\Org-Project-132-Queries.ssmssqlproj", "{E05EB8F9-4CBA-46F6-A80F-0590DB8C90D6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Default|Default = Default|Default
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{B0C7B944-7902-49D0-9A1F-08516A487E5A}.Default|Default.ActiveCfg = Default
 		{34D3C094-4DA1-4402-BCC7-D7D3C964B2AD}.Default|Default.ActiveCfg = Default
 		{15CC463C-A8D2-4F91-BF9C-5D8D86E815E2}.Default|Default.ActiveCfg = Default
 		{97D05A33-770A-4C00-B526-9FA045863965}.Default|Default.ActiveCfg = Default
@@ -138,6 +143,10 @@ Global
 		{25AF6842-FB5B-4988-8A25-FF9C85EDAC5D}.Default|Default.ActiveCfg = Default
 		{CF71F247-710E-49B9-A4EB-B2977FE49579}.Default|Default.ActiveCfg = Default
 		{428AB281-827E-41A5-B117-8106AACECE00}.Default|Default.ActiveCfg = Default
+		{B1DE93FE-0CFD-47A6-9D6B-8D49D7A707F9}.Default|Default.ActiveCfg = Default
+		{DD1C9FB4-C2B2-42E6-B94A-1096C0D5A2A9}.Default|Default.ActiveCfg = Default
+		{E05EB8F9-4CBA-46F6-A80F-0590DB8C90D6}.Default|Default.ActiveCfg = Default
+		{FA6378CF-66AB-4BDE-8C21-4F9690D5B582}.Default|Default.ActiveCfg = Default
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

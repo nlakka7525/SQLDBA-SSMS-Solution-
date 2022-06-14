@@ -123,6 +123,18 @@
           <ConnectionProtocol>NotSpecified</ConnectionProtocol>
           <ApplicationName>Microsoft SQL Server Management Studio - Query</ApplicationName>
         </ConnectionNode>
+        <ConnectionNode Name="localhost:21L-LTPABL-1187\Ajay">
+          <Created>2022-06-14T15:28:37.1325319+05:30</Created>
+          <Type>SQL</Type>
+          <Server>localhost</Server>
+          <UserName />
+          <Authentication>Windows Authentication</Authentication>
+          <InitialDB />
+          <LoginTimeout>30</LoginTimeout>
+          <ExecutionTimeout>0</ExecutionTimeout>
+          <ConnectionProtocol>NotSpecified</ConnectionProtocol>
+          <ApplicationName>Microsoft SQL Server Management Studio - Query</ApplicationName>
+        </ConnectionNode>
         <ConnectionNode Name="sqla:sa">
           <Created>2020-04-19T14:05:17.5205144+05:30</Created>
           <Type>SQL</Type>
@@ -236,9 +248,9 @@
           <FullPath>Query - Restore History.sql</FullPath>
         </FileNode>
         <FileNode Name="RevLogin-Script.sql">
-          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:sqla:False:sa</AssociatedConnectionMoniker>
-          <AssociatedConnSrvName>sqla</AssociatedConnSrvName>
-          <AssociatedConnUserName>sa</AssociatedConnUserName>
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:196.1.115.132:False:E84947</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>196.1.115.132</AssociatedConnSrvName>
+          <AssociatedConnUserName>E84947</AssociatedConnUserName>
           <FullPath>RevLogin-Script.sql</FullPath>
         </FileNode>
         <FileNode Name="ScriptOut - RESTORE With REPLACE - Multiple Dbs.sql">
