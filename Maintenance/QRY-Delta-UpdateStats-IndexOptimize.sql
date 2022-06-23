@@ -8,12 +8,12 @@ set lock_timeout 60000; -- 60 seconds
 
 declare @execute_indexoptimize bit = 1
 declare @p_db_name sysname 
-set @p_db_name = 'distribution'
+--set @p_db_name = 'distribution'
 
 if object_id('tempdb..#stats') is not null
 	drop table #stats;
 create table #stats
-(	id bigint identity(1,1) not null, [db_name] sysname, table_name sysname, stats_id bigint, stats_name sysname,
+(	id bigint identity(1,1) not null, [db_name] sysname, table_name nvarchar(500), stats_id bigint, stats_name sysname,
 	last_updated datetime2, rows_total bigint, rows_sampled bigint, steps int, unfiltered_rows bigint,
 	modification_count bigint, sqrt_formula bigint, [threshold %] numeric(20,2), order_id numeric(20,2)
 );
@@ -50,7 +50,7 @@ begin
 	order by order_id
 end
 '
---print @query_get_stats
+print @query_get_stats
 
 insert #stats
 exec sp_MSforeachdb @query_get_stats

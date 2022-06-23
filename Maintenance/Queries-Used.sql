@@ -1,15 +1,17 @@
 --	https://ola.hallengren.com/sql-server-backup.html
 
-EXECUTE dbo.IndexOptimize
-/* Update Stats */
-@Databases = 'ALL_DATABASES',
-@FragmentationLow = NULL,
-@FragmentationMedium = NULL,
-@FragmentationHigh = NULL,
-@UpdateStatistics = 'ALL',
-@OnlyModifiedStatistics = 'Y';
 
-
+EXECUTE dbo.IndexOptimize /* Update Stats */
+			@Databases = 'USER_DATABASES',
+			@FragmentationLow = NULL,
+			@FragmentationMedium = NULL,
+			@FragmentationHigh = NULL,
+			@UpdateStatistics = 'ALL',
+			@OnlyModifiedStatistics = 'Y',
+			@PartitionLevel = 'Y',
+			@Indexes = 'AdventureWorks.Production.Product',
+			@MSShippedObjects = 'Y'
+go
 
 
 DECLARE @_dbNames VARCHAR(MAX);
@@ -83,3 +85,5 @@ EXECUTE dbo.IndexOptimize_Modified
 --@Delay = 120, /* Introduce 300 seconds of Delay b/w Indexes of Replicated Databases */
 @LogToTable = 'Y'
 ,@forceReInitiate = 0
+go
+
