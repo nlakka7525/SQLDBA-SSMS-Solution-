@@ -84,7 +84,7 @@ begin
 								@FragmentationMedium = NULL,
 								@FragmentationHigh = NULL,
 								@UpdateStatistics = 'ALL',
-								@OnlyModifiedStatistics = 'N',
+								@OnlyModifiedStatistics = 'Y',
 								--@StatisticsSample = 100,
 								@PartitionLevel = 'Y',
 								@LogToTable = 'Y',
