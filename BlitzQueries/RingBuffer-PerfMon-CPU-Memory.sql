@@ -323,7 +323,9 @@ IF (SELECT count(distinct rpoolname) FROM #resource_pool) < 2
 	SET @pool_name = NULL;
 ;WITH T_Requests AS 
 (
-	SELECT [Pool], s.login_name, REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE (s.program_name, '0', '#'),'1', '#'),'2', '#'),'3', '#'),'4', '#'),'5', '#'),'6', '#'),'7', '#'),'8', '#'),'9', '#') as program_name, r.session_id, r.request_id
+	SELECT [Pool], s.login_name, [program_name] = ltrim(rtrim(s.program_name)),
+				--REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE (ltrim(rtrim(s.program_name)), '0', '#'),'1', '#'),'2', '#'),'3', '#'),'4', '#'),'5', '#'),'6', '#'),'7', '#'),'8', '#'),'9', '#') as program_name, 
+				r.session_id, r.request_id
 	FROM  sys.dm_exec_requests r
 	JOIN	sys.dm_exec_sessions s ON s.session_id = r.session_id
 	OUTER APPLY
@@ -338,22 +340,22 @@ IF (SELECT count(distinct rpoolname) FROM #resource_pool) < 2
 )
 ,T_Programs_Tasks_Total AS
 (
-	SELECT	[Pool], login_name, r.program_name,
+	SELECT	[Pool], login_name, [program_name] = ltrim(rtrim(r.program_name)),
 			[active_request_counts] = COUNT(*),
 			[num_tasks] = SUM(t.tasks)
 	FROM  T_Requests as r
 	OUTER APPLY (	select count(*) AS tasks, count(distinct t.scheduler_id) as schedulers 
 								from sys.dm_os_tasks t where r.session_id = t.session_id --and r.request_id = t.request_id
 							) t
-	GROUP  BY [Pool], login_name, r.program_name
+	GROUP  BY [Pool], login_name, ltrim(rtrim(r.program_name))
 )
 ,T_Programs_Schedulers AS
 (
-	SELECT [Pool], login_name, r.program_name, [num_schedulers] = COUNT(distinct t.scheduler_id)
+	SELECT [Pool], login_name, [program_name] = ltrim(rtrim(r.program_name)), [num_schedulers] = COUNT(distinct t.scheduler_id)
 	FROM T_Requests as r
 	JOIN sys.dm_os_tasks t
 		ON t.session_id = r.session_id AND t.request_id = r.request_id
-	GROUP BY [Pool], login_name, program_name
+	GROUP BY [Pool], login_name, ltrim(rtrim(r.program_name))
 )
 SELECT RunningQuery = (COALESCE(@pool_name,'ALL')+'-POOL/')+'Requests',
 		@current_time_UTC as [Current-Time-UTC],
@@ -363,7 +365,7 @@ SELECT RunningQuery = (COALESCE(@pool_name,'ALL')+'-POOL/')+'Requests',
 									end
 FROM	T_Programs_Tasks_Total as ptt
 JOIN	T_Programs_Schedulers as ps
-	ON ps.Pool = ptt.Pool AND ps.program_name = ptt.program_name
+	ON ps.Pool = ptt.Pool AND ps.program_name = ptt.program_name and ps.login_name = ptt.login_name
 OUTER APPLY (	SELECT COUNT(*) as Scheduler_Count FROM #resource_pool AS rp WHERE rp.rpoolname = ptt.[Pool]	) as rp
 ORDER  BY [Pool], [num_tasks] desc, active_request_counts desc, [scheduler_percent] desc
 OFFSET 0 ROWS FETCH NEXT @top_x_program_rows ROWS ONLY; 
