@@ -101,3 +101,24 @@ begin
 	DEALLOCATE cur_stats;
 end
 go
+
+
+/*
+EXECUTE dbo.IndexOptimize
+		@Databases = 'ALL_DATABASES',
+		--@Databases = 'AVAILABILITY_GROUP_DATABASES',
+		@FragmentationLow = NULL,
+		@FragmentationMedium = NULL,
+		@FragmentationHigh = NULL,
+		@UpdateStatistics = 'ALL',
+		@OnlyModifiedStatistics = 'Y',
+		--@StatisticsSample = 100,
+		@PartitionLevel = 'Y',
+		@LogToTable = 'N',
+		@SortInTempdb = 'Y',
+		@MSShippedObjects = 'Y'
+		--@MaxDOP = 4,
+		/* Run parallel update stats for each table */
+		--@Indexes = @indexes
+		,@Execute = 'Y';
+*/

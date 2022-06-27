@@ -17,6 +17,7 @@ DECLARE @get_blitz_analysis BIT = 0;
 DECLARE @only_X_resultset smallint = -1;
 DECLARE @show_plan TINYINT = 1; /* 0 = no plan, 1 = query plan, 2 = batch plan */
 DECLARE @all_requests TINYINT = 1;
+DECLARE @granted_memory_threshold_mb decimal(20,2) = 500.00;
 
 DECLARE @current_time_UTC datetime = sysutcdatetime();
 -- Capture running sessions for Blocking
@@ -95,6 +96,7 @@ select  Concat
 		,er.query_plan_hash
 		,[BatchQueryPlan] = case when @show_plan >= 2 then bqp.query_plan else 'set @show_plan = 2 to get plans' end
 		,[SqlQueryPlan] = case when @show_plan >= 1 then convert(xml,sqp.query_plan) else 'set @show_plan = 1 to get plans' end
+		,er.request_id
 		,GETDATE() as collection_time
 INTO #SysProcesses
 FROM	sys.dm_exec_sessions AS s
@@ -150,7 +152,8 @@ set @object_name = (case when @@SERVICENAME = 'MSSQLSERVER' then 'SQLServer' els
 select  'Memory-Status' as RunningQuery, [Domain] = DEFAULT_DOMAIN(), [ServerName] = @@servername, [IP] = CONNECTIONPROPERTY('local_net_address'),
 --		[IsClustered/IsHadrEnabled] = (select CONVERT(varchar,SERVERPROPERTY('IsClustered'))+' / '+CONVERT(varchar,SERVERPROPERTY('IsHadrEnabled'))
 --from sys.dm_os_host_info),
-		@current_time_UTC as [Current-Time-UTC], [MemoryGrantsPending] as [**M/r-Grants-Pending**], 
+		@current_time_UTC as [Current-Time-UTC], [MemoryGrantsPending] as [**M/r-Grants-Pending**],
+		[M/r-Consumers] = convert(varchar,(select count(*) from #SysProcesses sp where (sp.granted_query_memory_kb/1024.0) >= @granted_memory_threshold_mb))+' Sessions (>='+convert(varchar,@granted_memory_threshold_mb)+'MB)',
 		[**Blocking-Count**] = (select count(*) from #SysProcesses sp where sp.blocking_session_id <> 0 and sp.blocking_session_id <> sp.session_id),
 		[PageLifeExpectancy],
 		[CPU Count] = (select count(*) from sys.dm_os_schedulers as dos where dos.status IN ('VISIBLE ONLINE')),
@@ -377,7 +380,7 @@ SELECT RunningQuery = 'Concurrent-Session-Queries',
 		[query_count] = COUNT(*) OVER(PARTITION BY LEFT([sql_text],100)), 
 		[tasks_count] = SUM(tasks) OVER(PARTITION BY LEFT([sql_text],100)), 
 		--[tasks_count] = SUM(tasks) OVER(PARTITION BY Pool, LEFT(program_name,15), [DBName], LEFT(statement_text,100)), 
-		[session_id], [tasks], [status], [wait_type], [blocked by] = blocking_session_id, [open_tran], [granted_query_memory], 
+		[session_id], request_id, [tasks], [status], [wait_type], [blocked by] = blocking_session_id, [open_tran], [granted_query_memory], 
 		[sql_text], [sql_command], [wait_time], [elapsed_time(S)] = DATEDIFF(SECOND,start_time,collection_time), [login_time], 
 		granted_query_memory, granted_query_memory_kb, [memusage], 
 		[writes], [reads], [is_user_process], [session_row_count], [request_row_count], 
@@ -394,12 +397,16 @@ ORDER BY [tasks_count] desc, query_count desc, LEFT([sql_text],100), [request_st
 OFFSET 0 ROWS FETCH NEXT @top_x_query_rows ROWS ONLY;
 
 
-IF (	(SELECT cntr_value FROM sys.dm_os_performance_counters WITH (NOLOCK) 
-		WHERE [object_name] LIKE (@object_name+':%Memory Manager%') AND counter_name = N'Memory Grants Pending' ) > 0 )
+IF (	(	(SELECT cntr_value FROM sys.dm_os_performance_counters WITH (NOLOCK) 
+			WHERE [object_name] LIKE (@object_name+':%Memory Manager%') AND counter_name = N'Memory Grants Pending' ) > 0
+		)
+		OR
+		(EXISTS (select count(*) from #SysProcesses sp where (sp.granted_query_memory_kb/1024.0) >= @granted_memory_threshold_mb))
+	)
 BEGIN
 	--	Query to find what's running on server (Similar to sp_WhoIsActive)
-	SELECT RunningQuery = 'Memory-Consumers',
-			[Pool], [dd hh:mm:ss], [session_id], [command], granted_query_memory, 
+	SELECT RunningQuery = 'Memory-Consumers (>='+convert(varchar,@granted_memory_threshold_mb)+'MB)',
+			[Pool], [dd hh:mm:ss], [session_id], request_id, [command], granted_query_memory, 
 			[program_name], [login_name], [database_name], [host_name], 
 			[query_count] = COUNT(*) OVER(PARTITION BY LEFT([sql_text],100)), 
 			[tasks_count] = SUM(tasks) OVER(PARTITION BY LEFT([sql_text],100)), 
@@ -413,10 +420,13 @@ BEGIN
 			,[SqlQueryPlan] = CASE WHEN @show_plan >= 1 THEN [SqlQueryPlan] ELSE NULL END
 			,collection_time_utc = @current_time_UTC
 	FROM #SysProcesses ar
-	WHERE @pool_name IS NULL -- No pool filter applied
-		-- All sessions of Pool, or blockers of Pool session
-		OR (ar.Pool = @pool_name OR ar.session_id IN (SELECT bl.[blocking_session_id] FROM #SysProcesses bl WHERE bl.Pool = @pool_name and ISNULL(bl.[blocking_session_id],0) <> 0)
+	WHERE	(	@pool_name IS NULL -- No pool filter applied
+				-- All sessions of Pool, or blockers of Pool session
+				OR ( ar.Pool = @pool_name OR ar.session_id IN (SELECT bl.[blocking_session_id] FROM #SysProcesses bl WHERE bl.Pool = @pool_name and ISNULL(bl.[blocking_session_id],0) <> 0) )
 			)
+			AND
+			(	(ar.granted_query_memory_kb/1024.0) >= @granted_memory_threshold_mb )
+		
 	ORDER BY [granted_query_memory_kb] desc, [tasks_count] desc, query_count desc, LEFT([sql_text],100), [request_start_time]
 	OFFSET 0 ROWS FETCH NEXT @top_x_query_rows ROWS ONLY;
 END
