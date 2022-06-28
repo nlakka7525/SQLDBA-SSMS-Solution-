@@ -15,6 +15,30 @@
           <ConnectionProtocol>NotSpecified</ConnectionProtocol>
           <ApplicationName>Microsoft SQL Server Management Studio - Query</ApplicationName>
         </ConnectionNode>
+        <ConnectionNode Name="172.31.16.57:E84947">
+          <Created>2022-06-27T09:55:09.4548181+05:30</Created>
+          <Type>SQL</Type>
+          <Server>172.31.16.57</Server>
+          <UserName>E84947</UserName>
+          <Authentication>SQL</Authentication>
+          <InitialDB />
+          <LoginTimeout>30</LoginTimeout>
+          <ExecutionTimeout>0</ExecutionTimeout>
+          <ConnectionProtocol>NotSpecified</ConnectionProtocol>
+          <ApplicationName>Microsoft SQL Server Management Studio - Query</ApplicationName>
+        </ConnectionNode>
+        <ConnectionNode Name="172.31.16.94:E84947">
+          <Created>2022-06-28T12:57:55.2726672+05:30</Created>
+          <Type>SQL</Type>
+          <Server>172.31.16.94</Server>
+          <UserName>E84947</UserName>
+          <Authentication>SQL</Authentication>
+          <InitialDB />
+          <LoginTimeout>30</LoginTimeout>
+          <ExecutionTimeout>0</ExecutionTimeout>
+          <ConnectionProtocol>NotSpecified</ConnectionProtocol>
+          <ApplicationName>Microsoft SQL Server Management Studio - Query</ApplicationName>
+        </ConnectionNode>
         <ConnectionNode Name="172.31.16.95:E84947">
           <Created>2022-06-27T09:34:50.7752232+05:30</Created>
           <Type>SQL</Type>
@@ -31,6 +55,18 @@
           <Created>2022-06-23T10:43:43.8324872+05:30</Created>
           <Type>SQL</Type>
           <Server>172.31.25.106</Server>
+          <UserName>E84947</UserName>
+          <Authentication>SQL</Authentication>
+          <InitialDB />
+          <LoginTimeout>30</LoginTimeout>
+          <ExecutionTimeout>0</ExecutionTimeout>
+          <ConnectionProtocol>NotSpecified</ConnectionProtocol>
+          <ApplicationName>Microsoft SQL Server Management Studio - Query</ApplicationName>
+        </ConnectionNode>
+        <ConnectionNode Name="172.31.25.79:E84947">
+          <Created>2022-06-28T09:03:27.2702659+05:30</Created>
+          <Type>SQL</Type>
+          <Server>172.31.25.79</Server>
           <UserName>E84947</UserName>
           <Authentication>SQL</Authentication>
           <InitialDB />
@@ -158,8 +194,8 @@
           <FullPath>Maintainence - Delete files older than 72 hours.sql</FullPath>
         </FileNode>
         <FileNode Name="MaintenanceSolution-Without-Jobs.sql">
-          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:172.31.12.40:False:E84947</AssociatedConnectionMoniker>
-          <AssociatedConnSrvName>172.31.12.40</AssociatedConnSrvName>
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:172.31.16.94:False:E84947</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>172.31.16.94</AssociatedConnSrvName>
           <AssociatedConnUserName>E84947</AssociatedConnUserName>
           <FullPath>MaintenanceSolution-Without-Jobs.sql</FullPath>
         </FileNode>
@@ -176,8 +212,8 @@
           <FullPath>Ola-Maintenance-Solution-Github.sql</FullPath>
         </FileNode>
         <FileNode Name="QRY-Delta-UpdateStats-IndexOptimize.sql">
-          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:172.31.16.95:False:E84947</AssociatedConnectionMoniker>
-          <AssociatedConnSrvName>172.31.16.95</AssociatedConnSrvName>
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:172.31.16.94:False:E84947</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>172.31.16.94</AssociatedConnSrvName>
           <AssociatedConnUserName>E84947</AssociatedConnUserName>
           <FullPath>QRY-Delta-UpdateStats-IndexOptimize.sql</FullPath>
         </FileNode>

@@ -15,7 +15,7 @@ DECLARE @top_x_query_rows SMALLINT = 10;
 DECLARE @long_running_query_threshold_minutes INT = 10;
 DECLARE @get_blitz_analysis BIT = 0;
 DECLARE @only_X_resultset smallint = -1;
-DECLARE @show_plan TINYINT = 1; /* 0 = no plan, 1 = query plan, 2 = batch plan */
+DECLARE @show_plan TINYINT = 0; /* 0 = no plan, 1 = query plan, 2 = batch plan */
 DECLARE @all_requests TINYINT = 1;
 DECLARE @granted_memory_threshold_mb decimal(20,2) = 500.00;
 
@@ -101,7 +101,7 @@ select  Concat
 INTO #SysProcesses
 FROM	sys.dm_exec_sessions AS s
 LEFT JOIN sys.dm_exec_requests AS er ON er.session_id = s.session_id
-OUTER APPLY (select dec.most_recent_sql_handle as [sql_handle] from sys.dm_exec_connections dec where dec.session_id = s.session_id) AS dec
+OUTER APPLY (select top 1 dec.most_recent_sql_handle as [sql_handle] from sys.dm_exec_connections dec where dec.most_recent_session_id = s.session_id and dec.most_recent_sql_handle is not null) AS dec
 OUTER APPLY sys.dm_exec_sql_text(COALESCE(er.sql_handle,dec.sql_handle)) AS t
 OUTER APPLY sys.dm_exec_query_plan(er.plan_handle) AS bqp
 OUTER APPLY sys.dm_exec_text_query_plan(er.plan_handle,er.statement_start_offset, er.statement_end_offset) as sqp
