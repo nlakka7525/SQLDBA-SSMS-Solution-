@@ -18,6 +18,10 @@ DECLARE @only_X_resultset smallint = -1;
 DECLARE @show_plan TINYINT = 0; /* 0 = no plan, 1 = query plan, 2 = batch plan */
 DECLARE @all_requests TINYINT = 1;
 DECLARE @granted_memory_threshold_mb decimal(20,2) = 500.00;
+DECLARE @sort_order_all_sessions varchar(500);
+--SET @sort_order_all_sessions = '[elapsed_time_sec], [granted_query_memory_kb] desc';
+--SET @sort_order_all_sessions = '[login_name][elapsed_time_sec] desc';
+SET @sort_order_all_sessions = '[cpu] desc, [tasks] desc';
 
 DECLARE @current_time_UTC datetime = sysutcdatetime();
 -- Capture running sessions for Blocking
@@ -97,6 +101,7 @@ select  Concat
 		,[BatchQueryPlan] = case when @show_plan >= 2 then bqp.query_plan else 'set @show_plan = 2 to get plans' end
 		,[SqlQueryPlan] = case when @show_plan >= 1 then convert(xml,sqp.query_plan) else 'set @show_plan = 1 to get plans' end
 		,er.request_id
+		,[elapsed_time_sec] = DATEDIFF(second,start_time,GETDATE())
 		,GETDATE() as collection_time
 INTO #SysProcesses
 FROM	sys.dm_exec_sessions AS s
@@ -536,6 +541,13 @@ end
 
 IF @all_requests = 1
 begin
-	select RunningQuery = 'All-Active-Requests', * from #SysProcesses
-	order by DATEDIFF(second,start_time,collection_time) desc, granted_query_memory_kb desc
+	if @sort_order_all_sessions is null or len(ltrim(rtrim(@sort_order_all_sessions))) = 0
+		set @sort_order_all_sessions = '[elapsed_time_sec] desc, [granted_query_memory_kb] desc';
+
+	--select @sort_order_all_sessions, replace(replace(ltrim(rtrim(replace(replace(left(@sort_order_all_sessions,charindex(',',@sort_order_all_sessions)-1),' desc',''),' asc',''))),'[',''),']','')
+	
+	declare @sql nvarchar(max);	
+	set @sql = 'select RunningQuery = ''All-Sessions-SortedBy-'+(replace(replace(ltrim(rtrim(replace(replace(left(@sort_order_all_sessions,charindex(',',@sort_order_all_sessions)-1),' desc',''),' asc',''))),'[',''),']',''))+''', * from #SysProcesses'
+	set @sql = @sql + char(10) + ' order by '+@sort_order_all_sessions;
+	exec (@sql);
 end
