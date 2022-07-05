@@ -209,6 +209,15 @@ SELECT [Info] = LEFT('OS CPU'+REPLICATE('_',20),10 ) + ' = ' + @system_cpu_utili
 UNION ALL
 SELECT [Info] = LEFT('SQL CPU'+REPLICATE('_',20),10 ) + ' = ' + @sql_cpu_utilization;
 
+if (convert(int,left(@system_cpu_utilization, charindex('<',@system_cpu_utilization)-2)) > 50)
+begin
+	select [RunningQuery] = 'Schedulers', parent_node_id, count(*) as scheduler_count, sum(convert(int,is_idle)) as idle_scheduler_count, sum(current_tasks_count) as current_tasks_count,
+			sum(runnable_tasks_count) as runnable_tasks_count, sum(current_workers_count) as workers_count, sum(active_workers_count) as active_workers_count, 
+			sum(pending_disk_io_count) as pending_disk_io_count		
+	from sys.dm_os_schedulers
+	where status = 'VISIBLE ONLINE' and is_online = 1
+	group by parent_node_id
+end
 
 /* Begin Code to find Resource Pool Scheduler Affinity */
 set nocount on;
