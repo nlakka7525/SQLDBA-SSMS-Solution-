@@ -395,11 +395,15 @@ select * from tt where tt.QueryText not like 'select name as objectName from sou
 	and tt.QueryText not like 'SELECT         program_base.[program_id] AS %'
 order by PlanCount desc
 
+
+
+
 --	How to examine IO subsystem latencies from within SQL Server (Disk Latency)
 	--	https://www.sqlskills.com/blogs/paul/how-to-examine-io-subsystem-latencies-from-within-sql-server/
 	--	https://sqlperformance.com/2015/03/io-subsystem/monitoring-read-write-latency
 	--	https://www.brentozar.com/blitz/slow-storage-reads-writes/
-SELECT
+;WITH CTE_Latency AS (
+SELECT  
     [ReadLatency] =
         CASE WHEN [num_of_reads] = 0
             THEN 0 ELSE ([io_stall_read_ms] / [num_of_reads]) END,
@@ -429,9 +433,13 @@ JOIN sys.master_files AS [mf]
     ON [vfs].[database_id] = [mf].[database_id]
     AND [vfs].[file_id] = [mf].[file_id]
 -- WHERE [vfs].[file_id] = 2 -- log files
-ORDER BY [Latency] DESC
--- ORDER BY [ReadLatency] DESC
---ORDER BY [WriteLatency] DESC;
+)
+SELECT top 20 RunningQuery = 'since-startup-top-20-Disk-latency',
+		[startup_time] = (select cast(d.create_date as smalldatetime) from sys.databases d where d.name = 'tempdb'),
+		* 
+FROM CTE_Latency
+--WHERE ([ReadLatency] > 1 or [WriteLatency] > 1)
+ORDER BY ([ReadLatency]+[WriteLatency]) DESC
 GO
 
 
@@ -459,7 +467,7 @@ INSERT INTO #Snapshot(database_id,file_id,num_of_reads,num_of_bytes_read
 OPTION (RECOMPILE);
 
 -- Set test interval (1 minute). 
-WAITFOR DELAY '00:01:00.000';
+WAITFOR DELAY '00:00:05.000';
 
 ;WITH Stats(db_id, file_id, Reads, ReadBytes, Writes
     ,WrittenBytes, ReadStall, WriteStall)
@@ -477,7 +485,7 @@ as
         #Snapshot s JOIN sys.dm_io_virtual_file_stats(NULL, NULL) fs ON
             s.database_id = fs.database_id and s.file_id = fs.file_id
 )
-SELECT RunningQuery = '60-seconds-wait-stats',
+SELECT RunningQuery = '5-seconds-wait-stats',
     s.db_id AS [DB ID], d.name AS [Database]
     ,mf.name AS [File Name], mf.physical_name AS [File Path]
     ,mf.type_desc AS [Type], s.Reads 
@@ -511,6 +519,7 @@ ORDER BY
 	[Avg Write Stall] desc
 OPTION (RECOMPILE);
 go
+
 
 /*	 Look at pending I/O requests by file	*/
 SELECT DB_NAME(mf.database_id) AS [Database] , mf.physical_name ,r.io_pending , r.io_pending_ms_ticks , r.io_type , fs.num_of_reads , fs.num_of_writes

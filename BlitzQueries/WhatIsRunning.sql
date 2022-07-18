@@ -142,7 +142,8 @@ AND	(( @sql_text_fragment_filter is null or len(@sql_text_fragment_filter) = 0 )
 --and r.program_name like '%Postgres Defragment%'
 --and (lower(r.login_name) like 'contso\adwivedi' )
 --and sql_command like '%#fields%'
-ORDER BY start_time asc, granted_query_memory_raw desc
+--ORDER BY start_time asc, granted_query_memory_raw desc
+order by [writes] desc
 --order by cpu_time desc
 
 
