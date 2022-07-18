@@ -212,8 +212,8 @@
           <FullPath>Ola-Maintenance-Solution-Github.sql</FullPath>
         </FileNode>
         <FileNode Name="QRY-Delta-UpdateStats-IndexOptimize.sql">
-          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:172.31.16.94:False:E84947</AssociatedConnectionMoniker>
-          <AssociatedConnSrvName>172.31.16.94</AssociatedConnSrvName>
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:196.1.115.167:False:E84947</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>196.1.115.167</AssociatedConnSrvName>
           <AssociatedConnUserName>E84947</AssociatedConnUserName>
           <FullPath>QRY-Delta-UpdateStats-IndexOptimize.sql</FullPath>
         </FileNode>
