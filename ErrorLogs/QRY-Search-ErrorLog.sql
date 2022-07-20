@@ -10,7 +10,7 @@ WHERE d.name = 'tempdb';
 declare @start_time datetime, @end_time datetime, @err_msg_1 nvarchar(256) = null, @err_msg_2 nvarchar(256) = null;
 --set @start_time = '2021-05-17 18:00:00.000' --  August 22, 2020 05:16:00
 --set @time = DATEADD(HOUR,-1,getdate());
-set @start_time = DATEADD(HOUR,-1,getdate());
+set @start_time = DATEADD(HOUR,-12,getdate());
 --set @end_time = '2021-04-23 00:00:00.000';
 set @end_time = GETDATE()
 --set @end_time = DATEADD(minute,30*1,@start_time)
@@ -60,8 +60,8 @@ where 1 = 1
 --and e.Text like '%has been rejected due to breached concurrent connection limit%'
 and	e.ProcessInfo not in ('Backup')
 --and e.ProcessInfo not in ('Logon')
---and e.Text not like 'Error: 18456, Severity: 14, State: 5.'
---and not (e.ProcessInfo = 'Backup' and (e.Text like 'Log was backed up%' or e.Text like 'Database backed up. %' or e.Text like 'BACKUP DATABASE successfully%') )
+and e.Text not like 'Error: 18456%'
+and not (e.ProcessInfo = 'Backup' and (e.Text like 'Log was backed up%' or e.Text like 'Database backed up. %' or e.Text like 'BACKUP DATABASE successfully%') )
 and e.Text not like 'Parallel redo is shutdown for database%'
 and e.Text not like 'Parallel redo is started for database%'
 --and e.Text not like 'Database % is a cloned database. This database should be used for diagnostic purposes only and is not supported for use in a production environment.'
@@ -72,7 +72,7 @@ and e.Text not like 'Parallel redo is started for database%'
 and e.Text not like 'CHECKDB for database % finished without errors%'
 --and e.Text not like 'SQL Server blocked access to procedure%'
 --and e.Text not like 'Always On: DebugTraceVarArgs AR %'
---and e.Text not like 'Login failed for user %'
+and e.Text not like 'Login failed for user %'
 and e.Text not like 'I/O is frozen on database%'
 and e.Text not like 'I/O was resumed on database%'
 and e.Text not like 'Attempting to load library ''%.dll'' into memory. This is an informational message only. No user action is required.'

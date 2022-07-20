@@ -87,7 +87,7 @@ begin
 								@OnlyModifiedStatistics = 'Y',
 								--@StatisticsSample = 100,
 								@PartitionLevel = 'Y',
-								@LogToTable = 'Y',
+								@LogToTable = 'N',
 								@SortInTempdb = 'Y',
 								@MSShippedObjects = 'Y',
 								--@MaxDOP = 4,
