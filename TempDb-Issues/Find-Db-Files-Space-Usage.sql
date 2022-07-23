@@ -3,7 +3,7 @@ GO
 
 --	Query to find size of Data/Log files for all databases except tempdb
 	-- To estimate required size of tempdb database (20% of other dbs)
-https://github.com/imajaydwivedi/SQLDBA-SSMS-Solution/tree/master/PowerShell%20Commands/Find-Data-Log-File-Size-Total-Server.sql
+	-- https://github.com/imajaydwivedi/SQLDBA-SSMS-Solution/tree/master/PowerShell%20Commands/Find-Data-Log-File-Size-Total-Server.sql
 
 
 --	Find used/free space in Database Files
@@ -11,7 +11,7 @@ select f.type_desc, f.name, f.physical_name, (f.size*8.0)/1024 as size_MB, f.max
 	CAST(FILEPROPERTY(f.name, 'SpaceUsed') as BIGINT)/128.0/1024 AS SpaceUsed_gb
 		,(size/128.0 -CAST(FILEPROPERTY(name,'SpaceUsed') AS INT)/128.0)/1024 AS FreeSpace_GB
 from sys.database_files f
-where f.type_desc = 'ROWS'
+--where f.type_desc = 'ROWS'
 order by f.type_desc
 
 

@@ -1,6 +1,7 @@
 use DBA
 go
 
+declare @table_name varchar(125) = 'dbo.diet_cli_all_hist';
 ;with tStats as (
 	select	db_name() as [db_name], schema_name(o.schema_id)+'.'+o.name as [object_name], st.object_id, sp.stats_id, st.name as stats_name, st.auto_created, sp.last_updated, ps.rows_total,
 			sp.rows_sampled, sp.steps, sp.unfiltered_rows, sp.modification_counter
@@ -15,22 +16,28 @@ go
 	) as ps
 	where o.is_ms_shipped = 0
 )
-select	[db_name], [object_name], stats_name,
-		[columns] = STUFF((SELECT ', ' + c.name --convert(varchar,sc.column_id)
-							from sys.stats_columns as sc
-							join sys.columns c on c.object_id = sc.object_id and c.column_id = sc.column_id
-							where sc.object_id = s.object_id and sc.stats_id = s.stats_id
-							ORDER BY sc.stats_column_id
-							FOR XML PATH('')
-						), 1, 1, ''),
-		[current_time] = GETDATE(), [last_updated], auto_created, [rows_total], [rows_sampled], [steps],
-		[unfiltered_rows], [modification_counter], [UpdateThreshold]
-		,[threshold %] = case when [UpdateThreshold] = 0 then null else convert(decimal(20,0),(modification_counter*100)/[UpdateThreshold]) end
-		--,[order_id] = (SQRT(s.rows_total)*0.3) +(convert(decimal(20,0),(modification_counter*100)/[UpdateThreshold]))
-from tStats s
-where s.[object_name] in ('dbo.who_is_active')
-order by 1,2,4,3,[threshold %] desc
+,t_stats_final as (
+	select	[db_name], [object_name], stats_name,
+			[columns] = STUFF((SELECT ', ' + c.name --convert(varchar,sc.column_id)
+								from sys.stats_columns as sc
+								join sys.columns c on c.object_id = sc.object_id and c.column_id = sc.column_id
+								where sc.object_id = s.object_id and sc.stats_id = s.stats_id
+								ORDER BY sc.stats_column_id
+								FOR XML PATH('')
+							), 1, 1, ''),
+			[current_time] = GETDATE(), [last_updated], auto_created, [rows_total], [rows_sampled], [steps],
+			[unfiltered_rows], [modification_counter], [UpdateThreshold]
+			,[threshold %] = case when [UpdateThreshold] = 0 then null else convert(decimal(20,0),(modification_counter*100)/[UpdateThreshold]) end
+			--,[order_id] = (SQRT(s.rows_total)*0.3) +(convert(decimal(20,0),(modification_counter*100)/[UpdateThreshold]))
+	from tStats s
+	where s.[object_name] = @table_name
+)
+select	*
+		--distinct columns
+from t_stats_final
+--order by 1,2,4,3,[threshold %] desc
 go
+
 
 
 --DBCC SHOW_STATISTICS ('dbo.who_is_active','pk_who_is_active');
