@@ -223,6 +223,12 @@
           <AssociatedConnUserName>E84947</AssociatedConnUserName>
           <FullPath>QRY-Space-Estimate-Using-SQLMonitor.sql</FullPath>
         </FileNode>
+        <FileNode Name="SCH-Move-Database-Files.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:196.1.115.167:False:E84947</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>196.1.115.167</AssociatedConnSrvName>
+          <AssociatedConnUserName>E84947</AssociatedConnUserName>
+          <FullPath>SCH-Move-Database-Files.sql</FullPath>
+        </FileNode>
         <FileNode Name="Shrink Log Files.sql">
           <AssociatedConnectionMoniker />
           <AssociatedConnSrvName />

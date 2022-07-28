@@ -183,6 +183,18 @@
           <ConnectionProtocol>NotSpecified</ConnectionProtocol>
           <ApplicationName>Microsoft SQL Server Management Studio - Query</ApplicationName>
         </ConnectionNode>
+        <ConnectionNode Name="196.1.115.200:E84947">
+          <Created>2022-07-28T18:48:38.8447127+05:30</Created>
+          <Type>SQL</Type>
+          <Server>196.1.115.200</Server>
+          <UserName>E84947</UserName>
+          <Authentication>SQL</Authentication>
+          <InitialDB />
+          <LoginTimeout>30</LoginTimeout>
+          <ExecutionTimeout>0</ExecutionTimeout>
+          <ConnectionProtocol>NotSpecified</ConnectionProtocol>
+          <ApplicationName>Microsoft SQL Server Management Studio - Query</ApplicationName>
+        </ConnectionNode>
         <ConnectionNode Name="196.1.115.204:E84947">
           <Created>2022-03-15T09:59:02.2338595+05:30</Created>
           <Type>SQL</Type>
@@ -385,9 +397,15 @@
           <AssociatedConnUserName />
           <FullPath>Plan-Cache-Analysis.sql</FullPath>
         </FileNode>
+        <FileNode Name="QRY-Kill-Memory-Consumers.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:196.1.115.196:False:E84947</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>196.1.115.196</AssociatedConnSrvName>
+          <AssociatedConnUserName>E84947</AssociatedConnUserName>
+          <FullPath>QRY-Kill-Memory-Consumers.sql</FullPath>
+        </FileNode>
         <FileNode Name="QRY-sp_WhoIsActive-Usages.sql">
-          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:172.31.16.85:False:E84947</AssociatedConnectionMoniker>
-          <AssociatedConnSrvName>172.31.16.85</AssociatedConnSrvName>
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:196.1.115.200:False:E84947</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>196.1.115.200</AssociatedConnSrvName>
           <AssociatedConnUserName>E84947</AssociatedConnUserName>
           <FullPath>QRY-sp_WhoIsActive-Usages.sql</FullPath>
         </FileNode>
@@ -398,8 +416,8 @@
           <FullPath>Querying Deadlocks From System_Health XEvent.sql</FullPath>
         </FileNode>
         <FileNode Name="RingBuffer-PerfMon-CPU-Memory.sql">
-          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:196.1.115.167:False:E84947</AssociatedConnectionMoniker>
-          <AssociatedConnSrvName>196.1.115.167</AssociatedConnSrvName>
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:196.1.115.200:False:E84947</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>196.1.115.200</AssociatedConnSrvName>
           <AssociatedConnUserName>E84947</AssociatedConnUserName>
           <FullPath>RingBuffer-PerfMon-CPU-Memory.sql</FullPath>
         </FileNode>

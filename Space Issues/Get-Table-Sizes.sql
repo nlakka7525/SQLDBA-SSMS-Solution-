@@ -1,3 +1,5 @@
+set nocount on;
+
 if OBJECT_ID('tempdb..#TableSize') is not null
 	drop table #TableSize;
 create table #TableSize (
