@@ -402,7 +402,11 @@ order by PlanCount desc
 	--	https://www.sqlskills.com/blogs/paul/how-to-examine-io-subsystem-latencies-from-within-sql-server/
 	--	https://sqlperformance.com/2015/03/io-subsystem/monitoring-read-write-latency
 	--	https://www.brentozar.com/blitz/slow-storage-reads-writes/
-;WITH CTE_Latency AS (
+
+select [Startup Time] = cast(create_date as smalldatetime) from sys.databases d where d.name = 'tempdb';
+
+IF OBJECT_ID('tempdb..#VirtualFileStats') IS NOT NULL
+	DROP TABLE #VirtualFileStats;
 SELECT  
     [ReadLatency] =
         CASE WHEN [num_of_reads] = 0
@@ -426,20 +430,45 @@ SELECT
                 ([num_of_reads] + [num_of_writes])) END,
     LEFT ([mf].[physical_name], 2) AS [Drive],
     DB_NAME ([vfs].[database_id]) AS [DB],
-    [mf].[physical_name]
+    [FileLocation] = [mf].[physical_name],
+	[DataReadGB] = convert(numeric(20,2),[num_of_bytes_read]*1.0/1024/1024/1024), 
+	[DataWrittenGB] = convert(numeric(20,2),[num_of_bytes_written]*1.0/1024/1024/1024), 
+	[NoOfReads] = [num_of_reads], [NoOfWrites] = [num_of_writes]
+INTO #VirtualFileStats
 FROM
     sys.dm_io_virtual_file_stats (NULL,NULL) AS [vfs]
 JOIN sys.master_files AS [mf]
     ON [vfs].[database_id] = [mf].[database_id]
-    AND [vfs].[file_id] = [mf].[file_id]
--- WHERE [vfs].[file_id] = 2 -- log files
-)
-SELECT top 20 RunningQuery = 'since-startup-top-20-Disk-latency',
-		[startup_time] = (select cast(d.create_date as smalldatetime) from sys.databases d where d.name = 'tempdb'),
-		* 
-FROM CTE_Latency
---WHERE ([ReadLatency] > 1 or [WriteLatency] > 1)
-ORDER BY ([ReadLatency]+[WriteLatency]) DESC
+    AND [vfs].[file_id] = [mf].[file_id];
+
+SELECT	top 20
+		RunningQuery = 'TempDb-Latency',
+		ReadLatency, WriteLatency, Latency, 
+		Drive, DB, [FileLocation], DataReadGB, DataWrittenGB, [NoOfReads], [NoOfWrites],
+		[Avg-KB-Per-Read] = convert(numeric(20,2),AvgBPerRead*1.0/1024),
+		[Avg-KB-Per-Write] = convert(numeric(20,2),AvgBPerWrite*1.0/1024)
+FROM #VirtualFileStats
+WHERE [DB] = 'tempdb'
+ORDER BY ([ReadLatency]+[WriteLatency]) DESC;
+
+SELECT	top 20
+		RunningQuery = 'Top-20-UserDb-Latency',
+		ReadLatency, WriteLatency, Latency, 
+		Drive, DB, [FileLocation], DataReadGB, DataWrittenGB, [NoOfReads], [NoOfWrites],
+		[Avg-KB-Per-Read] = convert(numeric(20,2),AvgBPerRead*1.0/1024),
+		[Avg-KB-Per-Write] = convert(numeric(20,2),AvgBPerWrite*1.0/1024)
+FROM #VirtualFileStats
+WHERE [DB] <> 'tempdb'
+ORDER BY ([ReadLatency]+[WriteLatency]) DESC;
+
+SELECT	top 20
+		RunningQuery = 'top-20-DbFiles-By-IO',		
+		Drive, DB, [FileLocation], DataReadGB, DataWrittenGB, 
+		ReadLatency, WriteLatency, Latency, [NoOfReads], [NoOfWrites],
+		[Avg-KB-Per-Read] = convert(numeric(20,2),AvgBPerRead*1.0/1024),
+		[Avg-KB-Per-Write] = convert(numeric(20,2),AvgBPerWrite*1.0/1024)
+FROM #VirtualFileStats
+ORDER BY (DataReadGB+DataWrittenGB) DESC;
 GO
 
 
