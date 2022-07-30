@@ -398,16 +398,22 @@
           <FullPath>Plan-Cache-Analysis.sql</FullPath>
         </FileNode>
         <FileNode Name="QRY-Kill-Memory-Consumers.sql">
-          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:196.1.115.196:False:E84947</AssociatedConnectionMoniker>
-          <AssociatedConnSrvName>196.1.115.196</AssociatedConnSrvName>
-          <AssociatedConnUserName>E84947</AssociatedConnUserName>
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:localhost:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>localhost</AssociatedConnSrvName>
+          <AssociatedConnUserName />
           <FullPath>QRY-Kill-Memory-Consumers.sql</FullPath>
         </FileNode>
         <FileNode Name="QRY-sp_WhoIsActive-Usages.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:196.1.115.167:False:E84947</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>196.1.115.167</AssociatedConnSrvName>
+          <AssociatedConnUserName>E84947</AssociatedConnUserName>
+          <FullPath>QRY-sp_WhoIsActive-Usages.sql</FullPath>
+        </FileNode>
+        <FileNode Name="QRY-WhoIsActive-Infra.sql">
           <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:196.1.115.200:False:E84947</AssociatedConnectionMoniker>
           <AssociatedConnSrvName>196.1.115.200</AssociatedConnSrvName>
           <AssociatedConnUserName>E84947</AssociatedConnUserName>
-          <FullPath>QRY-sp_WhoIsActive-Usages.sql</FullPath>
+          <FullPath>QRY-WhoIsActive-Infra.sql</FullPath>
         </FileNode>
         <FileNode Name="Querying Deadlocks From System_Health XEvent.sql">
           <AssociatedConnectionMoniker />
@@ -416,8 +422,8 @@
           <FullPath>Querying Deadlocks From System_Health XEvent.sql</FullPath>
         </FileNode>
         <FileNode Name="RingBuffer-PerfMon-CPU-Memory.sql">
-          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:196.1.115.200:False:E84947</AssociatedConnectionMoniker>
-          <AssociatedConnSrvName>196.1.115.200</AssociatedConnSrvName>
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:196.1.115.167:False:E84947</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>196.1.115.167</AssociatedConnSrvName>
           <AssociatedConnUserName>E84947</AssociatedConnUserName>
           <FullPath>RingBuffer-PerfMon-CPU-Memory.sql</FullPath>
         </FileNode>
