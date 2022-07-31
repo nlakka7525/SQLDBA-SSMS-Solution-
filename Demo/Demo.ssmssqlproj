@@ -3,6 +3,30 @@
   <Items>
     <LogicalFolder Name="Connections" Type="2" Sorted="true">
       <Items>
+        <ConnectionNode Name="196.1.115.200:E84947">
+          <Created>2022-07-31T11:35:00.9503257+05:30</Created>
+          <Type>SQL</Type>
+          <Server>196.1.115.200</Server>
+          <UserName>E84947</UserName>
+          <Authentication>SQL</Authentication>
+          <InitialDB>DBA_Admin</InitialDB>
+          <LoginTimeout>30</LoginTimeout>
+          <ExecutionTimeout>0</ExecutionTimeout>
+          <ConnectionProtocol>NotSpecified</ConnectionProtocol>
+          <ApplicationName>Microsoft SQL Server Management Studio - Query</ApplicationName>
+        </ConnectionNode>
+        <ConnectionNode Name="localhost:21L-LTPABL-1187\Ajay">
+          <Created>2022-07-31T11:35:49.6119711+05:30</Created>
+          <Type>SQL</Type>
+          <Server>localhost</Server>
+          <UserName />
+          <Authentication>Windows Authentication</Authentication>
+          <InitialDB />
+          <LoginTimeout>30</LoginTimeout>
+          <ExecutionTimeout>0</ExecutionTimeout>
+          <ConnectionProtocol>NotSpecified</ConnectionProtocol>
+          <ApplicationName>Microsoft SQL Server Management Studio - Query</ApplicationName>
+        </ConnectionNode>
         <ConnectionNode Name="Sql2019:sa">
           <Created>2021-11-17T12:09:56.101332+05:30</Created>
           <Type>SQL</Type>
@@ -84,6 +108,12 @@
           <AssociatedConnSrvName />
           <AssociatedConnUserName />
           <FullPath>Demo-TSQL2012.sql</FullPath>
+        </FileNode>
+        <FileNode Name="QRY-Demo-Huge-MemoryGrants.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:localhost:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>localhost</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>QRY-Demo-Huge-MemoryGrants.sql</FullPath>
         </FileNode>
       </Items>
     </LogicalFolder>

@@ -1,7 +1,7 @@
-use DBA_Admin
+USE [DBA]
 go
 
---;with xmlnamespaces (DEFAULT 'http://schemas.microsoft.com/sqlserver/2004/07/showplan'),
+-- Find long running statements of session
 ;with xmlnamespaces ('http://schemas.microsoft.com/sqlserver/2004/07/showplan' as qp),
 t_queries as (
 	select	* 
@@ -16,25 +16,27 @@ t_queries as (
 			--,[CardinalityEstimationModelVersion] = query_plan.value('(/*:ShowPlanXML/*:BatchSequence/*:Batch/*:Statements/*:StmtSimple)[1]/@CardinalityEstimationModelVersion','int')
 			,[used_memory_mb] = convert(numeric(20,2),convert(bigint,replace(used_memory,',',''))*8.0/1024)
 	from dbo.WhoIsActive w
-	where w.collection_time between dateadd(day,-2,getdate()) and getdate()
-	and w.login_name = 'Lab\SQLServices'
-	and w.database_name = 'NSEFO'
-	and w.program_name like 'SQL Job = NSE FUTURES AUTO PROCESS SETTLEMENT%'
-	--and w.blocking_session_id is null
-	--and DATEDIFF(minute,w.start_time, w.collection_time) > 30
+	where w.collection_time >= '2022-07-29 18:12' and w.collection_time <= '2022-07-29 19:45'
+	and w.database_name = 'DBA' and w.login_name = 'LAB\SQLServices' and w.program_name = 'SQLCMD'
+	and w.session_id = 134
+)
+,t_capture_interval as (
+	select [capture_interval_minutes] = datediff(minute,min(collection_time),max(collection_time))*1.0/count(*) from t_queries
 )
 ,top_queries as (
-	select *
+	select	*,
+			[query_identifier] = left((case when [query_hash] is not null then [query_hash] else [sql_handle] end),20),
+			[query_hash_count] = COUNT(session_id)over(partition by (case when [query_hash] is not null then [query_hash] else [sql_handle] end), isnull(convert(varchar(max), sql_text),convert(varchar(max), [sql_command])))
 	from t_queries w
 	--where [used_memory_mb] > 500
 )
-select top 1000 [collection_time], [start_time], [dd hh:mm:ss.mss],
-		[query_identifier] = left((case when [query_hash] is not null then [query_hash] else [sql_handle] end),20),
-		[query_hash_count] = COUNT(session_id)over(partition by (case when [query_hash] is not null then [query_hash] else [sql_handle] end), convert(varchar(max), sql_command)),		
-		[session_id], [blocking_session_id], [command_type], [sql_text], [CPU], [used_memory_mb], [open_tran_count], 
+select top 1000 [collection_time], [dd hh:mm:ss.mss], [query_identifier],
+		[qry_time_min(~)] = ceiling([query_hash_count]*[capture_interval_minutes]),		
+		[query_hash_count], [session_id], [blocking_session_id], [command_type], [sql_text], [CPU], [used_memory_mb], [open_tran_count], 
 		[status], [wait_info], [query_hash], [sql_command], [blocked_session_count], [reads], [writes], [tempdb_allocations], [tasks], [query_plan], 
-		[query_plan_hash], [NonParallelPlanReason], [host_name], [additional_info], [program_name], [login_name], [database_name], [duration_minutes]		
-from top_queries
+		[query_plan_hash], [NonParallelPlanReason], [host_name], [additional_info], [program_name], [login_name], [database_name], [duration_minutes],
+		[batch_start_time] = [start_time]
+from top_queries,t_capture_interval
 --order by [duration_minutes] desc
 --order by [collection_time], session_id, [start_time]
 order by [collection_time], [blocked_session_count] desc, session_id, [start_time]
