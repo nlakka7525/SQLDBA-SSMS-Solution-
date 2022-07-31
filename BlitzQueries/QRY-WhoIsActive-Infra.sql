@@ -21,17 +21,19 @@ t_queries as (
 	and w.session_id = 134
 )
 ,t_capture_interval as (
-	select [capture_interval_minutes] = datediff(minute,min(collection_time),max(collection_time))*1.0/count(*) from t_queries
+	select [capture_interval_sec] = DATEDIFF(SECOND,snap1.collection_time_min, collection_time_snap2) 
+	from (select min(collection_time) as collection_time_min from t_queries) snap1
+	outer apply (select min(s2.collection_time) as collection_time_snap2 from t_queries s2 where s2.collection_time > snap1.collection_time_min) snap2
 )
 ,top_queries as (
 	select	*,
 			[query_identifier] = left((case when [query_hash] is not null then [query_hash] else [sql_handle] end),20),
-			[query_hash_count] = COUNT(session_id)over(partition by (case when [query_hash] is not null then [query_hash] else [sql_handle] end), isnull(convert(varchar(max), sql_text),convert(varchar(max), [sql_command])))
+			[query_hash_count] = COUNT(session_id)over(partition by session_id, program_name, login_name, (case when [query_hash] is not null then [query_hash] else [sql_handle] end), isnull(convert(varchar(max), sql_text),convert(varchar(max), [sql_command])))
 	from t_queries w
 	--where [used_memory_mb] > 500
 )
-select top 1000 [collection_time], [dd hh:mm:ss.mss], [query_identifier],
-		[qry_time_min(~)] = ceiling([query_hash_count]*[capture_interval_minutes]),		
+select top 1000 [collection_time], [dd hh:mm:ss.mss], [query_identifier], [capture_interval_sec],
+		[qry_time_min(~)] = ceiling([query_hash_count]*[capture_interval_sec]/60),		
 		[query_hash_count], [session_id], [blocking_session_id], [command_type], [sql_text], [CPU], [used_memory_mb], [open_tran_count], 
 		[status], [wait_info], [query_hash], [sql_command], [blocked_session_count], [reads], [writes], [tempdb_allocations], [tasks], [query_plan], 
 		[query_plan_hash], [NonParallelPlanReason], [host_name], [additional_info], [program_name], [login_name], [database_name], [duration_minutes],
