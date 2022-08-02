@@ -308,9 +308,9 @@
           <FullPath>Blitz.sql</FullPath>
         </FileNode>
         <FileNode Name="BlitzCache.sql">
-          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:196.1.115.167:False:E84947</AssociatedConnectionMoniker>
-          <AssociatedConnSrvName>196.1.115.167</AssociatedConnSrvName>
-          <AssociatedConnUserName>E84947</AssociatedConnUserName>
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:localhost:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>localhost</AssociatedConnSrvName>
+          <AssociatedConnUserName />
           <FullPath>BlitzCache.sql</FullPath>
         </FileNode>
         <FileNode Name="blitzFirst.sql">
@@ -414,6 +414,12 @@
           <AssociatedConnSrvName>196.1.115.200</AssociatedConnSrvName>
           <AssociatedConnUserName>E84947</AssociatedConnUserName>
           <FullPath>QRY-WhoIsActive-Infra.sql</FullPath>
+        </FileNode>
+        <FileNode Name="QRY-WhoIsActive-Infra-Parameter-Sniffing.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:196.1.115.200:False:E84947</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>196.1.115.200</AssociatedConnSrvName>
+          <AssociatedConnUserName>E84947</AssociatedConnUserName>
+          <FullPath>QRY-WhoIsActive-Infra-Parameter-Sniffing.sql</FullPath>
         </FileNode>
         <FileNode Name="Querying Deadlocks From System_Health XEvent.sql">
           <AssociatedConnectionMoniker />
