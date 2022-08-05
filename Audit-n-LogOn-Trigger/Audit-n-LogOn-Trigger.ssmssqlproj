@@ -3,7 +3,7 @@
   <Items>
     <LogicalFolder Name="Connections" Type="2" Sorted="true">
       <Items>
-        <ConnectionNode Name="localhost:LAB\adwivedi">
+        <ConnectionNode Name="localhost:21L-LTPABL-1187\Ajay">
           <Created>2022-06-01T16:18:06.4467228+05:30</Created>
           <Type>SQL</Type>
           <Server>localhost</Server>
@@ -15,7 +15,7 @@
           <ConnectionProtocol>NotSpecified</ConnectionProtocol>
           <ApplicationName>Microsoft SQL Server Management Studio - Query</ApplicationName>
         </ConnectionNode>
-        <ConnectionNode Name="Localhost\SQL2014:LAB\adwivedi">
+        <ConnectionNode Name="Localhost\SQL2014:21L-LTPABL-1187\Ajay">
           <Created>2022-06-01T22:43:11.7577639+05:30</Created>
           <Type>SQL</Type>
           <Server>Localhost\SQL2014</Server>
@@ -38,14 +38,14 @@
           <FullPath>Connection Limit.sql</FullPath>
         </FileNode>
         <FileNode Name="create-database-audit.sql">
-          <AssociatedConnectionMoniker />
-          <AssociatedConnSrvName />
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:localhost:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>localhost</AssociatedConnSrvName>
           <AssociatedConnUserName />
           <FullPath>create-database-audit.sql</FullPath>
         </FileNode>
         <FileNode Name="database-access-audit.sql">
-          <AssociatedConnectionMoniker />
-          <AssociatedConnSrvName />
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:localhost:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>localhost</AssociatedConnSrvName>
           <AssociatedConnUserName />
           <FullPath>database-access-audit.sql</FullPath>
         </FileNode>

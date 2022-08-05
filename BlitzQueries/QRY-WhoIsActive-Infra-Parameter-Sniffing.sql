@@ -29,7 +29,11 @@ t_queries as (
 ,top_queries as (
 	select	*,
 			[query_identifier] = left((case when [query_hash] is not null then [query_hash] else [sql_handle] end),20),
-			[query_hash_count] = COUNT(session_id)over(partition by (case when [query_hash] is not null then [query_hash] else [sql_handle] end), isnull(convert(varchar(max), sql_text),convert(varchar(max), [sql_command])))
+			--[query_hash_count] = COUNT(session_id)over(partition by session_id, program_name, login_name, (case when [query_hash] is not null then [query_hash] else [sql_handle] end), isnull(convert(varchar(max), sql_text),convert(varchar(max), [sql_command])))
+			[query_hash_count] = COUNT(session_id)over(partition by (case when [query_hash] is not null then [query_hash] 
+																		  when [sql_handle] is not null then [sql_handle]
+																		  else isnull(convert(varchar(max), sql_text),convert(varchar(max), [sql_command]))
+																		  end))
 	from t_queries w
 	--where [used_memory_mb] > 500
 )
