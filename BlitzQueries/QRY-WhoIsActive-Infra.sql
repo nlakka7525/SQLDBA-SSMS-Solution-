@@ -17,11 +17,13 @@ t_queries as (
 			,[used_memory_mb] = convert(numeric(20,2),convert(bigint,replace(used_memory,',',''))*8.0/1024)
 	from dbo.WhoIsActive w	
 	where w.collection_time >= dateadd(day,-7,getdate()) and w.collection_time <= getdate()
-	and w.database_name = 'remisior'
-	--and (	convert(varchar(max),w.sql_text) like '%[[. ]tbl_nsefo_sharing_trade[!] ]%' escape '!' )
+	and additional_info.value('(/additional_info/command_type)[1]','varchar(50)') not in ('ALTER INDEX','UPDATE STATISTICS','DBCC')
+	--and w.database_name = 'SOS'
+	and (	convert(varchar(max),w.sql_text) like '%[[. ]tbl_rpt_status[!] ]%' escape '!'
+			or convert(varchar(max),w.query_plan) like '%Table="![tbl_rpt_status!]"%' escape '!'
+		)
 	--and duration_minutes >= 5
 	--dbo.Tbl_Kyc_CloudStage_ClientInfo.IX_Tbl_Kyc_CloudStage_ClientInfo_PartyCode_CodeActivationDate (43)
-	--and convert(varchar(max),w.query_plan) like '%Database="![remisior!]" Schema="![dbo!]" Table="![AddBrkTrnx!]"%' escape '!'
 	--and convert(varchar(max),w.query_plan) like '%Database="![remisior!]" Schema="![dbo!]" Table="![AddBrkTrnx!]" Index="![IX_updt_cltcode!]"%' escape '!'
 )
 ,t_capture_interval as (
@@ -31,27 +33,37 @@ t_queries as (
 )
 ,top_queries as (
 	select	*,
-			[query_identifier] = left((case when [query_hash] is not null then [query_hash] else [sql_handle] end),20),
+			[query_identifier] = left((case when [query_hash] is not null then [query_hash] 
+											when [sql_handle] is not null then [sql_handle]
+											else isnull(convert(varchar(max), sql_text),convert(varchar(max), [sql_command])) 
+											end),20),
 			--[query_hash_count] = COUNT(session_id)over(partition by session_id, program_name, login_name, (case when [query_hash] is not null then [query_hash] else [sql_handle] end), isnull(convert(varchar(max), sql_text),convert(varchar(max), [sql_command])))
 			[query_hash_count] = COUNT(session_id)over(partition by (case when [query_hash] is not null then [query_hash] 
 																		  when [sql_handle] is not null then [sql_handle]
 																		  else isnull(convert(varchar(max), sql_text),convert(varchar(max), [sql_command]))
 																		  end))
+			,[query_identifier_rowid] = ROW_NUMBER()over(partition by left((case when [query_hash] is not null then [query_hash] 
+											when [sql_handle] is not null then [sql_handle]
+											else isnull(convert(varchar(max), sql_text),convert(varchar(max), [sql_command])) 
+											end),20) order by [duration_minutes] desc)
 	from t_queries w
 	--where [used_memory_mb] > 500
 )
 select top 1000 [collection_time], [dd hh:mm:ss.mss], [query_identifier],[capture_interval_sec],
 		[qry_time_min(~)] = ceiling([query_hash_count]*[capture_interval_sec]/60),		
-		[query_hash_count], [session_id], [blocking_session_id], [command_type], [sql_text], [query_hash], [sql_handle], [CPU], [used_memory_mb], [open_tran_count], 
+		[query_hash_count], [session_id], [blocking_session_id], [command_type], [sql_text], [query_hash], 
+		[sql_handle], [CPU], [used_memory_mb], [open_tran_count], 
 		[status], [wait_info], [sql_command], [blocked_session_count], [reads], [writes], [tempdb_allocations], [tasks], [query_plan], 
 		[query_plan_hash], [NonParallelPlanReason], [host_name], [additional_info], [program_name], [login_name], [database_name], [duration_minutes],
 		[batch_start_time] = [start_time]
 from top_queries,t_capture_interval
-where command_type not in ('ALTER INDEX')
---where [query_identifier] not in ('0xA1A533089E2AFBEB')
---order by [duration_minutes] desc
---order by [collection_time], session_id, [start_time]
---order by [collection_time], [blocked_session_count] desc, session_id, [start_time]
-order by [collection_time]
-
+where [query_identifier_rowid] = 1
+order by [query_hash_count] desc
 go
+/*
+select top 1000 *
+from dbo.resource_consumption rc
+where rc.event_time >= dateadd(day,-7,getdate()) and event_time <= getdate()
+and rc.database_name = 'kyc'
+and (	convert(varchar(max),sql_text) like '%[[. ]tbl_ErrorLog[!] ]%' escape '!' )
+*/

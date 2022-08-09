@@ -1,5 +1,6 @@
-
-
+use kyc
+go
+declare @table_name varchar(255) = '[kyc].[dbo].[tbl_InstaDp_Repository_Details]'
 SELECT sp.stats_id, 
        st.name, 
        filter_definition, 
@@ -17,5 +18,7 @@ SELECT sp.stats_id,
         FOR XML PATH('')), 1, 1, '') AS stats_columns
 FROM sys.stats AS st
      CROSS APPLY sys.dm_db_stats_properties(st.object_id, st.stats_id) AS sp
-WHERE st.object_id = OBJECT_ID('reconciler.manifestation');
+WHERE st.object_id = OBJECT_ID(@table_name)
+ORDER BY [stats_columns]
 
+--exec sp_BlitzIndex @DatabaseName = 'remisior', @SchemaName = 'dbo', @TableName = 'comb_cli_NXT_Mob'
