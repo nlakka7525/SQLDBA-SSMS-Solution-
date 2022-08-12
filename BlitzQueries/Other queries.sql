@@ -403,7 +403,9 @@ order by PlanCount desc
 	--	https://sqlperformance.com/2015/03/io-subsystem/monitoring-read-write-latency
 	--	https://www.brentozar.com/blitz/slow-storage-reads-writes/
 
-select [Startup Time] = cast(create_date as smalldatetime) from sys.databases d where d.name = 'tempdb';
+select	[Startup Time] = cast(create_date as smalldatetime), 
+		[Uptime- Days HH:mm:ss)] = convert(varchar,datediff(day,'1900-01-01',(GETDATE()-create_date)))+' Days '+convert(varchar,(GETDATE()-create_date),108)
+from sys.databases d where d.name = 'tempdb';
 
 IF OBJECT_ID('tempdb..#VirtualFileStats') IS NOT NULL
 	DROP TABLE #VirtualFileStats;

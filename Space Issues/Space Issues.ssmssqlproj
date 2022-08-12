@@ -111,6 +111,18 @@
           <ConnectionProtocol>NotSpecified</ConnectionProtocol>
           <ApplicationName>Microsoft SQL Server Management Studio - Query</ApplicationName>
         </ConnectionNode>
+        <ConnectionNode Name="196.1.115.195:E84947">
+          <Created>2022-08-11T16:45:49.2836387+05:30</Created>
+          <Type>SQL</Type>
+          <Server>196.1.115.195</Server>
+          <UserName>E84947</UserName>
+          <Authentication>SQL</Authentication>
+          <InitialDB />
+          <LoginTimeout>30</LoginTimeout>
+          <ExecutionTimeout>0</ExecutionTimeout>
+          <ConnectionProtocol>NotSpecified</ConnectionProtocol>
+          <ApplicationName>Microsoft SQL Server Management Studio - Query</ApplicationName>
+        </ConnectionNode>
         <ConnectionNode Name="196.1.115.196:E84947">
           <Created>2022-05-25T11:50:48.5362783+05:30</Created>
           <Type>SQL</Type>
@@ -248,8 +260,8 @@
           <FullPath>Shrink Log Files.sql</FullPath>
         </FileNode>
         <FileNode Name="srv-space-usage.sql">
-          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:172.31.16.85:False:E84947</AssociatedConnectionMoniker>
-          <AssociatedConnSrvName>172.31.16.85</AssociatedConnSrvName>
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:196.1.115.195:False:E84947</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>196.1.115.195</AssociatedConnSrvName>
           <AssociatedConnUserName>E84947</AssociatedConnUserName>
           <FullPath>srv-space-usage.sql</FullPath>
         </FileNode>
