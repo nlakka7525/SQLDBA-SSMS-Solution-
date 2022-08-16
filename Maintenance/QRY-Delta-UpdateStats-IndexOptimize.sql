@@ -1,4 +1,4 @@
-use DBA_Admin
+use DBA
 go
 
 set transaction isolation level read uncommitted;
@@ -6,7 +6,7 @@ set nocount on;
 --set quoted_identifier off;
 set lock_timeout 60000; -- 60 seconds
 
-declare @execute_indexoptimize bit = 1
+declare @execute_indexoptimize bit = 0
 declare @p_db_name sysname 
 --set @p_db_name = 'distribution'
 
@@ -55,10 +55,11 @@ print @query_get_stats
 insert #stats
 exec sp_MSforeachdb @query_get_stats
 
-select db_name, table_name, COUNT(*) as stats_count_total,
-				max(last_updated) as last_updated, max(rows_total) as rows_total, max(modification_count) as modification_count
-				,QUOTENAME(db_name)+'.'+table_name as [@Indexes]
-from #stats
+select	db_name, table_name, COUNT(*) as stats_count_total,
+		max(last_updated) as last_updated, max(rows_total) as rows_total, max(modification_count) as modification_count
+		,QUOTENAME(db_name)+'.'+table_name as [@Indexes]
+		,[********************* tsql-RECOMPILE ***********************] = 'exec '+QUOTENAME(s.db_name)+'..sp_recompile '''+table_name+''''
+from #stats s
 group by db_name, table_name
 order by max(order_id) desc;
 
