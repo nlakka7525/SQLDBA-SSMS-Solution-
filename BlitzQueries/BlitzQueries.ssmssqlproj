@@ -374,9 +374,9 @@
           <FullPath>Find-Indirect-Connections.sql</FullPath>
         </FileNode>
         <FileNode Name="Find-Statistics.sql">
-          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:SQL-A:False:sa</AssociatedConnectionMoniker>
-          <AssociatedConnSrvName>SQL-A</AssociatedConnSrvName>
-          <AssociatedConnUserName>sa</AssociatedConnUserName>
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:localhost:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>localhost</AssociatedConnSrvName>
+          <AssociatedConnUserName />
           <FullPath>Find-Statistics.sql</FullPath>
         </FileNode>
         <FileNode Name="Fragmentation-Analysis.sql">
