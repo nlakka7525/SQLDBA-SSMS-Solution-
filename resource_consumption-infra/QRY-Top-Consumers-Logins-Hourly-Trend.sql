@@ -1,7 +1,11 @@
 use DBA_Admin
 go
 
-declare @top_filter int = 20
+declare @top_filter int = 30;
+declare @start_time_snap1	datetime2 = '2022-08-17 07:30';
+declare @start_time_snap2	datetime2 = '2022-08-18 07:30';
+declare @end_time_snap1		datetime2 = '2022-08-17 16:00';
+declare @end_time_snap2		datetime2 = '2022-08-18 16:00';
 
 if object_id('tempdb..#current') is not null drop table #current;
 ;with cte as (
@@ -17,7 +21,7 @@ if object_id('tempdb..#current') is not null drop table #current;
 			cpu_time = convert(varchar,floor((sum(cpu_time)/1e+6)/60/60/24)) + ' Day '+ convert(varchar,dateadd(second,(sum(cpu_time)/1e+6),'1900-01-01 00:00:00'),108)
 			,[executions > 5 sec] = count(1)
 	from dbo.resource_consumption rc
-	where rc.event_time between '2022-08-16 07:30' and '2022-08-16 16:00'
+	where rc.event_time between @start_time_snap2 and @end_time_snap2
 	group by convert(date,event_time), 
 			--database_name, username, client_app_name, client_hostname, client_app_name
 			username
@@ -39,7 +43,7 @@ if object_id('tempdb..#previous') is not null drop table #previous;
 			cpu_time = convert(varchar,floor((sum(cpu_time)/1e+6)/60/60/24)) + ' Day '+ convert(varchar,dateadd(second,(sum(cpu_time)/1e+6),'1900-01-01 00:00:00'),108)
 			,[executions > 5 sec] = count(1)
 	from dbo.resource_consumption rc
-	where rc.event_time between '2022-08-09 07:30' and '2022-08-09 16:00'
+	where rc.event_time between @start_time_snap1 and @end_time_snap1
 	group by convert(date,event_time), 
 			--database_name, username, client_app_name, client_hostname, client_app_name
 			username
@@ -65,14 +69,18 @@ select	[query] = coalesce(c.query,p.query),
 										then convert(varchar,isnull(c.[executions > 5 sec],0) - isnull(p.[executions > 5 sec],0))+N' ?'
 										when isnull(c.[executions > 5 sec],0) = isnull(p.[executions > 5 sec],0) then '='
 										else convert(varchar,isnull(p.[executions > 5 sec],0)-isnull(c.[executions > 5 sec],0))+N' ?' end
-from #current c full outer join #previous p
+		,[logical_reads_gb_TOTAL (??)] = case when (sum(c.logical_reads_gb)over()) - (sum(p.logical_reads_gb)over()) >= 0.0 
+												then convert(varchar,(sum(c.logical_reads_gb)over()) - (sum(p.logical_reads_gb)over()))+N' ?'
+											  else convert(varchar,(sum(p.logical_reads_gb)over())-(sum(c.logical_reads_gb)over()))+N' ?'
+											  end
+from #current c full outer join #previous p on c.username = p.username
 outer apply (select top 1 i.date as cur_date from #current i) cur
 outer apply (select top 1 i.date as prev_date from #previous i) prev
-on c.username = p.username
+where abs(isnull(c.logical_reads_gb,0.0) - isnull(p.logical_reads_gb,0.0)) >= 10
 order by abs(isnull(c.logical_reads_gb,0.0) - isnull(p.logical_reads_gb,0.0)) desc
 go
 
-
+/*
 --	GROUP BY LOGIN --
 ;with cte as (
 	select  --top 10 with ties
@@ -118,3 +126,4 @@ select * from cte where row_rank <= 3
 order by [date],[hour],[row_rank]
 go
 
+*/

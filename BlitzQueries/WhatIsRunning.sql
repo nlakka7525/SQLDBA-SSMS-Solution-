@@ -145,7 +145,8 @@ AND	(( @sql_text_fragment_filter is null or len(@sql_text_fragment_filter) = 0 )
 --ORDER BY start_time asc, granted_query_memory_raw desc
 --order by [writes] desc
 --order by cpu_time desc
-order by granted_query_memory_raw desc
+--order by granted_query_memory_raw desc
+order by isnull(tempdb_allocations,0) desc, isnull(tempdb_current,0) desc
 
 
 
