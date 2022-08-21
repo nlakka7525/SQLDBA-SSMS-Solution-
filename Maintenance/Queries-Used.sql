@@ -9,8 +9,9 @@ EXECUTE dbo.IndexOptimize /* Update Stats */
 			@UpdateStatistics = 'ALL',
 			@OnlyModifiedStatistics = 'Y',
 			@PartitionLevel = 'Y',
-			@Indexes = 'AdventureWorks.Production.Product',
-			@MSShippedObjects = 'Y'
+			--@Indexes = 'AdventureWorks.Production.Product',
+			@MSShippedObjects = 'Y',
+			@DatabasesInParallel = 'Y'
 go
 
 

@@ -1,16 +1,14 @@
 --	Check-SQLServerAvailability
 SET nocount on;
 
-declare @time datetime;
-select @time = d.create_date
+select @@servername as srv, [Uptime (hh:mm:ss)] = convert(varchar,getdate()-d.create_date,108)
 FROM sys.databases as d
 WHERE d.name = 'tempdb';
---SELECT @@servername as srv, @time as server_uptime, DATEDIFF(MINUTE,@time,GETDATE()) AS [up_time(minutes)], DATEDIFF(HOUR,@time,GETDATE()) AS [up_time(hours)];
 
 declare @start_time datetime, @end_time datetime, @err_msg_1 nvarchar(256) = null, @err_msg_2 nvarchar(256) = null;
 --set @start_time = '2021-05-17 18:00:00.000' --  August 22, 2020 05:16:00
 --set @time = DATEADD(HOUR,-1,getdate());
-set @start_time = DATEADD(MINUTE,-5,getdate());
+set @start_time = DATEADD(MINUTE,-15,getdate());
 --set @end_time = '2021-04-23 00:00:00.000';
 set @end_time = --DATEADD(HOUR,-11,getdate()); 
 				GETDATE()

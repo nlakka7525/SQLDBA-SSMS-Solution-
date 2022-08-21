@@ -138,7 +138,8 @@ WHERE 1 = 1
 AND	(( @sql_text_fragment_filter is null or len(@sql_text_fragment_filter) = 0 )
 		or (	r.sql_command like ('%'+@sql_text_fragment_filter+'%')
 			 )
-	 ) 
+	 )
+and (	 wait_type is not null and wait_type like 'PREEMPTIVE%' )
 --and r.program_name like '%Postgres Defragment%'
 --and (lower(r.login_name) like 'contso\adwivedi' )
 --and sql_command like '%#fields%'
@@ -146,7 +147,8 @@ AND	(( @sql_text_fragment_filter is null or len(@sql_text_fragment_filter) = 0 )
 --order by [writes] desc
 --order by cpu_time desc
 --order by granted_query_memory_raw desc
-order by isnull(tempdb_allocations,0) desc, isnull(tempdb_current,0) desc
+--and r.session_id in (112,270,376)
+--order by isnull(tempdb_allocations,0) desc, isnull(tempdb_current,0) desc
 
 
 

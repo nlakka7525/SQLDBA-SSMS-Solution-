@@ -2,10 +2,11 @@ use DBA_Admin
 go
 
 declare @top_filter int = 30;
-declare @start_time_snap1	datetime2 = '2022-08-17 07:30';
-declare @start_time_snap2	datetime2 = '2022-08-18 07:30';
-declare @end_time_snap1		datetime2 = '2022-08-17 16:00';
-declare @end_time_snap2		datetime2 = '2022-08-18 16:00';
+
+declare @start_time_snap1	datetime2 = '2022-08-19 07:30';
+declare @start_time_snap2	datetime2 = '2022-08-20 07:30';
+declare @end_time_snap1		datetime2 = '2022-08-19 16:00';
+declare @end_time_snap2		datetime2 = '2022-08-20 16:00';
 
 if object_id('tempdb..#current') is not null drop table #current;
 ;with cte as (
