@@ -12,7 +12,7 @@
 			,der.logical_reads, der.writes, der.row_count, query_hash, dop, parallel_worker_count
 	from sys.dm_exec_requests der join sys.dm_exec_sessions des
 		on des.session_id = der.session_id
-	where der.granted_query_memory*8.0/1024/1024 >= 2
+	where der.granted_query_memory*8.0/1024/1024 >= 0.5
 	--and der.open_transaction_count = 0 and des.open_transaction_count = 0
 	order by memory_gb desc
 

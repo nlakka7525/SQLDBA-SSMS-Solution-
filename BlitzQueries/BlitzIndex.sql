@@ -6,7 +6,7 @@ EXEC tempdb..sp_BlitzIndex @DatabaseName = 'VDP' ,@BringThePain = 1 -- Bring onl
 EXEC tempdb..sp_BlitzIndex @DatabaseName = 'FMO' ,@BringThePain = 1 -- Bring only main issues
 EXEC tempdb..sp_BlitzIndex @DatabaseName = 'SRA' ,@BringThePain = 1 -- Bring only main issues
 
-EXEC tempdb..sp_BlitzIndex @DatabaseName = 'Cosmo', @SchemaName = 'dbo', @TableName = 'rm_image'
+EXEC master..sp_BlitzIndex @DatabaseName = 'KYC_CI', @SchemaName = 'dbo', @TableName = 'tblRnELeadMaster'
 EXEC tempdb..sp_BlitzIndex @DatabaseName = 'Cosmo', @SchemaName = 'dbo', @TableName = 'rm_image_file'
 EXEC tempdb..sp_BlitzIndex @DatabaseName = 'Cosmo', @SchemaName = 'dbo', @TableName = 'rm_image_relevancy_link'
 EXEC tempdb..sp_BlitzIndex @DatabaseName = 'Cosmo', @SchemaName = 'dbo', @TableName = 'schedule_link'
