@@ -217,6 +217,12 @@
           <AssociatedConnUserName />
           <FullPath>Qry-Find-pattern-in-All-Database-Objects.sql</FullPath>
         </FileNode>
+        <FileNode Name="QRY-Move-Data-In-Batches-Bulk-Loading-In-Batches.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:172.31.16.173:False:E84947</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>172.31.16.173</AssociatedConnSrvName>
+          <AssociatedConnUserName>E84947</AssociatedConnUserName>
+          <FullPath>QRY-Move-Data-In-Batches-Bulk-Loading-In-Batches.sql</FullPath>
+        </FileNode>
         <FileNode Name="QRY-Remove-SingleUser-Database-Mode.sql">
           <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:localhost:True</AssociatedConnectionMoniker>
           <AssociatedConnSrvName>localhost</AssociatedConnSrvName>
