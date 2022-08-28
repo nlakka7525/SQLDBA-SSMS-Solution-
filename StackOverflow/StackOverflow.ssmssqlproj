@@ -3,7 +3,7 @@
   <Items>
     <LogicalFolder Name="Connections" Type="2" Sorted="true">
       <Items>
-        <ConnectionNode Name="localhost:21L-LTPABL-1187\Ajay">
+        <ConnectionNode Name="localhost:LAB\adwivedi">
           <Created>2022-08-21T13:55:22.050874+05:30</Created>
           <Type>SQL</Type>
           <Server>localhost</Server>
@@ -15,7 +15,7 @@
           <ConnectionProtocol>NotSpecified</ConnectionProtocol>
           <ApplicationName>Microsoft SQL Server Management Studio - Query</ApplicationName>
         </ConnectionNode>
-        <ConnectionNode Name="SqlPractice:21L-LTPABL-1187\Ajay">
+        <ConnectionNode Name="SqlPractice:LAB\adwivedi">
           <Created>2022-05-28T15:44:59.7354361+05:30</Created>
           <Type>SQL</Type>
           <Server>SqlPractice</Server>
@@ -44,8 +44,8 @@
           <FullPath>Create [dbo].[PostTags] table.sql</FullPath>
         </FileNode>
         <FileNode Name="Generate Workloads.sql">
-          <AssociatedConnectionMoniker />
-          <AssociatedConnSrvName />
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:SqlPractice:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>SqlPractice</AssociatedConnSrvName>
           <AssociatedConnUserName />
           <FullPath>Generate Workloads.sql</FullPath>
         </FileNode>
@@ -164,8 +164,8 @@
           <FullPath>SCH - RPT-usp_find_interesting_unanswered_questions.sql</FullPath>
         </FileNode>
         <FileNode Name="SCH - RPT-usp_get_user_comment_score_distribution.sql">
-          <AssociatedConnectionMoniker />
-          <AssociatedConnSrvName />
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:SqlPractice:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>SqlPractice</AssociatedConnSrvName>
           <AssociatedConnUserName />
           <FullPath>SCH - RPT-usp_get_user_comment_score_distribution.sql</FullPath>
         </FileNode>
@@ -218,8 +218,8 @@
           <FullPath>SCH - RPT-usp_My_Money_for_Jam.sql</FullPath>
         </FileNode>
         <FileNode Name="SCH - RPT-usp_Posts_containing_a_very_short_title.sql">
-          <AssociatedConnectionMoniker />
-          <AssociatedConnSrvName />
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:SqlPractice:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>SqlPractice</AssociatedConnSrvName>
           <AssociatedConnUserName />
           <FullPath>SCH - RPT-usp_Posts_containing_a_very_short_title.sql</FullPath>
         </FileNode>
@@ -296,8 +296,8 @@
           <FullPath>SCH - RPT-usp_user_StackOverflow_Rank_and_Percentile.sql</FullPath>
         </FileNode>
         <FileNode Name="SCH - RPT-usp_users_by_location.sql">
-          <AssociatedConnectionMoniker />
-          <AssociatedConnSrvName />
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:SqlPractice:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>SqlPractice</AssociatedConnSrvName>
           <AssociatedConnUserName />
           <FullPath>SCH - RPT-usp_users_by_location.sql</FullPath>
         </FileNode>
