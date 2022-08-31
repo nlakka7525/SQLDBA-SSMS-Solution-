@@ -2,7 +2,7 @@ USE DBA_Admin;
 declare @database_name varchar(200),
 		@table_name varchar(200);
 set @database_name = 'ACCOUNT';
-set @table_name = 'BankReco'
+set @table_name = 'CLIENT_CASH_DETAILS'
 
 declare @sql nvarchar(max);
 set nocount on;
@@ -41,7 +41,7 @@ select	--top 20
 		[*Query*] = ''Index-Details'', [index_name] = i.database_name+''.''+i.schema_name+''.''+i.object_name+''.''+i.index_name, i.definition, i.index_size,
 		i.index_usage, i.index_op_stats, i.data_compression, i.fill_factor, 
 		[forwarded_fetches] = case when i.forwarded_fetches > 0 then format(convert(bigint,i.forwarded_fetches),''N0'')+'' forward records fetched.'' else null end, 
-		i.create_date
+		i.create_date, i.drop_tsql, i.create_tsql
 		--,i.*
 from dbo.BlitzIndex_Detailed_Aug26 i
 where (@p_database_name is null or i.database_name = @p_database_name)
