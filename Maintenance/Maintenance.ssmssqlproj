@@ -147,7 +147,7 @@
           <ConnectionProtocol>NotSpecified</ConnectionProtocol>
           <ApplicationName>Microsoft SQL Server Management Studio - Query</ApplicationName>
         </ConnectionNode>
-        <ConnectionNode Name="localhost:21L-LTPABL-1187\Ajay">
+        <ConnectionNode Name="localhost:LAB\adwivedi">
           <Created>2022-03-21T09:43:12.9215372+05:30</Created>
           <Type>SQL</Type>
           <Server>localhost</Server>
@@ -159,7 +159,7 @@
           <ConnectionProtocol>NotSpecified</ConnectionProtocol>
           <ApplicationName>Microsoft SQL Server Management Studio - Query</ApplicationName>
         </ConnectionNode>
-        <ConnectionNode Name="SQLPRACTICE:21L-LTPABL-1187\Ajay">
+        <ConnectionNode Name="SQLPRACTICE:LAB\adwivedi">
           <Created>2022-08-15T12:45:12.4456752+05:30</Created>
           <Type>SQL</Type>
           <Server>SQLPRACTICE</Server>
@@ -206,9 +206,9 @@
           <FullPath>Maintainence - Delete files older than 72 hours.sql</FullPath>
         </FileNode>
         <FileNode Name="MaintenanceSolution-Without-Jobs.sql">
-          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:196.1.115.196:False:E84947</AssociatedConnectionMoniker>
-          <AssociatedConnSrvName>196.1.115.196</AssociatedConnSrvName>
-          <AssociatedConnUserName>E84947</AssociatedConnUserName>
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:localhost:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>localhost</AssociatedConnSrvName>
+          <AssociatedConnUserName />
           <FullPath>MaintenanceSolution-Without-Jobs.sql</FullPath>
         </FileNode>
         <FileNode Name="Ola Update Stats Formula.sql">
@@ -248,9 +248,9 @@
           <FullPath>QRY-Statistics-State-Update-Status.sql</FullPath>
         </FileNode>
         <FileNode Name="Queries-Used.sql">
-          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:196.1.115.167:False:E84947</AssociatedConnectionMoniker>
-          <AssociatedConnSrvName>196.1.115.167</AssociatedConnSrvName>
-          <AssociatedConnUserName>E84947</AssociatedConnUserName>
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:localhost:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>localhost</AssociatedConnSrvName>
+          <AssociatedConnUserName />
           <FullPath>Queries-Used.sql</FullPath>
         </FileNode>
       </Items>

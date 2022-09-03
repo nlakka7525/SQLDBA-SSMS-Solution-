@@ -99,11 +99,14 @@ Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "Org-Project-EOD-Process-Opt
 EndProject
 Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "Org-Project-196", "Org-Project-196\Org-Project-196.ssmssqlproj", "{0AF3B217-FF63-4870-A54B-B0258D300EE7}"
 EndProject
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "Private", "Private\Private.ssmssqlproj", "{0E2B20AA-E47A-40B5-9170-6DBEAD2527BC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Default|Default = Default|Default
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0F2E65D2-5033-4E77-97BB-B49548CE9AFC}.Default|Default.ActiveCfg = Default
 		{34D3C094-4DA1-4402-BCC7-D7D3C964B2AD}.Default|Default.ActiveCfg = Default
 		{15CC463C-A8D2-4F91-BF9C-5D8D86E815E2}.Default|Default.ActiveCfg = Default
 		{97D05A33-770A-4C00-B526-9FA045863965}.Default|Default.ActiveCfg = Default
@@ -151,8 +154,8 @@ Global
 		{E05EB8F9-4CBA-46F6-A80F-0590DB8C90D6}.Default|Default.ActiveCfg = Default
 		{3E8382EC-202B-49F0-BF05-F367C37A36DF}.Default|Default.ActiveCfg = Default
 		{E854A3D1-8B5E-44BD-8FFA-3E564B8C9161}.Default|Default.ActiveCfg = Default
-		{AFD38878-FD95-4592-81CE-098877A7716D}.Default|Default.ActiveCfg = Default
 		{0AF3B217-FF63-4870-A54B-B0258D300EE7}.Default|Default.ActiveCfg = Default
+		{0E2B20AA-E47A-40B5-9170-6DBEAD2527BC}.Default|Default.ActiveCfg = Default
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

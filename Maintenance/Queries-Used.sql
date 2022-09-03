@@ -88,3 +88,37 @@ EXECUTE dbo.IndexOptimize_Modified
 ,@forceReInitiate = 0
 go
 
+
+EXECUTE DBA.dbo.DatabaseBackup
+			@Databases = 'SYSTEM_DATABASES',
+			@Directory = 'E:\Backup01',
+			@DirectoryStructure = NULL,
+			@FileName = '{DatabaseName}.{FileExtension}',
+			@BackupType = 'FULL',
+			@Verify = 'Y',
+			@Compress = 'Y',
+			@CheckSum = 'Y',
+			@NumberOfFiles = 1,
+			@Init = 'Y',
+			@Format = 'Y',
+			--@DatabasesInParallel = 'Y',
+			@LogToTable = 'Y',
+			@Execute = 'Y';
+
+EXECUTE DBA.dbo.DatabaseBackup
+			@Databases = 'USER_DATABASES,-StackOverflow%',
+			@Directory = 'E:\Backup01,E:\Backup02,E:\Backup03,E:\Backup04',
+			@DirectoryStructure = NULL,
+			@FileName = '{DatabaseName}_{FileNumber}of{NumberOfFiles}.{FileExtension}',
+			@BackupType = 'FULL',
+			@Verify = 'Y',
+			@Compress = 'Y',
+			@CheckSum = 'Y',
+			@NumberOfFiles = 4,
+			@Init = 'Y',
+			@Format = 'Y',
+			@DatabasesInParallel = 'Y',
+			@LogToTable = 'Y',
+			@Execute = 'Y'
+GO
+
