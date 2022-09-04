@@ -11,6 +11,14 @@ EXEC sp_WhoIsActive @get_outer_command = 1, @get_task_info=2 --,@get_avg_time=1,
 					--,@filter_type = 'database' ,@filter = 'DBA_Admin'
 					--,@sort_order = '[used_memory] desc, [start_time]'
 
+/*	Enable LIVE Query Plans
+DBCC TRACESTATUS(7412);
+DBCC TRACEON(7412, -1);
+DBCC TRACEOFF(7412, -1);
+
+exec sp_BlitzWho @GetLiveQueryPlan=1
+*/
+
 --kill 814 with statusonly
 --EXEC sp_WhoIsActive @get_outer_command = 1, @get_task_info=2, @get_locks=1
 
