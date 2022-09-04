@@ -17,6 +17,9 @@ DBCC TRACEON(7412, -1);
 DBCC TRACEOFF(7412, -1);
 
 exec sp_BlitzWho @GetLiveQueryPlan=1
+
+--Get the execution plan and current progress for session 159
+select * from sys.dm_exec_query_statistics_xml(159);
 */
 
 --kill 814 with statusonly
