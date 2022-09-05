@@ -27,4 +27,4 @@ Query Performance
 2453 -> table variables can trigger recompile when rows are inserted
 
 
-OPTION (QUERYTRACEON 8671, QUERYTRACEON 
+OPTION (QUERYTRACEON 8671)
