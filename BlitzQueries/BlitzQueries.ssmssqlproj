@@ -457,18 +457,6 @@
           <AssociatedConnUserName />
           <FullPath>RingBuffer-PerfMon-CPU-Memory.sql</FullPath>
         </FileNode>
-        <FileNode Name="SCH-sp_WhoIsActive_v11_32(Modified).sql">
-          <AssociatedConnectionMoniker />
-          <AssociatedConnSrvName />
-          <AssociatedConnUserName />
-          <FullPath>SCH-sp_WhoIsActive_v11_32(Modified).sql</FullPath>
-        </FileNode>
-        <FileNode Name="SCH-sp_WhoIsActive_v11_35.sql">
-          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:sqlprod1:True</AssociatedConnectionMoniker>
-          <AssociatedConnSrvName>sqlprod1</AssociatedConnSrvName>
-          <AssociatedConnUserName />
-          <FullPath>SCH-sp_WhoIsActive_v11_35.sql</FullPath>
-        </FileNode>
         <FileNode Name="SCH-sp_WhoIsActive_v12_00(Modified).sql">
           <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:localhost:True</AssociatedConnectionMoniker>
           <AssociatedConnSrvName>localhost</AssociatedConnSrvName>
@@ -516,6 +504,12 @@
           <AssociatedConnSrvName />
           <AssociatedConnUserName />
           <FullPath>SRV-Find-Oldest-Active-Transactions.sql</FullPath>
+        </FileNode>
+        <FileNode Name="Trace-Flags-2-Use.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:localhost:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>localhost</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>Trace-Flags-2-Use.sql</FullPath>
         </FileNode>
         <FileNode Name="Very-Large-Databases-Optimization.sql">
           <AssociatedConnectionMoniker />
