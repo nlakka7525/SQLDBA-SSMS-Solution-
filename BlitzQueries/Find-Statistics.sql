@@ -1,6 +1,7 @@
-use kyc
+use [MSAJAG]
 go
-declare @table_name varchar(255) = '[kyc].[dbo].[tbl_InstaDp_Repository_Details]'
+declare @table_name varchar(255) = '[MSAJAG].[dbo].[COMMON_CONTRACT_DATA]'
+declare @column_name varchar(255) = 'EXCHANGE'
 SELECT sp.stats_id, 
        st.name, 
        filter_definition, 
@@ -19,6 +20,11 @@ SELECT sp.stats_id,
 FROM sys.stats AS st
      CROSS APPLY sys.dm_db_stats_properties(st.object_id, st.stats_id) AS sp
 WHERE st.object_id = OBJECT_ID(@table_name)
-ORDER BY [stats_columns]
+ORDER BY [stats_columns];
+
+select * from sys.dm_db_stats_histogram (object_id(@table_name), 11) h
 
 --exec sp_BlitzIndex @DatabaseName = 'remisior', @SchemaName = 'dbo', @TableName = 'comb_cli_NXT_Mob'
+
+-- dbcc show_statistics ('dbo.V_CommonScrip_MasterForDividend',_WA_Sys_0000000B_39D87308)
+
