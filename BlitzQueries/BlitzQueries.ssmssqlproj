@@ -427,6 +427,12 @@
           <AssociatedConnUserName />
           <FullPath>QRY-sp_BlitzIndex-Existence-check.sql</FullPath>
         </FileNode>
+        <FileNode Name="QRY-sp_HumanEvents-Usages.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:196.1.115.196:False:E84947</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>196.1.115.196</AssociatedConnSrvName>
+          <AssociatedConnUserName>E84947</AssociatedConnUserName>
+          <FullPath>QRY-sp_HumanEvents-Usages.sql</FullPath>
+        </FileNode>
         <FileNode Name="QRY-sp_WhoIsActive-Usages.sql">
           <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:196.1.115.196:False:E84947</AssociatedConnectionMoniker>
           <AssociatedConnSrvName>196.1.115.196</AssociatedConnSrvName>
