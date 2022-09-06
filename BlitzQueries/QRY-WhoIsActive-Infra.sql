@@ -1,7 +1,16 @@
 USE [DBA_Admin]
-go
-
 -- Find long running statements of session
+declare @table_name nvarchar(225) = 'COMMON_CONTRACT_DATA';
+declare @no_of_days tinyint = 7;
+declare @database_name nvarchar(255);
+declare @index_name nvarchar(255);
+declare @duration_threshold_minutes smallint = 5;
+declare @memory_threshold_mb smallint = 500;
+declare @sql nvarchar(max);
+
+declare @crlf nvarchar(10) = char(13)+char(10);
+set quoted_identifier off;
+set @sql = "
 ;with xmlnamespaces ('http://schemas.microsoft.com/sqlserver/2004/07/showplan' as qp),
 t_queries as (
 	select	* 
@@ -16,15 +25,14 @@ t_queries as (
 			--,[CardinalityEstimationModelVersion] = query_plan.value('(/*:ShowPlanXML/*:BatchSequence/*:Batch/*:Statements/*:StmtSimple)[1]/@CardinalityEstimationModelVersion','int')
 			,[used_memory_mb] = convert(numeric(20,2),convert(bigint,replace(used_memory,',',''))*8.0/1024)
 	from dbo.WhoIsActive w	
-	where w.collection_time >= dateadd(day,-7,getdate()) and w.collection_time <= getdate()
-	and additional_info.value('(/additional_info/command_type)[1]','varchar(50)') not in ('ALTER INDEX','UPDATE STATISTICS','DBCC')
-	--and w.database_name = 'SOS'
-	and (	convert(varchar(max),w.sql_text) like '%[[. ]tbl_rpt_status[!] ]%' escape '!'
-			or convert(varchar(max),w.query_plan) like '%Table="![tbl_rpt_status!]"%' escape '!'
+	where w.collection_time >= dateadd(day,-@no_of_days,getdate()) and w.collection_time <= getdate()
+	and additional_info.value('(/additional_info/command_type)[1]','varchar(50)') not in ('ALTER INDEX','UPDATE STATISTICS','DBCC','BACKUP LOG','BACKUP DATABASE')
+	"+(case when @database_name is null then "--" else '' end)+"and w.database_name = @database_name
+	and (	convert(nvarchar(max),w.sql_text) like ('%[[. ]'+@table_name+'[!] ]%') escape '!'
+			or convert(nvarchar(max),w.query_plan) like ('%Table=""!['+@table_name+'!]""%') escape '!'
 		)
-	--and duration_minutes >= 5
-	--dbo.Tbl_Kyc_CloudStage_ClientInfo.IX_Tbl_Kyc_CloudStage_ClientInfo_PartyCode_CodeActivationDate (43)
-	--and convert(varchar(max),w.query_plan) like '%Database="![remisior!]" Schema="![dbo!]" Table="![AddBrkTrnx!]" Index="![IX_updt_cltcode!]"%' escape '!'
+	--and duration_minutes >= @duration_threshold_minutes
+	--and convert(varchar(max),w.query_plan) like ('%Database=""!['+@database_name+'!]"" Schema=""![dbo!]"" Table=""!['+@table_name+'!]"" Index=""!['+@index_name+'!]""%""') escape '!'
 )
 ,t_capture_interval as (
 	select [capture_interval_sec] = DATEDIFF(SECOND,snap1.collection_time_min, collection_time_snap2) 
@@ -36,9 +44,8 @@ t_queries as (
 			[query_identifier] = left((case when [query_hash] is not null then [query_hash] 
 											when [sql_handle] is not null then [sql_handle]
 											else isnull(convert(varchar(max), sql_text),convert(varchar(max), [sql_command])) 
-											end),20),
-			--[query_hash_count] = COUNT(session_id)over(partition by session_id, program_name, login_name, (case when [query_hash] is not null then [query_hash] else [sql_handle] end), isnull(convert(varchar(max), sql_text),convert(varchar(max), [sql_command])))
-			[query_hash_count] = COUNT(session_id)over(partition by (case when [query_hash] is not null then [query_hash] 
+											end),20)
+			,[query_hash_count] = COUNT(session_id)over(partition by (case when [query_hash] is not null then [query_hash] 
 																		  when [sql_handle] is not null then [sql_handle]
 																		  else isnull(convert(varchar(max), sql_text),convert(varchar(max), [sql_command]))
 																		  end))
@@ -47,11 +54,12 @@ t_queries as (
 											else isnull(convert(varchar(max), sql_text),convert(varchar(max), [sql_command])) 
 											end),20) order by [duration_minutes] desc)
 	from t_queries w
-	--where [used_memory_mb] > 500
+	--where [used_memory_mb] > @memory_threshold_mb
 )
 select top 1000 [collection_time], [dd hh:mm:ss.mss], [query_identifier],[capture_interval_sec],
-		[qry_time_min(~)] = ceiling([query_hash_count]*[capture_interval_sec]/60),		
-		[query_hash_count], [session_id], [blocking_session_id], [command_type], [sql_text], [query_hash], 
+		--[qry_time_min(~)] = ceiling([query_hash_count]*[capture_interval_sec]/60), 
+		[query_hash_count],
+		[session_id], [blocking_session_id], [command_type], [sql_text], [query_hash], 
 		[sql_handle], [CPU], [used_memory_mb], [open_tran_count], 
 		[status], [wait_info], [sql_command], [blocked_session_count], [reads], [writes], [tempdb_allocations], [tasks], [query_plan], 
 		[query_plan_hash], [NonParallelPlanReason], [host_name], [additional_info], [program_name], [login_name], [database_name], [duration_minutes],
@@ -59,11 +67,21 @@ select top 1000 [collection_time], [dd hh:mm:ss.mss], [query_identifier],[captur
 from top_queries,t_capture_interval
 where [query_identifier_rowid] = 1
 order by [query_hash_count] desc
-go
+option (recompile);
+"
+set quoted_identifier on;
+
+exec sp_ExecuteSql @sql, N'@table_name nvarchar(225),
+						@no_of_days tinyint = 7,
+						@database_name nvarchar(255) = NULL, 
+						@index_name nvarchar(255) = NULL, 
+						@duration_threshold_minutes smallint = 5,
+						@memory_threshold_mb smallint = 500', 
+						@table_name, @no_of_days /*, @database_name, @index_name, @duration_threshold_minutes, @memory_threshold_mb */
 /*
-select top 1000 *
+select top 10000 sql_text2 = convert(xml,(select sql_text for xml path(''))),*
 from dbo.resource_consumption rc
 where rc.event_time >= dateadd(day,-7,getdate()) and event_time <= getdate()
-and rc.database_name = 'kyc'
-and (	convert(varchar(max),sql_text) like '%[[. ]tbl_ErrorLog[!] ]%' escape '!' )
+and (	convert(nvarchar(max),sql_text) like '%[[. ]TBL_CampaignLinkDetailsLog[!] ]%' escape '!' )
+
 */
