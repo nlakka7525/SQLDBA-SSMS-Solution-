@@ -1,11 +1,10 @@
 use DBA_Admin
 go
-
 declare @start_time datetime = dateadd(day,-15,getdate());
-declare @end_time datetime = getdate();
 declare @database_name nvarchar(255) = 'MSAJAG';
+declare @table_name nvarchar(500) = 'TBL_COMBINE_REPORTING_DETAIL_HIST';
 declare @str_length smallint = 50;
-declare @table_name nvarchar(500) = 'COMMON_CONTRACT_DATA';
+declare @end_time datetime = getdate();
 declare @sql_string nvarchar(max);
 
 if object_id('tempdb..#queries') is not null drop table #queries;
@@ -71,7 +70,7 @@ declare @start_time datetime = dateadd(day,-15,getdate());
 declare @end_time datetime = getdate();
 declare @database_name nvarchar(255) = 'MSAJAG';
 declare @str_length smallint = 50;
-declare @table_name nvarchar(500) = 'COMMON_CONTRACT_DATA';
+declare @table_name nvarchar(500) = 'STT_ClientDetail';
 declare @sql_string nvarchar(max);
 
 set quoted_identifier off;

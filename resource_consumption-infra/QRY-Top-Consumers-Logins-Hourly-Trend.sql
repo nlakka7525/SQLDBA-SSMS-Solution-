@@ -3,10 +3,10 @@ go
 
 declare @top_filter int = 30;
 
-declare @start_time_snap1	datetime2 = '2022-09-05 17:40';
-declare @start_time_snap2	datetime2 = '2022-09-06 17:40';
-declare @end_time_snap1		datetime2 = '2022-09-05 18:30';
-declare @end_time_snap2		datetime2 = '2022-09-06 18:30';
+declare @start_time_snap1	datetime2 = '2022-09-05 15:30';
+declare @start_time_snap2	datetime2 = '2022-09-07 15:30';
+declare @end_time_snap1		datetime2 = '2022-09-05 16:00';
+declare @end_time_snap2		datetime2 = '2022-09-07 16:00';
 
 if object_id('tempdb..#current') is not null drop table #current;
 ;with cte as (
