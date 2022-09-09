@@ -1,8 +1,8 @@
 use DBA_Admin
 go
 declare @start_time datetime = dateadd(day,-15,getdate());
-declare @database_name nvarchar(255) = 'MSAJAG';
-declare @table_name nvarchar(500) = 'TBL_COMBINE_REPORTING_DETAIL_HIST';
+declare @database_name nvarchar(255) --= 'ACCOUNT';
+declare @table_name nvarchar(500) = 'BillMatch';
 declare @str_length smallint = 50;
 declare @end_time datetime = getdate();
 declare @sql_string nvarchar(max);
@@ -45,7 +45,7 @@ set @sql_string = "
 			[counts] = count(*)
 	from DBA_Admin.dbo.resource_consumption rc
 	where rc.event_time between @start_time and @end_time
-	and rc.database_name = @database_name
+	"+(CASE WHEN @database_name IS NULL THEN "--" ELSE "" END)+"and rc.database_name = @database_name
 	and rc.sql_text like ('%'+@table_name+'%')
 	and result = 'OK'
 	group by (case when client_app_name like 'SQL Job = %' then client_app_name else left(DBA_Admin.dbo.normalized_sql_text(sql_text,150,0),@str_length) end)
@@ -63,15 +63,7 @@ set quoted_identifier on;
 
 insert #queries
 exec sp_ExecuteSql @sql_string, N'@database_name nvarchar(255), @start_time datetime, @end_time datetime, @str_length smallint, @table_name nvarchar(500)', 
-					@database_name, @start_time, @end_time, @str_length, @table_name
-go
-
-declare @start_time datetime = dateadd(day,-15,getdate());
-declare @end_time datetime = getdate();
-declare @database_name nvarchar(255) = 'MSAJAG';
-declare @str_length smallint = 50;
-declare @table_name nvarchar(500) = 'STT_ClientDetail';
-declare @sql_string nvarchar(max);
+					@database_name, @start_time, @end_time, @str_length, @table_name;
 
 set quoted_identifier off;
 set @sql_string = "
@@ -82,7 +74,7 @@ select top 200 rc.sql_text, q.counts, q.cpu_time_seconds_avg, q.logical_reads_gb
 from #queries q
 outer apply (select top 1 * from dbo.resource_consumption rc 
 			where rc.event_time between @start_time and @end_time
-			and rc.database_name = @database_name
+			"+(CASE WHEN @database_name IS NULL THEN "--" ELSE "" END)+"and rc.database_name = @database_name
 			and rc.sql_text like ('%'+@table_name+'%')
 			and result = 'OK'
 			and q.[grouping-key] = (case when rc.client_app_name like 'SQL Job = %' then rc.client_app_name else left(DBA_Admin.dbo.normalized_sql_text(rc.sql_text,150,0),@str_length) end)

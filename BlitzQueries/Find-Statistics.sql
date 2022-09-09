@@ -1,6 +1,6 @@
 use [master]
 go
-declare @table_name varchar(255) = '[MSAJAG].[dbo].[STT_ClientDetail]'
+declare @table_name varchar(255) = '[ACCOUNT].[dbo].[BillMatch]'
 declare @sql nvarchar(max);
 
 declare @database_name nvarchar(255);
