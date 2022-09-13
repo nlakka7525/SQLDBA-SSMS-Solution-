@@ -1,6 +1,6 @@
 USE [DBA_Admin]
 -- Find long running statements of session
-declare @table_name nvarchar(225) = 'COMMON_CONTRACT_DATA';
+declare @table_name nvarchar(225) = 'BillMatch';
 declare @no_of_days tinyint = 7;
 declare @database_name nvarchar(255);
 declare @index_name nvarchar(255);

@@ -1,10 +1,20 @@
-﻿$SQLNotebookPath = 'D:\SQLPractice\'
+﻿[CmdletBinding()]
+Param (
+    [Parameter(Mandatory=$false)]
+    [String]$SQLNotebookPath = 'D:\SQLPractice\',
+    [Parameter(Mandatory=$true)]
+    [String]$SqlInstance
+)
+
+# Install PowerShellNotebook
+#Install-Module -Scope AllUsers -Name PowerShellNotebook
+Import-Module PowerShellNotebook
 
 # ======================== BEGIN ==========================
 # Activity 01 -> Rename sample files to new date
 # ---------------------------------------------------------
 $FileNamePattern_Existing = 'Wed-Aug31'
-$FileNamePattern_New = 'Sat-Sep03'
+$FileNamePattern_New = 'Wed-Sep07'
 
 $files2Rename = @()
 $files2Rename += Get-ChildItem -Path $SQLNotebookPath | ? {$_.Name -match "$FileNamePattern_Existing" }
@@ -19,6 +29,8 @@ foreach($file in $files2Rename) {
 # ======================== BEGIN ==========================
 # Activity 02 -> Execute all SQLNotebooks
 # ---------------------------------------------------------
+Invoke-SqlNotebook -ServerInstance SQLDEMO2019 -Database master -InputFile '.\BPCheck.ipynb' -OutputFile 'BPCheck_output.ipynb';
+
 
 # ======================== END ============================
 
