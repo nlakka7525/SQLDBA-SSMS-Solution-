@@ -1,5 +1,9 @@
 USE [msdb]
 GO
+
+--EXEC msdb.dbo.sp_delete_job @job_name=N'(dba) Run-PlanCacheAutopilot', @delete_unused_schedule=1
+GO
+
 DECLARE @jobId BINARY(16)
 EXEC  msdb.dbo.sp_add_job @job_name=N'(dba) Run-PlanCacheAutopilot', 
 		@enabled=1, 
@@ -9,8 +13,8 @@ EXEC  msdb.dbo.sp_add_job @job_name=N'(dba) Run-PlanCacheAutopilot',
 		@delete_level=0, 
 		@description=N'Capture Queries having parameter sniffing', 
 		@category_name=N'(dba) Monitoring & Alerting', 
-		@owner_login_name=N'LAB\adwivedi', @job_id = @jobId OUTPUT
-select @jobId
+		--@owner_login_name=N'sa', 
+		@job_id = @jobId OUTPUT
 GO
 EXEC msdb.dbo.sp_add_jobserver @job_name=N'(dba) Run-PlanCacheAutopilot'
 GO
@@ -56,7 +60,7 @@ EXEC msdb.dbo.sp_update_job @job_name=N'(dba) Run-PlanCacheAutopilot',
 		@delete_level=0, 
 		@description=N'Capture Queries having parameter sniffing', 
 		@category_name=N'(dba) Monitoring & Alerting', 
-		@owner_login_name=N'LAB\adwivedi', 
+		--@owner_login_name=N'sa', 
 		@notify_email_operator_name=N'', 
 		@notify_page_operator_name=N''
 GO
@@ -74,6 +78,10 @@ EXEC msdb.dbo.sp_add_jobschedule @job_name=N'(dba) Run-PlanCacheAutopilot', @nam
 		@active_start_date=20220915, 
 		@active_end_date=99991231, 
 		@active_start_time=0, 
-		@active_end_time=235959, @schedule_id = @schedule_id OUTPUT
-select @schedule_id
+		@active_end_time=235959, 
+		@schedule_id = @schedule_id OUTPUT
 GO
+
+EXEC msdb.dbo.sp_start_job @job_name=N'(dba) Run-PlanCacheAutopilot'
+go
+

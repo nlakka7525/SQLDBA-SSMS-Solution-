@@ -1,4 +1,4 @@
-USE DBA
+USE DBA_Admin
 GO
 /*
 SQL Agent Job => [(dba) Run-PlanCacheAutopilot]
@@ -34,7 +34,7 @@ ALTER PROC dbo.usp_PlanCacheAutopilot
 	@MinLogicalWrites INT = 0,
 	@MinSpills INT = 0,
 	@MinGrantMB INT = 0,
-	@OutputDatabaseName NVARCHAR(258) = 'DBA',
+	@OutputDatabaseName NVARCHAR(258) = 'DBA_Admin',
 	@OutputSchemaName NVARCHAR(258) = 'dbo',
 	@OutputTableName NVARCHAR(258) = 'PlanCacheAutopilot',
 	@CheckDateOverride DATETIMEOFFSET = NULL,
