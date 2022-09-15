@@ -1,5 +1,26 @@
 USE DBA
 GO
+/*
+SQL Agent Job => [(dba) Run-PlanCacheAutopilot]
+Job Script => SCH-Job-[(dba) Run-PlanCacheAutoPilot].sql
+
+EXEC dbo.usp_PlanCacheAutopilot
+	@MinExecutions = 2,
+	@MinDurationSeconds = 10,
+	@MinCPUSeconds = 10,
+	@MinLogicalReads = 100000,
+	@MinLogicalWrites = 0,
+	@MinSpills = 0,
+	@MinGrantMB = 0,
+	@OutputDatabaseName = 'DBA',
+	@OutputSchemaName = 'dbo',
+	@OutputTableName = 'PlanCacheAutopilot',
+	@CheckDateOverride = NULL,
+	@LogThePlans = 1,
+	@ClearThePlans = 0,
+	@Debug = 1;
+*/
+GO
 
 IF OBJECT_ID('dbo.usp_PlanCacheAutopilot') IS NULL
   EXEC ('CREATE PROCEDURE dbo.usp_PlanCacheAutopilot AS RETURN 0;');
@@ -13,7 +34,7 @@ ALTER PROC dbo.usp_PlanCacheAutopilot
 	@MinLogicalWrites INT = 0,
 	@MinSpills INT = 0,
 	@MinGrantMB INT = 0,
-	@OutputDatabaseName NVARCHAR(258) = 'DBAtools',
+	@OutputDatabaseName NVARCHAR(258) = 'DBA',
 	@OutputSchemaName NVARCHAR(258) = 'dbo',
 	@OutputTableName NVARCHAR(258) = 'PlanCacheAutopilot',
 	@CheckDateOverride DATETIMEOFFSET = NULL,
@@ -283,22 +304,7 @@ END
 
 GO
 
-EXEC dbo.usp_PlanCacheAutopilot
-	@MinExecutions = 2,
-	@MinDurationSeconds = 10,
-	@MinCPUSeconds = 10,
-	@MinLogicalReads = 100000,
-	@MinLogicalWrites = 0,
-	@MinSpills = 0,
-	@MinGrantMB = 0,
-	@OutputDatabaseName = 'DBA',
-	@OutputSchemaName = 'dbo',
-	@OutputTableName = 'PlanCacheAutopilot',
-	@CheckDateOverride = NULL,
-	@LogThePlans = 1,
-	@ClearThePlans = 0,
-	@Debug = 1;
-GO
+
 /* For debugging:
 
 SELECT * FROM ##ProblemPlans p
@@ -306,10 +312,10 @@ INNER JOIN sys.dm_exec_query_stats qs ON p.PlanHandle = qs.plan_handle
 WHERE p.PlanHandle = 0x0500040040C37F1A2039DA107502000001000000000000000000000000000000000000000000000000000000
 ORDER BY p.PlanHandle;
 
-SELECT COUNT(*) FROM DBAtools.dbo.PlanCacheAutopilot;
-SELECT TOP 100 * FROM DBAtools.dbo.PlanCacheAutopilot;
+SELECT COUNT(*) FROM DBA.dbo.PlanCacheAutopilot;
+SELECT TOP 100 * FROM DBA.dbo.PlanCacheAutopilot;
 
-DROP TABLE IF EXISTS DBAtools.dbo.PlanCacheAutopilot;
+DROP TABLE IF EXISTS DBA.dbo.PlanCacheAutopilot;
 */
 
 
