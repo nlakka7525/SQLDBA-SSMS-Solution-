@@ -3,6 +3,18 @@
   <Items>
     <LogicalFolder Name="Connections" Type="2" Sorted="true">
       <Items>
+        <ConnectionNode Name="(local):21L-LTPABL-1187\Ajay">
+          <Created>2022-09-14T09:51:20.0524509+05:30</Created>
+          <Type>SQL</Type>
+          <Server>(local)</Server>
+          <UserName />
+          <Authentication>Windows Authentication</Authentication>
+          <InitialDB />
+          <LoginTimeout>30</LoginTimeout>
+          <ExecutionTimeout>0</ExecutionTimeout>
+          <ConnectionProtocol>NotSpecified</ConnectionProtocol>
+          <ApplicationName>Microsoft SQL Server Management Studio - Query</ApplicationName>
+        </ConnectionNode>
         <ConnectionNode Name="172.31.12.40:E84947">
           <Created>2022-06-24T11:42:08.1088456+05:30</Created>
           <Type>SQL</Type>
@@ -243,7 +255,7 @@
           <ConnectionProtocol>NotSpecified</ConnectionProtocol>
           <ApplicationName>Microsoft SQL Server Management Studio - Query</ApplicationName>
         </ConnectionNode>
-        <ConnectionNode Name="localhost:LAB\adwivedi">
+        <ConnectionNode Name="localhost:21L-LTPABL-1187\Ajay">
           <Created>2022-03-21T09:12:38.8622746+05:30</Created>
           <Type>SQL</Type>
           <Server>localhost</Server>
@@ -279,7 +291,7 @@
           <ConnectionProtocol>NotSpecified</ConnectionProtocol>
           <ApplicationName>Microsoft SQL Server Management Studio - Query</ApplicationName>
         </ConnectionNode>
-        <ConnectionNode Name="SqlPractice:LAB\adwivedi">
+        <ConnectionNode Name="SqlPractice:21L-LTPABL-1187\Ajay">
           <Created>2022-05-14T19:26:30.5599433+05:30</Created>
           <Type>SQL</Type>
           <Server>SqlPractice</Server>
@@ -291,7 +303,7 @@
           <ConnectionProtocol>NotSpecified</ConnectionProtocol>
           <ApplicationName>Microsoft SQL Server Management Studio - Query</ApplicationName>
         </ConnectionNode>
-        <ConnectionNode Name="sqlprod1:LAB\adwivedi">
+        <ConnectionNode Name="sqlprod1:21L-LTPABL-1187\Ajay">
           <Created>2021-12-07T11:54:59.6010364+05:30</Created>
           <Type>SQL</Type>
           <Server>sqlprod1</Server>
@@ -464,9 +476,9 @@
           <FullPath>Querying Deadlocks From System_Health XEvent.sql</FullPath>
         </FileNode>
         <FileNode Name="RingBuffer-PerfMon-CPU-Memory.sql">
-          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:196.1.115.200:False:E84947</AssociatedConnectionMoniker>
-          <AssociatedConnSrvName>196.1.115.200</AssociatedConnSrvName>
-          <AssociatedConnUserName>E84947</AssociatedConnUserName>
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:(local):True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>(local)</AssociatedConnSrvName>
+          <AssociatedConnUserName />
           <FullPath>RingBuffer-PerfMon-CPU-Memory.sql</FullPath>
         </FileNode>
         <FileNode Name="SCH-sp_WhoIsActive_v12_00(Modified).sql">
@@ -474,6 +486,12 @@
           <AssociatedConnSrvName>localhost</AssociatedConnSrvName>
           <AssociatedConnUserName />
           <FullPath>SCH-sp_WhoIsActive_v12_00(Modified).sql</FullPath>
+        </FileNode>
+        <FileNode Name="SCH-usp_PlanCacheAutoPilot.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:localhost:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>localhost</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>SCH-usp_PlanCacheAutoPilot.sql</FullPath>
         </FileNode>
         <FileNode Name="SQL Server 2008 R2 Diagnostic Information Queries.sql">
           <AssociatedConnectionMoniker />
