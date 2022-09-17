@@ -15,9 +15,11 @@ DECLARE @top_x_query_rows SMALLINT = 10;
 DECLARE @long_running_query_threshold_minutes INT = 10;
 DECLARE @get_blitz_analysis BIT = 0;
 DECLARE @only_X_resultset smallint = -1;
-DECLARE @show_plan TINYINT = 0; /* 0 = no plan, 1 = query plan, 2 = batch plan */
+DECLARE @show_plan TINYINT = 1; /* 0 = no plan, 1 = query plan, 2 = batch plan */
 DECLARE @all_requests TINYINT = 1;
 DECLARE @granted_memory_threshold_mb decimal(20,2) = 500.00;
+DECLARE @show_io_latency BIT = 1;
+DECLARE @io_snapshot_durations_seconds tinyint = 5;
 DECLARE @sort_order_all_sessions varchar(500);
 --SET @sort_order_all_sessions = '[elapsed_time_sec], [granted_query_memory_kb] desc';
 --SET @sort_order_all_sessions = '[login_name][elapsed_time_sec] desc';
@@ -560,3 +562,87 @@ begin
 	set @sql = @sql + char(10) + ' order by '+@sort_order_all_sessions;
 	exec (@sql);
 end
+
+if @show_io_latency = 1 /* Delta IO Latency */
+begin	
+	declare @wait_for_delay varchar(20);
+	set @wait_for_delay = convert(varchar,dateadd(second,@io_snapshot_durations_seconds,'1900-01-01'),108);
+
+	if OBJECT_ID('tempdb..#Snapshot') IS NOT NULL
+		drop table #Snapshot;
+
+	CREATE TABLE #Snapshot
+	(
+		database_id SMALLINT NOT NULL,
+		file_id SMALLINT NOT NULL,
+		num_of_reads BIGINT NOT NULL,
+		num_of_bytes_read BIGINT NOT NULL,
+		io_stall_read_ms BIGINT NOT NULL,
+		num_of_writes BIGINT NOT NULL,
+		num_of_bytes_written BIGINT NOT NULL,
+		io_stall_write_ms BIGINT NOT NULL
+	);
+
+	INSERT INTO #Snapshot(database_id,file_id,num_of_reads,num_of_bytes_read
+		,io_stall_read_ms,num_of_writes,num_of_bytes_written,io_stall_write_ms)
+		SELECT database_id,file_id,num_of_reads,num_of_bytes_read
+			,io_stall_read_ms,num_of_writes,num_of_bytes_written,io_stall_write_ms
+		FROM sys.dm_io_virtual_file_stats(NULL,NULL)
+	OPTION (RECOMPILE);
+
+	-- Set test interval (1 minute). 
+	WAITFOR DELAY @wait_for_delay;
+
+	;WITH Stats(db_id, file_id, Reads, ReadBytes, Writes
+		,WrittenBytes, ReadStall, WriteStall)
+	as
+	(
+		SELECT
+			s.database_id, s.file_id
+			,fs.num_of_reads - s.num_of_reads
+			,fs.num_of_bytes_read - s.num_of_bytes_read
+			,fs.num_of_writes - s.num_of_writes
+			,fs.num_of_bytes_written - s.num_of_bytes_written
+			,fs.io_stall_read_ms - s.io_stall_read_ms
+			,fs.io_stall_write_ms - s.io_stall_write_ms
+		FROM
+			#Snapshot s JOIN sys.dm_io_virtual_file_stats(NULL, NULL) fs ON
+				s.database_id = fs.database_id and s.file_id = fs.file_id
+	)
+	, StatsFormatted AS (
+		SELECT RunningQuery = convert(varchar,@io_snapshot_durations_seconds)+'-Seconds-IO-Stats',
+			s.db_id AS [DB ID], d.name AS [Database]
+			,mf.name AS [File Name], mf.physical_name AS [File Path]
+			,mf.type_desc AS [Type], s.Reads 
+			,CONVERT(DECIMAL(12,3), s.ReadBytes / 1048576.) AS [Read MB]
+			,CONVERT(DECIMAL(12,3), s.WrittenBytes / 1048576.) AS [Written MB]
+			,s.Writes, s.Reads + s.Writes AS [IO Count]
+			,CONVERT(DECIMAL(5,2),100.0 * s.ReadBytes / 
+					(s.ReadBytes + s.WrittenBytes)) AS [Read %]
+			,CONVERT(DECIMAL(5,2),100.0 * s.WrittenBytes / 
+					(s.ReadBytes + s.WrittenBytes)) AS [Write %]
+			,s.ReadStall AS [Read Stall]
+			,s.WriteStall AS [Write Stall]
+			,CASE WHEN s.Reads = 0 
+				THEN 0.000
+				ELSE CONVERT(DECIMAL(12,3),1.0 * s.ReadStall / s.Reads) 
+			END AS [Avg Read Stall] 
+			,CASE WHEN s.Writes = 0 
+				THEN 0.000
+				ELSE CONVERT(DECIMAL(12,3),1.0 * s.WriteStall / s.Writes) 
+			END AS [Avg Write Stall] 
+		FROM
+			Stats s JOIN sys.master_files mf WITH (NOLOCK) ON
+				s.db_id = mf.database_id and
+				s.file_id = mf.file_id
+			JOIN sys.databases d WITH (NOLOCK) ON 
+				s.db_id = d.database_id  
+		WHERE -- Only display files with more than 20MB throughput
+			(s.ReadBytes + s.WrittenBytes) > 20 * 1048576
+	)
+	SELECT	*
+	FROM	StatsFormatted
+	ORDER BY ([Avg Read Stall]+[Avg Write Stall]) desc
+	OPTION (RECOMPILE);
+END
+go
