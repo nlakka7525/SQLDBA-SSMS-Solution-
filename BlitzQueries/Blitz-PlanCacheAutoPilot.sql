@@ -19,7 +19,7 @@ go
 /* Get Details of Queries by QueryHash */
 select *
 from dbo.PlanCacheAutopilot pca
-where pca.query_hash in (0x81628FB507FEDD01,0x8E2C5C53F48965AB)
+where pca.query_hash in (0x9431F942971DCF00) --,0xA3912FBACA1D6ABA,0xF1A5416179C04CBF)
 order by query_hash, query_plan_hash
 go
 

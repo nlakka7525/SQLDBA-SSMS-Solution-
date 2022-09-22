@@ -21,7 +21,7 @@ t_queries as (
 			--,[CardinalityEstimationModelVersion] = query_plan.value('(/*:ShowPlanXML/*:BatchSequence/*:Batch/*:Statements/*:StmtSimple)[1]/@CardinalityEstimationModelVersion','int')
 			,[used_memory_mb] = convert(numeric(20,2),convert(bigint,replace(used_memory,',',''))*8.0/1024)
 	from dbo.WhoIsActive w
-	where w.collection_time between dateadd(day,-2,getdate()) and getdate()	
+	where w.collection_time between dateadd(day,-5,getdate()) and getdate()	
 	--and w.login_name = 'ANGELBROKING\bidba.admin' and w.database_name = 'NSEFO'
 	--and w.program_name like 'SQL Job = NSE FUTURES AUTO PROCESS SETTLEMENT%'
 	--and w.session_id = 164
