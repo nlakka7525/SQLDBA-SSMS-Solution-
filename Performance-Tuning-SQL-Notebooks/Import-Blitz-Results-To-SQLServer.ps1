@@ -1,36 +1,114 @@
 ﻿[CmdletBinding()]
 Param (
     [Parameter(Mandatory=$false)]
-    [String]$SQLNotebookPath = 'D:\SQLPractice\',
+    [String]$SQLNotebookPath,
     [Parameter(Mandatory=$true)]
-    [String]$SqlInstance
+    [String]$SqlInstance,
+    [Parameter(Mandatory=$false)]
+    [String]$ExistingFileNamePattern = 'WeekDay-MonthDay',
+    [Parameter(Mandatory=$false)]
+    [String]$NewFileNamePattern,
+    [Parameter(Mandatory=$false)]
+    [PSCredential]$SqlCredential,
+    [Switch]$RenameFiles,
+    [switch]$ExecuteSQLNotebooks,
+    [switch]$ImportBlitzIndexData,
+    [String]$StartWithFile
 )
+"$(Get-Date -Format yyyyMMMdd_HHmm) {0,-10} {1}" -f 'INFO:', "Import dbatools.."
+Import-Module dbatools
+$ErrorActionPreference = "STOP"
+
+# Declare local variables
+$today = Get-Date
+if([String]::IsNullOrEmpty($NewFileNamePattern)) {
+    $NewFileNamePattern = "$($today.ToString('ddd'))-$($today.ToString('MMM'))$($today.ToString('dd'))"
+}
+
+# Validate credentials
+if($ExecuteSQLNotebooks) {
+    "$(Get-Date -Format yyyyMMMdd_HHmm) {0,-10} {1}" -f 'INFO:', "Validate SQL Credentails.."
+    Invoke-DbaQuery -SqlInstance $SqlInstance -Query 'select @@version as vrsn' -SqlCredential $SqlCredential -EnableException | Out-Null
+}
 
 # Install PowerShellNotebook
-#Install-Module -Scope AllUsers -Name PowerShellNotebook
-Import-Module PowerShellNotebook
+"$(Get-Date -Format yyyyMMMdd_HHmm) {0,-10} {1}" -f 'INFO:', "Import PowerShellNotebook module.."
+
+# Validate SQLNotebookPath
+if([String]::IsNullOrEmpty($SQLNotebookPath)) {
+    $SQLNotebookPath = $PSScriptRoot
+}
+
+if([String]::IsNullOrEmpty($SQLNotebookPath)) {
+    "Kindly provide SQLNotebookPath parameter." | Write-Error
+}
+else {
+    "$(Get-Date -Format yyyyMMMdd_HHmm) {0,-10} {1}" -f 'INFO:', "`$SQLNotebookPath => '$SQLNotebookPath'"
+}
+
+"$(Get-Date -Format yyyyMMMdd_HHmm) {0,-10} {1}" -f 'INFO:', "`$ExistingFileNamePattern => '$ExistingFileNamePattern'"
+"$(Get-Date -Format yyyyMMMdd_HHmm) {0,-10} {1}" -f 'INFO:', "`$NewFileNamePattern => '$NewFileNamePattern'"
 
 # ======================== BEGIN ==========================
 # Activity 01 -> Rename sample files to new date
 # ---------------------------------------------------------
-$FileNamePattern_Existing = 'Wed-Aug31'
-$FileNamePattern_New = 'Wed-Sep07'
+if($RenameFiles) { # We don't need renaming of file
+    "$(Get-Date -Format yyyyMMMdd_HHmm) {0,-10} {1}" -f 'INFO:', "Renaming files from '$ExistingFileNamePattern' to '$NewFileNamePattern'.."
 
-$files2Rename = @()
-$files2Rename += Get-ChildItem -Path $SQLNotebookPath | ? {$_.Name -match "$FileNamePattern_Existing" }
-foreach($file in $files2Rename) {
-    $newName = $file.Name -replace $FileNamePattern_Existing, $FileNamePattern_New
-    "Renaming '$($file.Name)' to '$newName'" | Write-Host -ForegroundColor Cyan
-    $file | Rename-Item -NewName $newName
+    $files2Rename = @()
+    $files2Rename += Get-ChildItem -Path $SQLNotebookPath | ? {$_.Name -match "$ExistingFileNamePattern" }
+    if($files2Rename.Count -eq 0) {
+        "No files found to rename." | Write-Error
+    }
+
+    foreach($file in $files2Rename) {
+        $newName = $file.Name -replace $ExistingFileNamePattern, $NewFileNamePattern
+        "`t$(Get-Date -Format yyyyMMMdd_HHmm) {0,-10} {1}" -f 'INFO:', "Renaming '$($file.Name)' to '$newName'" | Write-Host -ForegroundColor Cyan
+        $file | Rename-Item -NewName $newName
+    }
 }
 # ======================== END ============================
-
 
 # ======================== BEGIN ==========================
 # Activity 02 -> Execute all SQLNotebooks
 # ---------------------------------------------------------
-Invoke-SqlNotebook -ServerInstance SQLDEMO2019 -Database master -InputFile '.\BPCheck.ipynb' -OutputFile 'BPCheck_output.ipynb';
+if($ExecuteSQLNotebooks) 
+{
+    "$(Get-Date -Format yyyyMMMdd_HHmm) {0,-10} {1}" -f 'INFO:', "Find all sample SQLNotebooks.."
+    $sqlNoteBooksOnPath = @()
+    if([String]::IsNullOrEmpty($StartWithFile)) {
+        $sqlNoteBooksOnPath += Get-ChildItem -Path $SQLNotebookPath -Name *.ipynb `
+                                -Recurse -File -Include "*$ExistingFileNamePattern*" | Sort-Object
+    }
+    else {
+        $sqlNoteBooksOnPath += Get-ChildItem -Path $SQLNotebookPath -Name *.ipynb `
+                                -Recurse -File -Include "*$ExistingFileNamePattern*" | 
+                                Sort-Object | Where-Object {$_ -ge $StartWithFile}
+    }
 
+    if($sqlNoteBooksOnPath.Count -eq 0) {
+        "No sample SQLNotebook files found for execution." | Write-Error
+    }
+    else {
+        "$(Get-Date -Format yyyyMMMdd_HHmm) {0,-10} {1}" -f 'INFO:', "$($sqlNoteBooksOnPath.Count) sample SQLNotebooks found."
+    }
+
+    $counter = 1
+    foreach($noteBook in $sqlNoteBooksOnPath) 
+    {
+        $newName = $noteBook -replace $ExistingFileNamePattern, $NewFileNamePattern
+        $outputFolder = Join-Path $SQLNotebookPath $($today.ToString("yyyy-MM-dd HHmm"))
+        $sampleNoteBook = Join-Path $SQLNotebookPath $noteBook
+        $outputNoteBook = Join-Path $outputFolder $newName
+
+        "`t$(Get-Date -Format yyyyMMMdd_HHmm) {0,-6} {1}" -f 'INFO:', "Working on $counter/$($sqlNoteBooksOnPath.Count) => '$outputNoteBook'.."
+        Invoke-SqlNotebook -ServerInstance $SqlInstance -Database master `
+                            -InputFile $sampleNoteBook -OutputFile $outputNoteBook `
+                            -Force -Credential $SqlCredential | Out-Null
+        $counter += 1
+        #return
+    }
+}
 
 # ======================== END ============================
 
@@ -39,13 +117,35 @@ Invoke-SqlNotebook -ServerInstance SQLDEMO2019 -Database master -InputFile '.\BP
 # Activity 03 -> Import BlitzIndex to SQL Tables
 # ---------------------------------------------------------
 #$personal = Get-Credential -UserName 'sa' -Message 'Personal'
-$Server = 'SQLPractice'
-$IndexSummaryFile = 'D:\SQLPractice\sp_BlitzIndex-Summary-Fri-Aug26.xlsx'
-$IndexDetailedFile = 'D:\SQLPractice\sp_BlitzIndex-Detailed-Fri-Aug26.xlsx'
+if($ImportBlitzIndexData)
+{
+    $Server = 'SQLPractice'
+    $IndexSummaryFile = 'D:\SQLPractice\sp_BlitzIndex-Summary-Fri-Aug26.xlsx'
+    $IndexDetailedFile = 'D:\SQLPractice\sp_BlitzIndex-Detailed-Fri-Aug26.xlsx'
 
-Import-Excel $IndexSummaryFile | Write-DbaDbTableData -SqlInstance $Server -Database 'DBA_Admin' -Table 'BlitzIndex_Summary_Aug26' -SqlCredential $personal -AutoCreateTable
-Import-Excel $IndexDetailedFile | Write-DbaDbTableData -SqlInstance $Server -Database 'DBA_Admin' -Table 'BlitzIndex_Detailed_Aug26' -SqlCredential $personal -AutoCreateTable
+    Import-Excel $IndexSummaryFile | Write-DbaDbTableData -SqlInstance $Server -Database 'DBA_Admin' -Table 'BlitzIndex_Summary_Aug26' -SqlCredential $personal -AutoCreateTable
+    Import-Excel $IndexDetailedFile | Write-DbaDbTableData -SqlInstance $Server -Database 'DBA_Admin' -Table 'BlitzIndex_Detailed_Aug26' -SqlCredential $personal -AutoCreateTable
 
 
-EXEC sp_rename 'dbo.ErrorLog.ErrorTime', 'ErrorDateTime', 'COLUMN';
+    EXEC sp_rename 'dbo.ErrorLog.ErrorTime', 'ErrorDateTime', 'COLUMN';
+}
 # ======================== END ============================
+
+
+<#
+cls
+cd D:\GitHub-Office\DBA-SRE\YourServerName\
+
+Import-Module dbatools
+
+#$sqlCredential = Get-Credential -UserName 'SomeLogin' -Message 'SQL Credentials'
+$params = @{
+    SqlInstance = 'YourServerName'
+    SqlCredential = $sqlCredential
+    #ExistingFileNamePattern = 'Thu-Sep29'
+    #NewFileNamePattern = 'WeekDay-MonthDay'
+    ExecuteSQLNotebooks = $true
+    #RenameFiles = $true
+}
+.\Import-Blitz-Results-To-SQLServer.ps1 @params
+#>
