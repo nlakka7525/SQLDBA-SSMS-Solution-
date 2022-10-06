@@ -50,70 +50,6 @@ else {
 "$(Get-Date -Format yyyyMMMdd_HHmm) {0,-10} {1}" -f 'INFO:', "`$NewFileNamePattern => '$NewFileNamePattern'"
 
 # ======================== BEGIN ==========================
-# Activity 01 -> Rename sample files to new date
-# ---------------------------------------------------------
-if($RenameFiles) { # We don't need renaming of file
-    "$(Get-Date -Format yyyyMMMdd_HHmm) {0,-10} {1}" -f 'INFO:', "Renaming files from '$ExistingFileNamePattern' to '$NewFileNamePattern'.."
-
-    $files2Rename = @()
-    $files2Rename += Get-ChildItem -Path $SQLNotebookPath | ? {$_.Name -match "$ExistingFileNamePattern" }
-    if($files2Rename.Count -eq 0) {
-        "No files found to rename." | Write-Error
-    }
-
-    foreach($file in $files2Rename) {
-        $newName = $file.Name -replace $ExistingFileNamePattern, $NewFileNamePattern
-        "`t$(Get-Date -Format yyyyMMMdd_HHmm) {0,-10} {1}" -f 'INFO:', "Renaming '$($file.Name)' to '$newName'" | Write-Host -ForegroundColor Cyan
-        $file | Rename-Item -NewName $newName
-    }
-}
-# ======================== END ============================
-
-# ======================== BEGIN ==========================
-# Activity 02 -> Execute all SQLNotebooks
-# ---------------------------------------------------------
-if($ExecuteSQLNotebooks) 
-{
-    "$(Get-Date -Format yyyyMMMdd_HHmm) {0,-10} {1}" -f 'INFO:', "Find all sample SQLNotebooks.."
-    $sqlNoteBooksOnPath = @()
-    if([String]::IsNullOrEmpty($StartWithFile)) {
-        $sqlNoteBooksOnPath += Get-ChildItem -Path $SQLNotebookPath -Name *.ipynb `
-                                -Recurse -File -Include "*$ExistingFileNamePattern*" | Sort-Object
-    }
-    else {
-        $sqlNoteBooksOnPath += Get-ChildItem -Path $SQLNotebookPath -Name *.ipynb `
-                                -Recurse -File -Include "*$ExistingFileNamePattern*" | 
-                                Sort-Object | Where-Object {$_ -ge $StartWithFile}
-    }
-
-    if($sqlNoteBooksOnPath.Count -eq 0) {
-        "No sample SQLNotebook files found for execution." | Write-Error
-    }
-    else {
-        "$(Get-Date -Format yyyyMMMdd_HHmm) {0,-10} {1}" -f 'INFO:', "$($sqlNoteBooksOnPath.Count) sample SQLNotebooks found."
-    }
-
-    $counter = 1
-    foreach($noteBook in $sqlNoteBooksOnPath) 
-    {
-        $newName = $noteBook -replace $ExistingFileNamePattern, $NewFileNamePattern
-        $outputFolder = Join-Path $SQLNotebookPath $($today.ToString("yyyy-MM-dd HHmm"))
-        $sampleNoteBook = Join-Path $SQLNotebookPath $noteBook
-        $outputNoteBook = Join-Path $outputFolder $newName
-
-        "`t$(Get-Date -Format yyyyMMMdd_HHmm) {0,-6} {1}" -f 'INFO:', "Working on $counter/$($sqlNoteBooksOnPath.Count) => '$outputNoteBook'.."
-        Invoke-SqlNotebook -ServerInstance $SqlInstance -Database master `
-                            -InputFile $sampleNoteBook -OutputFile $outputNoteBook `
-                            -Force -Credential $SqlCredential | Out-Null
-        $counter += 1
-        #return
-    }
-}
-
-# ======================== END ============================
-
-
-# ======================== BEGIN ==========================
 # Activity 03 -> Import BlitzIndex to SQL Tables
 # ---------------------------------------------------------
 #$personal = Get-Credential -UserName 'sa' -Message 'Personal'
@@ -137,6 +73,7 @@ cls
 cd D:\GitHub-Office\DBA-SRE\YourServerName\
 
 Import-Module dbatools
+$ErrorActionPreference = "STOP"
 
 #$sqlCredential = Get-Credential -UserName 'SomeLogin' -Message 'SQL Credentials'
 $params = @{
@@ -146,6 +83,7 @@ $params = @{
     #NewFileNamePattern = 'WeekDay-MonthDay'
     ExecuteSQLNotebooks = $true
     #RenameFiles = $true
+    #StartWithFile = 'sp_BlitzFirst-SinceStartup'
 }
 .\Import-Blitz-Results-To-SQLServer.ps1 @params
 #>
