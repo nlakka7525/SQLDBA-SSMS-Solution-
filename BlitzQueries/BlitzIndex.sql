@@ -1,17 +1,18 @@
 use tempdb
-EXEC DBA.dbo.sp_BlitzIndex @getalldatabases = 1, @BringThePain = 1
-EXEC DBA.dbo.sp_BlitzIndex @getalldatabases = 1, @Mode = 2 -- index usage details
+EXEC master.dbo.sp_BlitzIndex @getalldatabases = 1, @BringThePain = 1
+EXEC master.dbo.sp_BlitzIndex @GetAllDatabases = 1, @Mode = 1 -- summarize database metrics
+EXEC master.dbo.sp_BlitzIndex @GetAllDatabases = 1, @Mode = 2 -- index usage details
 
-EXEC tempdb..sp_BlitzIndex @DatabaseName = 'VDP' ,@BringThePain = 1 -- Bring only main issues
-EXEC tempdb..sp_BlitzIndex @DatabaseName = 'FMO' ,@BringThePain = 1 -- Bring only main issues
-EXEC tempdb..sp_BlitzIndex @DatabaseName = 'SRA' ,@BringThePain = 1 -- Bring only main issues
+EXEC master..sp_BlitzIndex @DatabaseName = 'VDP' ,@BringThePain = 1 -- Bring only main issues
+EXEC master..sp_BlitzIndex @DatabaseName = 'FMO' ,@BringThePain = 1 -- Bring only main issues
+EXEC master..sp_BlitzIndex @DatabaseName = 'SRA' ,@BringThePain = 1 -- Bring only main issues
 
 EXEC master..sp_BlitzIndex @DatabaseName = 'KYC_CI', @SchemaName = 'dbo', @TableName = 'tblRnELeadMaster'
-EXEC tempdb..sp_BlitzIndex @DatabaseName = 'Cosmo', @SchemaName = 'dbo', @TableName = 'rm_image_file'
-EXEC tempdb..sp_BlitzIndex @DatabaseName = 'Cosmo', @SchemaName = 'dbo', @TableName = 'rm_image_relevancy_link'
-EXEC tempdb..sp_BlitzIndex @DatabaseName = 'Cosmo', @SchemaName = 'dbo', @TableName = 'schedule_link'
-EXEC tempdb..sp_BlitzIndex @DatabaseName = 'Cosmo', @SchemaName = 'dbo', @TableName = 'schres_configuration'
-EXEC tempdb..sp_BlitzIndex @DatabaseName = 'Cosmo', @SchemaName = 'dbo', @TableName = 'source_tv'
+EXEC master..sp_BlitzIndex @DatabaseName = 'Cosmo', @SchemaName = 'dbo', @TableName = 'rm_image_file'
+EXEC master..sp_BlitzIndex @DatabaseName = 'Cosmo', @SchemaName = 'dbo', @TableName = 'rm_image_relevancy_link'
+EXEC master..sp_BlitzIndex @DatabaseName = 'Cosmo', @SchemaName = 'dbo', @TableName = 'schedule_link'
+EXEC master..sp_BlitzIndex @DatabaseName = 'Cosmo', @SchemaName = 'dbo', @TableName = 'schres_configuration'
+EXEC master..sp_BlitzIndex @DatabaseName = 'Cosmo', @SchemaName = 'dbo', @TableName = 'source_tv'
 go
 
 /*	Store index Details into Table, and Analyze them one by one */
