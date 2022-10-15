@@ -1,7 +1,7 @@
 use StackOverflow
 go
 
-create or alter procedure rpt.usp_Most_and_least_dangerous_tags_to_answer
+create or alter procedure dbo.usp_Most_and_least_dangerous_tags_to_answer
 as
 begin
 	-- https://data.stackexchange.com/stackoverflow/query/1256/most-and-least-dangerous-tags-to-answer-among-the-tags-with-1000-questions
@@ -50,5 +50,5 @@ begin
 end
 go
 
-exec rpt.usp_Most_and_least_dangerous_tags_to_answer
+exec dbo.usp_Most_and_least_dangerous_tags_to_answer
 go

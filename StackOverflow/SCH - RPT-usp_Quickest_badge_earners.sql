@@ -1,7 +1,7 @@
 use StackOverflow
 go
 
-create or alter procedure rpt.usp_Quickest_badge_earners @BadgeName nvarchar(80)
+create or alter procedure dbo.usp_Quickest_badge_earners @BadgeName nvarchar(80)
 as
 begin
 	-- https://data.stackexchange.com/stackoverflow/query/10418/quickest-badge-earners-v2c
@@ -34,5 +34,5 @@ begin
 end
 go
 
-exec rpt.usp_Quickest_badge_earners @BadgeName = 'teacher'
+exec dbo.usp_Quickest_badge_earners @BadgeName = 'teacher'
 go

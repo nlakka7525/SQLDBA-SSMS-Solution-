@@ -1,7 +1,7 @@
 use StackOverflow
 go
 
-create or alter procedure rpt.usp_Top_500_answerers
+create or alter procedure dbo.usp_Top_500_answerers
 as
 begin
 	-- https://data.stackexchange.com/stackoverflow/query/952/top-500-answerers-on-the-site
@@ -30,5 +30,5 @@ end
 go
 
 
-exec rpt.usp_Top_500_answerers
+exec dbo.usp_Top_500_answerers
 go

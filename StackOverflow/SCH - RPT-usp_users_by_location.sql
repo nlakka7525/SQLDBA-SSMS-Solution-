@@ -1,7 +1,7 @@
 use StackOverflow
 go
 
-create or alter procedure rpt.usp_users_by_location @location varchar(100)
+create or alter procedure dbo.usp_users_by_location @location varchar(100)
  with recompile
 as
 begin

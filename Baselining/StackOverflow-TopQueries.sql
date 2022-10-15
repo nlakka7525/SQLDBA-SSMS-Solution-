@@ -1,6 +1,46 @@
 USE StackOverflow;
 GO
 
+create table dbo.PostTags 
+(	PostId int not null, 
+	TagId int not null,
+	constraint pk_PostTags primary key (PostId, Tagid),
+	constraint fk_PostTags__PostId foreign key (PostId) references dbo.Posts (Id),
+	constraint fk_PostTags__TagId foreign key (TagId) references dbo.Tags (Id)
+);
+go
+
+alter table dbo.PostTags nocheck constraint fk_PostTags__PostId;
+alter table dbo.PostTags nocheck constraint fk_PostTags__TagId;
+GO
+
+declare @counter int = 1;
+declare @batch_size int = 10000;
+while ( ((@counter-1)*@batch_size) <= (select MAX(id) from dbo.Posts) )
+begin
+	insert dbo.PostTags (PostId, TagId)
+	select p.Id as PostId, t.Id as TagId
+	from dbo.Posts as p
+	outer apply
+		( select ltrim(rtrim(pt.value)) as PostTag
+		  from STRING_SPLIT(REPLACE(p.Tags,'<',''), '>') as pt
+		  where ltrim(rtrim(pt.value)) <> ''
+		  and p.Id > ((@counter-1)*@batch_size)
+		and p.Id <= (@counter*@batch_size)
+		) as pt
+	join dbo.Tags as t
+		on ltrim(rtrim(t.TagName)) = pt.PostTag
+	where p.Id > ((@counter-1)*@batch_size)
+		and p.Id <= (@counter*@batch_size)
+
+	set @counter += 1;
+end
+go
+
+alter table dbo.PostTags with check check constraint fk_PostTags__PostId;
+alter table dbo.PostTags with check check constraint fk_PostTags__TagId;
+GO
+
 IF OBJECT_ID('dbo.usp_Q7521') IS NULL
   EXEC ('CREATE PROCEDURE dbo.usp_Q7521 AS RETURN 0;')
 GO
@@ -206,11 +246,6 @@ SELECT TOP 50
 END
 GO
 
-
-
-
-
-
 IF OBJECT_ID('dbo.usp_Q6772') IS NULL
   EXEC ('CREATE PROCEDURE dbo.usp_Q6772 AS RETURN 0;')
 GO
@@ -234,14 +269,6 @@ WHERE Id = @UserId
 
 END
 GO
-
-
-
-
-
-
-
-
 
 IF OBJECT_ID('dbo.usp_Q6856') IS NULL
   EXEC ('CREATE PROCEDURE dbo.usp_Q6856 AS RETURN 0;')
@@ -394,9 +421,134 @@ order by [Passive Rep Per Day] desc
 END
 GO
 
+create or alter procedure dbo.usp_Bounties_and_Questions_by_Month
+as
+begin
+	-- https://data.stackexchange.com/stackoverflow/query/7672/bounties-and-questions-by-month
+	-- Bounties and Questions by Month
+	-- Computes the number of bounties awarded and the total bounty amount awarded each month, along with the number of questions asked.
+	select Isnull(V.Year, P.Year), Isnull(V.Month, P.Month), V.Bounties, V.Amount,
+	P.Questions
+	FROM
+	(
+	select
+	datepart(year, Posts.CreationDate) Year,
+	datepart(month, Posts.CreationDate) Month,
+	count(Posts.Id) Questions
+	from Posts
+	where PostTypeid = 1 -- 1 = Question
+	group by datepart(year, Posts.CreationDate), datepart(month, Posts.CreationDate)
+	) AS P
+	left JOIN
+	(
+	select
+	datepart(year, Votes.CreationDate) Year,
+	datepart(month, Votes.CreationDate) Month,
+	count(Votes.Id) Bounties,
+	sum(Votes.BountyAmount) Amount
+	from Votes
+	where VoteTypeId = 9 -- 9 = BountyAwarded
+	group by datepart(year, Votes.CreationDate), datepart(month, Votes.CreationDate)
+	) AS V
+	ON P.Year = V.Year AND P.Month = V.Month
+	order by P.Year, P.Month
+end
+go
+
+create or alter procedure dbo.usp_get_user_comment_score_distribution @UserId int
+as
+begin
+	-- https://data.stackexchange.com/stackoverflow/query/947/my-comment-score-distribution
+	-- My Comment Score distribution
+
+	SELECT 
+		Count(*) AS CommentCount,
+		Score
+	FROM 
+		Comments
+	WHERE 
+		UserId = @UserId
+	GROUP BY 
+		Score
+	ORDER BY 
+		Score DESC
+end
+go
+
+create or alter procedure dbo.usp_get_user_score @UserId int
+as
+begin
+	-- How Unsung am I?
+	-- Zero and non-zero accepted count. Self-accepted answers do not count.
+
+	select
+		count(a.Id) as [Accepted Answers],
+		sum(case when a.Score = 0 then 0 else 1 end) as [Scored Answers],  
+		sum(case when a.Score = 0 then 1 else 0 end) as [Unscored Answers],
+		sum(CASE WHEN a.Score = 0 then 1 else 0 end)*1000 / count(a.Id) / 10.0 as [Percentage Unscored]
+	from
+		Posts q
+	  inner join
+		Posts a
+	  on a.Id = q.AcceptedAnswerId
+	where
+		  a.CommunityOwnedDate is null
+	  and a.OwnerUserId = @UserId
+	  and q.OwnerUserId != @UserId
+	  and a.postTypeId = 2
+end
+go
 
 
+create or alter procedure dbo.usp_Jon_Skeet_comparison @UserId int
+as 
+begin
+	-- https://data.stackexchange.com/stackoverflow/query/3160/jon-skeet-comparison
+	-- Jon Skeet comparison
 
+	with fights as (
+	  select myAnswer.ParentId as Question,
+	   myAnswer.Score as MyScore,
+	   jonsAnswer.Score as JonsScore
+	  from Posts as myAnswer
+	  inner join Posts as jonsAnswer
+	   on jonsAnswer.OwnerUserId = 22656 and myAnswer.ParentId = jonsAnswer.ParentId
+	  where myAnswer.ownerUserId = @UserId and myAnswer.postTypeId = 2
+	)
+
+	select
+	  case
+	   when myScore > JonsScore then 'You win'
+	   when myScore < JonsScore then 'Jon wins'
+	   else 'Tie'
+	  end as 'Winner',
+	  Question as [Post Link],
+	  myScore as 'My score',
+	  jonsScore as "Jon's score"
+	from fights;
+end
+go
+
+CREATE OR ALTER PROCEDURE dbo.usp_get_user_upvotes @UserId int
+AS
+BEGIN
+	-- https://data.stackexchange.com/stackoverflow/query/785/how-many-upvotes-do-i-have-for-each-tag
+	-- How many upvotes do I have for each tag?
+	-- how long before I get tag badges?
+
+	SELECT --TOP 20 
+		TagName,
+		COUNT(*) AS UpVotes 
+	FROM Tags
+		INNER JOIN PostTags ON PostTags.TagId = Tags.id
+		INNER JOIN Posts ON Posts.ParentId = PostTags.PostId
+		INNER JOIN Votes ON Votes.PostId = Posts.Id and VoteTypeId = 2
+	WHERE 
+		Posts.OwnerUserId = @UserId
+	GROUP BY TagName 
+	ORDER BY UpVotes DESC
+END
+GO
 
 
 

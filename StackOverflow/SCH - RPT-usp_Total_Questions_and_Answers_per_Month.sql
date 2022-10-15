@@ -1,7 +1,7 @@
 use StackOverflow
 go
 
-create or alter procedure rpt.usp_Total_Questions_and_Answers_per_Month @months tinyint = 12
+create or alter procedure dbo.usp_Total_Questions_and_Answers_per_Month @months tinyint = 12
 as
 begin
 	-- https://data.stackexchange.com/stackoverflow/query/6134/total-questions-and-answers-per-month-for-the-last-12
@@ -39,5 +39,5 @@ begin
 end
 go
 
-exec rpt.usp_Total_Questions_and_Answers_per_Month
+exec dbo.usp_Total_Questions_and_Answers_per_Month
 go

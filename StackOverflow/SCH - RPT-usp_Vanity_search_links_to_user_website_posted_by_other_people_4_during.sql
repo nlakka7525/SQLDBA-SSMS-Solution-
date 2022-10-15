@@ -1,7 +1,7 @@
 use StackOverflow
 go
 
-create or alter procedure rpt.usp_Vanity_search_links_to_user_website_posted_by_other_people_4_during @UserId int, @StartDate date, @EndDate date
+create or alter procedure dbo.usp_Vanity_search_links_to_user_website_posted_by_other_people_4_during @UserId int, @StartDate date, @EndDate date
 as
 begin
 	-- https://data.stackexchange.com/stackoverflow/query/1181/vanity-search-links-to-my-website-posted-by-other-people-during-last-2-months
@@ -45,5 +45,5 @@ begin
 end
 go
 
-exec rpt.usp_Vanity_search_links_to_user_website_posted_by_other_people_4_during @UserId = 26837, @StartDate = '2015-01-01', @EndDate = '2020-05-01'
+exec dbo.usp_Vanity_search_links_to_user_website_posted_by_other_people_4_during @UserId = 26837, @StartDate = '2015-01-01', @EndDate = '2020-05-01'
 go

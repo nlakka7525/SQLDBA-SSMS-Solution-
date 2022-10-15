@@ -1,7 +1,7 @@
 use StackOverflow
 go
 
-create or alter procedure rpt.usp_Users_with_high_self_accept_rates
+create or alter procedure dbo.usp_Users_with_high_self_accept_rates
 as
 begin
 	-- https://data.stackexchange.com/stackoverflow/query/1933/users-with-high-self-accept-rates-and-having-10-answers
@@ -28,5 +28,5 @@ begin
 end
 go
 
-exec rpt.usp_Users_with_high_self_accept_rates
+exec dbo.usp_Users_with_high_self_accept_rates
 go

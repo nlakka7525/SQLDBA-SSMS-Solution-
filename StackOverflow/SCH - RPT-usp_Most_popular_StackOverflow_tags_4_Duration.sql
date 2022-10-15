@@ -1,7 +1,7 @@
 use StackOverflow
 go
 
-create or alter procedure rpt.usp_Most_popular_StackOverflow_tags_4_Duration @StartDate date, @EndDate date
+create or alter procedure dbo.usp_Most_popular_StackOverflow_tags_4_Duration @StartDate date, @EndDate date
 as
 begin
 	-- Most popular StackOverflow tags in May 2010
@@ -35,5 +35,5 @@ begin
 end
 go
 
-exec rpt.usp_Most_popular_StackOverflow_tags_4_Duration @StartDate = '2015-01-01', @EndDate = '2015-02-01'
+exec dbo.usp_Most_popular_StackOverflow_tags_4_Duration @StartDate = '2015-01-01', @EndDate = '2015-02-01'
 go

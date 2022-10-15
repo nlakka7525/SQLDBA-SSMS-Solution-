@@ -1,7 +1,7 @@
 use StackOverflow
 go
 
-create or alter procedure rpt.usp_Most_Down_Voted_Questions
+create or alter procedure dbo.usp_Most_Down_Voted_Questions
 as
 begin
 	-- https://data.stackexchange.com/stackoverflow/query/36660/most-down-voted-questions
@@ -17,5 +17,5 @@ begin
 end
 go
 
-exec rpt.usp_Most_Down_Voted_Questions
-go
+--exec dbo.usp_Most_Down_Voted_Questions
+--go

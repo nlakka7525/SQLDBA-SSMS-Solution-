@@ -1,7 +1,7 @@
 use StackOverflow
 go
 
-create or alter procedure rpt.usp_Top_50_Most_Prolific_Editors
+create or alter procedure dbo.usp_Top_50_Most_Prolific_Editors
 as
 begin
 	-- https://data.stackexchange.com/stackoverflow/query/6627/top-50-most-prolific-editors
@@ -36,5 +36,5 @@ begin
 end
 go
 
-exec rpt.usp_Top_50_Most_Prolific_Editors
+exec dbo.usp_Top_50_Most_Prolific_Editors
 go

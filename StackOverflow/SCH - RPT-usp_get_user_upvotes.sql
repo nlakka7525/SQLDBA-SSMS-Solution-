@@ -22,5 +22,5 @@ BEGIN
 END
 GO
 
---exec dbo.usp_get_my_upvotes @UserId = 545629
---go
+exec dbo.usp_get_user_upvotes @UserId = 545629
+go

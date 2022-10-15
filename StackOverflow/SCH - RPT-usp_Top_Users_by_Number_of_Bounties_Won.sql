@@ -1,7 +1,7 @@
 use StackOverflow
 go
 
-create or alter procedure rpt.usp_Top_Users_by_Number_of_Bounties_Won
+create or alter procedure dbo.usp_Top_Users_by_Number_of_Bounties_Won
 as
 begin
 	-- https://data.stackexchange.com/stackoverflow/query/1080/top-users-by-number-of-bounties-won
@@ -19,5 +19,5 @@ begin
 end
 go
 
-exec rpt.usp_Top_Users_by_Number_of_Bounties_Won
+exec dbo.usp_Top_Users_by_Number_of_Bounties_Won
 go

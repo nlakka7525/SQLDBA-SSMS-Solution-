@@ -1,7 +1,7 @@
 use StackOverflow
 go
 
-create or alter procedure rpt.usp_Bounties_and_Questions_by_Month
+create or alter procedure dbo.usp_Bounties_and_Questions_by_Month
 as
 begin
 	-- https://data.stackexchange.com/stackoverflow/query/7672/bounties-and-questions-by-month
@@ -35,5 +35,5 @@ begin
 end
 go
 
-exec rpt.usp_Bounties_and_Questions_by_Month
-go
+--exec dbo.usp_Bounties_and_Questions_by_Month
+--go

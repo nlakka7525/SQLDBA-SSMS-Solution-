@@ -1,7 +1,7 @@
 use StackOverflow
 go
 
-create or alter procedure rpt.usp_Users_with_duplicate_account_and_1k_reputation
+create or alter procedure dbo.usp_Users_with_duplicate_account_and_1k_reputation
 as
 begin
 	-- https://data.stackexchange.com/stackoverflow/query/975/users-with-more-than-one-duplicate-account-and-a-more-than-1000-reputation-in-agg
@@ -30,4 +30,4 @@ begin
 end
 go
 
-exec  rpt.usp_Users_with_duplicate_account_and_1k_reputation
+exec  dbo.usp_Users_with_duplicate_account_and_1k_reputation

@@ -25,5 +25,5 @@ begin
 end
 go
 
---exec dbo.usp_get_my_score @UserId = 545629
---go
+exec dbo.usp_get_user_score @UserId = 545629
+go

@@ -1,7 +1,7 @@
 use StackOverflow
 go
 
-create or alter procedure rpt.usp_Posts_with_many_thank_you_answers
+create or alter procedure dbo.usp_Posts_with_many_thank_you_answers
 as
 begin
 	-- https://data.stackexchange.com/stackoverflow/query/886/posts-with-many-thank-you-answers
@@ -19,5 +19,5 @@ begin
 end
 go
 
-exec rpt.usp_Posts_with_many_thank_you_answers
+exec dbo.usp_Posts_with_many_thank_you_answers
 go

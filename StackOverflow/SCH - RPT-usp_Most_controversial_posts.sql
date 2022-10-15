@@ -1,7 +1,7 @@
 use StackOverflow
 go
 
-create or alter procedure rpt.usp_Most_controversial_posts
+create or alter procedure dbo.usp_Most_controversial_posts
 as
 begin
 	-- https://data.stackexchange.com/stackoverflow/query/466/most-controversial-posts-on-the-site
@@ -28,5 +28,5 @@ begin
 end
 go
 
-exec rpt.usp_Most_controversial_posts
+exec dbo.usp_Most_controversial_posts
 go

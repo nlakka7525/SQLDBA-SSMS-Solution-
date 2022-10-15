@@ -1,7 +1,7 @@
 use StackOverflow
 go
 
-create or alter procedure rpt.usp_Top_100_Users_that_rarely_upvote
+create or alter procedure dbo.usp_Top_100_Users_that_rarely_upvote
 								@MinReputation int, @MinUpvotes int
 as
 begin
@@ -22,7 +22,7 @@ begin
 end
 go
 
-exec rpt.usp_Top_100_Users_that_rarely_upvote @MinReputation = 1000, @MinUpvotes = 100
+exec dbo.usp_Top_100_Users_that_rarely_upvote @MinReputation = 1000, @MinUpvotes = 100
 go
-exec rpt.usp_Top_100_Users_that_rarely_upvote @MinReputation = 10000, @MinUpvotes = 0
+exec dbo.usp_Top_100_Users_that_rarely_upvote @MinReputation = 10000, @MinUpvotes = 0
 go

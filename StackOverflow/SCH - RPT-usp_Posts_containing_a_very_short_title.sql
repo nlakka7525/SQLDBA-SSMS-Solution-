@@ -1,7 +1,7 @@
 use StackOverflow
 go
 
-create or alter procedure rpt.usp_Posts_containing_a_very_short_title
+create or alter procedure dbo.usp_Posts_containing_a_very_short_title
 as
 begin
 	-- https://data.stackexchange.com/stackoverflow/query/877/posts-containing-a-very-short-title
@@ -12,5 +12,5 @@ begin
 end
 go
 
-exec rpt.usp_Posts_containing_a_very_short_title
+exec dbo.usp_Posts_containing_a_very_short_title
 go

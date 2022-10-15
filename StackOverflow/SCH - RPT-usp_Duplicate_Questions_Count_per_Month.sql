@@ -1,7 +1,7 @@
 use StackOverflow
 go
 
-create or alter procedure rpt.usp_Duplicate_Questions_Count_per_Month
+create or alter procedure dbo.usp_Duplicate_Questions_Count_per_Month
 as
 begin
 	-- https://data.stackexchange.com/stackoverflow/query/1075286/duplicate-questions-count-per-month
@@ -31,5 +31,5 @@ begin
 end
 go
 
-exec rpt.usp_Duplicate_Questions_Count_per_Month
+exec dbo.usp_Duplicate_Questions_Count_per_Month
 go

@@ -1,7 +1,7 @@
 use StackOverflow
 go
 
-create or alter procedure rpt.Low_views_high_votes_yet_unanswered
+create or alter procedure dbo.Low_views_high_votes_yet_unanswered
 as
 begin
 	-- https://data.stackexchange.com/stackoverflow/query/951/low-views-high-votes-yet-unanswered
@@ -12,5 +12,5 @@ begin
 end
 go
 
-exec rpt.Low_views_high_votes_yet_unanswered
-go
+--exec dbo.Low_views_high_votes_yet_unanswered
+--go

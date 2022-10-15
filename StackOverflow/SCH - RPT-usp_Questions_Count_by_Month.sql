@@ -1,7 +1,7 @@
 use StackOverflow
 go
 
-create or alter procedure rpt.usp_Questions_Count_by_Month
+create or alter procedure dbo.usp_Questions_Count_by_Month
 as
 begin
 	-- https://data.stackexchange.com/stackoverflow/query/1075285/questions-count-by-month
@@ -25,5 +25,5 @@ begin
 end
 go
 
-exec rpt.usp_Questions_Count_by_Month
+exec dbo.usp_Questions_Count_by_Month
 go

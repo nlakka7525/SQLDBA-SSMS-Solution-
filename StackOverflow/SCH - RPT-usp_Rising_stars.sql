@@ -1,7 +1,7 @@
 use StackOverflow
 go
 
-create or alter procedure rpt.usp_Rising_stars
+create or alter procedure dbo.usp_Rising_stars
 as
 begin
 	-- https://data.stackexchange.com/stackoverflow/query/946/rising-stars-top-50-users-ordered-on-rep-per-day
@@ -31,5 +31,5 @@ begin
 end
 go
 
-exec rpt.usp_Rising_stars
+exec dbo.usp_Rising_stars
 go

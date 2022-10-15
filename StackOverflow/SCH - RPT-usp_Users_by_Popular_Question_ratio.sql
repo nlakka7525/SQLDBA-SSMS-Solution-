@@ -1,7 +1,7 @@
 use StackOverflow
 go
 
-create or alter procedure rpt.usp_Users_by_Popular_Question_ratio
+create or alter procedure dbo.usp_Users_by_Popular_Question_ratio
 as
 begin
 	-- https://data.stackexchange.com/stackoverflow/query/2777/users-by-popular-question-ratio
@@ -37,6 +37,6 @@ begin
 end
 go
 
-exec rpt.usp_Users_by_Popular_Question_ratio
+exec dbo.usp_Users_by_Popular_Question_ratio
 go
 

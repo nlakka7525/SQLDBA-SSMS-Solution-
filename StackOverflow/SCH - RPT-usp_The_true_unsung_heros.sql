@@ -1,7 +1,7 @@
 use StackOverflow
 go
 
-create or alter procedure rpt.usp_The_true_unsung_heros
+create or alter procedure dbo.usp_The_true_unsung_heros
 as
 begin
 	-- https://data.stackexchange.com/stackoverflow/query/6607/the-true-unsung-heros
@@ -23,5 +23,5 @@ begin
 end
 go
 
-exec rpt.usp_The_true_unsung_heros
+exec dbo.usp_The_true_unsung_heros
 go

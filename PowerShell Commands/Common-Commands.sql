@@ -485,6 +485,6 @@ $result = [System.Runtime.InteropServices.Marshal]::PtrToStringUni($Ptr)
 [System.Runtime.InteropServices.Marshal]::ZeroFreeCoTaskMemUnicode($Ptr)
 $result 
 
--- 44) 
-
+-- 44) Reset Domain (Fix Broken Domain) without Reboot (Only logoff)
+Test-ComputerSecureChannel -Repair -Credential (Get-Credential)
 

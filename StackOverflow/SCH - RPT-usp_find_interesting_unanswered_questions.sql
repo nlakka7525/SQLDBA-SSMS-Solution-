@@ -1,7 +1,7 @@
 use StackOverflow
 go
 
-create or alter procedure rpt.usp_find_interesting_unanswered_questions @UserId int
+create or alter procedure dbo.usp_find_interesting_unanswered_questions @UserId int
 as
 begin
 	-- Find interesting unanswered questions
@@ -46,5 +46,5 @@ begin
 end
 go
 
-exec rpt.usp_find_interesting_unanswered_questions @UserId = 545629
+exec dbo.usp_find_interesting_unanswered_questions @UserId = 545629
 go
