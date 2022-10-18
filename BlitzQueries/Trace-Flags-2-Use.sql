@@ -13,8 +13,10 @@ Neutral
 ------------
 4199 -> Enable Query Optimizer Fixes
 	--
-9481 -> Old CE (pre-2014) regardless of compat level
-2312 -> Sets the query optimizer cardinality estimation model to the SQL Server 2014 (12.x) and later versions, dependent of the compatibility level of the database.
+9481 -> Old CE
+2312 -> New CE
+9204 -> Get loaded stats for query
+3604 -> Output stats to msg tab
 	--
 11064 -> memory balancing for columnstore inserted
 9398 -> Disables Adaptive Joins
