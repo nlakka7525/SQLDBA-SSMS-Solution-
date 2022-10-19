@@ -103,7 +103,7 @@ $endTime = Get-Date
 
 $elapsedTime = New-TimeSpan -Start $startTime -End $endTime
 
-"Total time taken = $($elapsedTime.Minutes) minutes $($elapsedTime.Seconds) seconds" | Write-Host -ForegroundColor Yellow
+"Total time taken = $("{0:N0}" -f $elapsedTime.TotalHours) hours $($elapsedTime.Minutes) minutes $($elapsedTime.Seconds) seconds" | Write-Host -ForegroundColor Yellow
 
 
 <#
