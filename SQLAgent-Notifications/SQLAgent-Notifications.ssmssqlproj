@@ -2,7 +2,44 @@
 <SqlWorkbenchSqlProject xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Name="SQLAgent-Notifications">
   <Items>
     <LogicalFolder Name="Connections" Type="2" Sorted="true">
-      <Items />
+      <Items>
+        <ConnectionNode Name="DrReplica1:LAB\adwivedi">
+          <Created>2022-11-02T22:06:04.9103545+05:30</Created>
+          <Type>SQL</Type>
+          <Server>DrReplica1</Server>
+          <UserName />
+          <Authentication>Windows Authentication</Authentication>
+          <InitialDB />
+          <LoginTimeout>30</LoginTimeout>
+          <ExecutionTimeout>0</ExecutionTimeout>
+          <ConnectionProtocol>NotSpecified</ConnectionProtocol>
+          <ApplicationName>Microsoft SQL Server Management Studio - Query</ApplicationName>
+        </ConnectionNode>
+        <ConnectionNode Name="My2NodeAg:LAB\adwivedi">
+          <Created>2022-11-02T21:33:16.203426+05:30</Created>
+          <Type>SQL</Type>
+          <Server>My2NodeAg</Server>
+          <UserName />
+          <Authentication>Windows Authentication</Authentication>
+          <InitialDB />
+          <LoginTimeout>30</LoginTimeout>
+          <ExecutionTimeout>0</ExecutionTimeout>
+          <ConnectionProtocol>NotSpecified</ConnectionProtocol>
+          <ApplicationName>Microsoft SQL Server Management Studio - Query</ApplicationName>
+        </ConnectionNode>
+        <ConnectionNode Name="ProdReplica1:LAB\adwivedi">
+          <Created>2022-11-02T21:59:22.9681288+05:30</Created>
+          <Type>SQL</Type>
+          <Server>ProdReplica1</Server>
+          <UserName />
+          <Authentication>Windows Authentication</Authentication>
+          <InitialDB />
+          <LoginTimeout>30</LoginTimeout>
+          <ExecutionTimeout>0</ExecutionTimeout>
+          <ConnectionProtocol>NotSpecified</ConnectionProtocol>
+          <ApplicationName>Microsoft SQL Server Management Studio - Query</ApplicationName>
+        </ConnectionNode>
+      </Items>
     </LogicalFolder>
     <LogicalFolder Name="Queries" Type="0" Sorted="true">
       <Items>
@@ -11,6 +48,12 @@
           <AssociatedConnSrvName />
           <AssociatedConnUserName />
           <FullPath>DBA - Ping Mirroring Partners.sql</FullPath>
+        </FileNode>
+        <FileNode Name="SCH-Setup-AG-Alerts.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:DrReplica1:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>DrReplica1</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>SCH-Setup-AG-Alerts.sql</FullPath>
         </FileNode>
       </Items>
     </LogicalFolder>
