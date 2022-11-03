@@ -1,9 +1,18 @@
+/* Get Replication Involved Servers */
+select s.server_id, s.name as srv_name, s.data_source, s.is_linked, 
+		s.is_system, s.is_distributor, s.is_publisher, s.is_subscriber,
+		s.is_nonsql_subscriber, s.modify_date
+from sys.servers s
+where is_distributor = 1 or is_publisher = 1 or is_subscriber = 1
+order by (case when is_distributor = 1 then 0 when is_publisher = 1 then 1 else 2 end), srv_name
+go
+
 /* Execute on Distributor Server */
 use master
 select 'use '+QUOTENAME(d.name) as [--TSQL--] from sys.databases d where d.is_distributor = 1;
 GO
 
-use [DistributionDB]
+use [distribution]
 go
 set quoted_identifier off;
 set nocount on;
@@ -42,8 +51,11 @@ into #MSarticles
 from #publications pl join #subscriptions sb on sb.publication_id = pl.publication_id and sb.publisher_db = pl.publisher_db
 join dbo.MSarticles a with (nolock) on a.publication_id = pl.publication_id and a.publisher_db = pl.publisher_db;
 
-select *
+select [table_name] = quotename(publisher_db)+'.'+quotename(source_owner)+'.'+quotename(source_object),
+		*
 from #MSarticles a
+where a.publisher = 'ANAND1\ANAND1'
+or a.subscriber = 'ANAND1\ANAND1'
 order by a.publisher, a.publisher_db, a.publication, a.article
 */
 

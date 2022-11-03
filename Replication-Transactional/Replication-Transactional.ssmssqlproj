@@ -15,6 +15,18 @@
           <ConnectionProtocol>NotSpecified</ConnectionProtocol>
           <ApplicationName>Microsoft SQL Server Management Studio - Query</ApplicationName>
         </ConnectionNode>
+        <ConnectionNode Name="196.1.115.196:E84947">
+          <Created>2022-11-03T09:27:21.7023639+05:30</Created>
+          <Type>SQL</Type>
+          <Server>196.1.115.196</Server>
+          <UserName>E84947</UserName>
+          <Authentication>SQL</Authentication>
+          <InitialDB />
+          <LoginTimeout>30</LoginTimeout>
+          <ExecutionTimeout>0</ExecutionTimeout>
+          <ConnectionProtocol>NotSpecified</ConnectionProtocol>
+          <ApplicationName>Microsoft SQL Server Management Studio - Query</ApplicationName>
+        </ConnectionNode>
         <ConnectionNode Name="196.1.115.228:DBMonitor">
           <Created>2022-04-04T07:12:28.9893565+05:30</Created>
           <Type>SQL</Type>
@@ -34,6 +46,18 @@
           <UserName>E84947</UserName>
           <Authentication>SQL</Authentication>
           <InitialDB>DBA_Admin</InitialDB>
+          <LoginTimeout>30</LoginTimeout>
+          <ExecutionTimeout>0</ExecutionTimeout>
+          <ConnectionProtocol>NotSpecified</ConnectionProtocol>
+          <ApplicationName>Microsoft SQL Server Management Studio - Query</ApplicationName>
+        </ConnectionNode>
+        <ConnectionNode Name="localhost:21L-LTPABL-1187\Ajay">
+          <Created>2022-11-03T09:25:43.0837572+05:30</Created>
+          <Type>SQL</Type>
+          <Server>localhost</Server>
+          <UserName />
+          <Authentication>Windows Authentication</Authentication>
+          <InitialDB>master</InitialDB>
           <LoginTimeout>30</LoginTimeout>
           <ExecutionTimeout>0</ExecutionTimeout>
           <ConnectionProtocol>NotSpecified</ConnectionProtocol>
@@ -80,8 +104,8 @@
           <FullPath>__Resources.sql</FullPath>
         </FileNode>
         <FileNode Name="1 - Get Replication Jobs.sql">
-          <AssociatedConnectionMoniker />
-          <AssociatedConnSrvName />
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:localhost:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>localhost</AssociatedConnSrvName>
           <AssociatedConnUserName />
           <FullPath>1 - Get Replication Jobs.sql</FullPath>
         </FileNode>
@@ -96,6 +120,12 @@
           <AssociatedConnSrvName />
           <AssociatedConnUserName />
           <FullPath>3 - Setting - Publication - Backup_Restore.sql</FullPath>
+        </FileNode>
+        <FileNode Name="3 - Setting - Publication - Immediate Sync.sql">
+          <AssociatedConnectionMoniker />
+          <AssociatedConnSrvName />
+          <AssociatedConnUserName />
+          <FullPath>3 - Setting - Publication - Immediate Sync.sql</FullPath>
         </FileNode>
         <FileNode Name="3 - Setting up Tran Repl Publication.sql">
           <AssociatedConnectionMoniker />
@@ -144,6 +174,12 @@
           <AssociatedConnSrvName />
           <AssociatedConnUserName />
           <FullPath>Backup-Restore.sql</FullPath>
+        </FileNode>
+        <FileNode Name="DBA - Repl - 00 - Create All Objects.sql">
+          <AssociatedConnectionMoniker />
+          <AssociatedConnSrvName />
+          <AssociatedConnUserName />
+          <FullPath>DBA - Repl - 00 - Create All Objects.sql</FullPath>
         </FileNode>
         <FileNode Name="DBA - Repl - 01 - Insert  Tracker Token.sql">
           <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:172.31.25.106:False:E84947</AssociatedConnectionMoniker>
@@ -252,6 +288,12 @@
           <AssociatedConnSrvName />
           <AssociatedConnUserName />
           <FullPath>MSdistribution_history.sql</FullPath>
+        </FileNode>
+        <FileNode Name="QRY-Scriptout-AddSubscription-ReSubscribe.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:196.1.115.228:False:E84947</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>196.1.115.228</AssociatedConnSrvName>
+          <AssociatedConnUserName>E84947</AssociatedConnUserName>
+          <FullPath>QRY-Scriptout-AddSubscription-ReSubscribe.sql</FullPath>
         </FileNode>
         <FileNode Name="Repl - ReplicationSupportOnly.sql">
           <AssociatedConnectionMoniker />
