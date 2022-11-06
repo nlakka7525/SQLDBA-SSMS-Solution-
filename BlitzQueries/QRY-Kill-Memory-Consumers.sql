@@ -1,13 +1,14 @@
 /*
 declare @start_time datetime2 = sysdatetime();
 declare @my_login varchar(100) = ORIGINAL_LOGIN();
+declare @login_not_in varchar(100) = 'Lab\SQLServices';
 declare @kill_string nvarchar(200);
-declare @memory_threshold_mb int = 500;
+declare @memory_threshold_mb int = 1000;
 declare @include_open_tran bit = 1;
 
 declare @sql nvarchar(max);
 declare @params nvarchar(2000);
-set @params = N'@memory_threshold_mb int, @include_open_tran bit, @my_login varchar(100)';
+set @params = N'@memory_threshold_mb int, @include_open_tran bit, @my_login varchar(100), @login_not_in varchar(100)';
 
 set quoted_identifier off;
 set @sql = "
@@ -28,12 +29,13 @@ where der.granted_query_memory >= (@memory_threshold_mb*1024/8)
 and (	@include_open_tran = 1 
 	or (der.open_transaction_count = 0 and des.open_transaction_count = 0) 
 	)
---and des.login_name <> @my_login
+and des.login_name <> @my_login
+and des.login_name <> @login_not_in
 order by granted_query_memory desc;	
 "
 set quoted_identifier on;
 
-exec sp_executesql @sql, @params, @memory_threshold_mb, @include_open_tran, @my_login;
+exec sp_executesql @sql, @params, @memory_threshold_mb, @include_open_tran, @my_login, @login_not_in;
 */
 go
 -- Parameters

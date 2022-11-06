@@ -31,6 +31,42 @@
           <AssociatedConnUserName />
           <FullPath>2) Fundamentals-of-Columnstore---How-Data-is-Deleted,-Updated,-and-Inserted.sql</FullPath>
         </FileNode>
+        <FileNode Name="3) Fundamentals-of-Columnstore---How-Data-is-Selected.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:SqlPractice:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>SqlPractice</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>3) Fundamentals-of-Columnstore---How-Data-is-Selected.sql</FullPath>
+        </FileNode>
+        <FileNode Name="4) Fundamentals-of-Columnstore---How-Data-is-Rebuilt.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:SqlPractice:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>SqlPractice</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>4) Fundamentals-of-Columnstore---How-Data-is-Rebuilt.sql</FullPath>
+        </FileNode>
+        <FileNode Name="5) Fundamentals-of-Columnstore---Nonclustered-Columnstore-Advantages.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:SqlPractice:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>SqlPractice</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>5) Fundamentals-of-Columnstore---Nonclustered-Columnstore-Advantages.sql</FullPath>
+        </FileNode>
+        <FileNode Name="6) Fundamentals-of-Columnstore---A-Bigger,-Better-Clustered-Columnstore-Candidate.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:SqlPractice:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>SqlPractice</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>6) Fundamentals-of-Columnstore---A-Bigger,-Better-Clustered-Columnstore-Candidate.sql</FullPath>
+        </FileNode>
+        <FileNode Name="7a) Fundamentals-of-Columnstore---Partitioning-Is-a-Great-Partner-for-Columnstore.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:SqlPractice:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>SqlPractice</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>7a) Fundamentals-of-Columnstore---Partitioning-Is-a-Great-Partner-for-Columnstore.sql</FullPath>
+        </FileNode>
+        <FileNode Name="7b) Fundamentals-of-Columnstore---Partitioning-Is-a-Great-Partner-for-Columnstore.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:SqlPractice:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>SqlPractice</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>7b) Fundamentals-of-Columnstore---Partitioning-Is-a-Great-Partner-for-Columnstore.sql</FullPath>
+        </FileNode>
       </Items>
     </LogicalFolder>
     <LogicalFolder Name="Miscellaneous" Type="3" Sorted="true">
