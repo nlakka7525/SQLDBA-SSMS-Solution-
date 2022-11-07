@@ -180,7 +180,7 @@ CREATE TABLE [dbo].[Votes_staging](
 )
 GO
 ALTER TABLE dbo.Votes_columnstore_partitioned
-	SWITCH PARTITION 51 TO dbo.Votes_staging; /* SET THE PARTITION NUMBER */
+	SWITCH PARTITION 59 TO dbo.Votes_staging; /* SET THE PARTITION NUMBER */
 GO
 
 /* Now we have dbo.Votes_staging with the contents of partition 51: */
@@ -214,7 +214,7 @@ GO
 
 /* Switch it back into the main table: */
 ALTER TABLE dbo.Votes_staging
-	SWITCH TO dbo.Votes_columnstore_partitioned PARTITION 51; /* SET THE PARTITION NUMBER */
+	SWITCH TO dbo.Votes_columnstore_partitioned PARTITION 59; /* SET THE PARTITION NUMBER */
 GO
 /* Ugh, that's why Niko and Emanuele haven't
 implemented this as an automatic feature yet. */
@@ -228,7 +228,7 @@ EXEC(@StringToExecute);
 
 /* Now it'll switch in: */
 ALTER TABLE dbo.Votes_staging
-	SWITCH TO dbo.Votes_columnstore_partitioned PARTITION 51; /* SET THE PARTITION NUMBER */
+	SWITCH TO dbo.Votes_columnstore_partitioned PARTITION 59; /* SET THE PARTITION NUMBER */
 GO
 
 
