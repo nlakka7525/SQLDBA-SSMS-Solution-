@@ -42,7 +42,7 @@ $scriptBlock = {
     }
 
     # Randonly call b/w 2 logins
-    if (($id1 % 2) -eq 0) {
+    if ( $appName -eq 'SQLQueryStress' ) {
         $con = Connect-DbaInstance -SqlInstance $SqlInstance -Database $Database -SqlCredential $SqlCredential -ClientName $appName
     }
     else {

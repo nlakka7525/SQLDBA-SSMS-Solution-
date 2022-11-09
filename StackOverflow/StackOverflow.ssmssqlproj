@@ -325,6 +325,12 @@
           <AssociatedConnUserName />
           <FullPath>SCH - RPT-usp_Vanity_search_links_to_user_website_posted_by_other_people_4_during.sql</FullPath>
         </FileNode>
+        <FileNode Name="Setup-IndexLab6.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:SqlPractice:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>SqlPractice</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>Setup-IndexLab6.sql</FullPath>
+        </FileNode>
         <FileNode Name="SQLQuery1.sql">
           <AssociatedConnectionMoniker />
           <AssociatedConnSrvName />
