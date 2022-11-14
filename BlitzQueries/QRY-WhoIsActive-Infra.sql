@@ -1,4 +1,4 @@
-USE [DBA_Admin]
+USE [DBA]
 -- Find long running statements of session
 declare @table_name nvarchar(225) --= 'BillMatch';
 declare @no_of_days tinyint = 7;
