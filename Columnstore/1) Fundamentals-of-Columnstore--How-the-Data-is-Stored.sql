@@ -99,6 +99,18 @@ sp_BlitzIndex @TableName = 'Users_columnstore',
 	@ShowColumnstoreOnly = 1;
 GO
 
+17 row groups * 10 columns = 170
+
+INSERT -> batches of 1 millions +
+DELETE -> batch for entire 1 year. Say 12 years old data
+UPDATE -> Never
+SELECT -> 
+facts -> DeNormalized tables. 20-200 columns.
+		 Can't predict queries and columns of those queries
+		 group by, entire years (big batches), max, min, top, avg
+Table type -> Numeric data, repetitive
+
+
 
 
 

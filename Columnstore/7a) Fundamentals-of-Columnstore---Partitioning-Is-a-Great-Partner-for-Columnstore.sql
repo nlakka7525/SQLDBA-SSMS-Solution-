@@ -82,6 +82,7 @@ CREATE CLUSTERED INDEX CCI ON
 	dbo.Votes_columnstore_partitioned (PostId)
 	ON DatePartitionScheme(CreationDate);
 GO
+
 SET IDENTITY_INSERT dbo.[Votes_columnstore_partitioned] ON;
 GO
 INSERT INTO dbo.[Votes_columnstore_partitioned] 
@@ -91,6 +92,7 @@ INSERT INTO dbo.[Votes_columnstore_partitioned]
 GO
 SET IDENTITY_INSERT dbo.[Votes_columnstore_partitioned] OFF;
 GO
+
 /* Switch to a clustered columnstore index. */
 CREATE CLUSTERED COLUMNSTORE INDEX CCI
 	ON dbo.Votes_columnstore_partitioned
