@@ -1,2 +1,3 @@
-EXEC tempdb..sp_Blitz @BringThePain=1 -- Bring out the pain
+-- For General Server Configuration Check
+EXEC sp_Blitz @CheckServerInfo = 1, @BringThePain=1 -- Bring out the pain
 
