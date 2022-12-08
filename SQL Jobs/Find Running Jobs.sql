@@ -1,5 +1,5 @@
 DECLARE @job_name varchar(500);
-SET @job_name = '(dba) Delete RDS OS Metrics';
+--SET @job_name = '(dba) Delete RDS OS Metrics';
 
 ;WITH T_Schedules AS
 (

@@ -1,14 +1,15 @@
 --	Check-SQLServerAvailability
 SET nocount on;
 
-select @@servername as srv, [Uptime (hh:mm:ss)] = convert(varchar,getdate()-d.create_date,108)
-FROM sys.databases as d
-WHERE d.name = 'tempdb';
+--select @@servername as srv, [Uptime (hh:mm:ss)] = convert(varchar,getdate()-d.create_date,108), create_date
+--FROM sys.databases as d WHERE d.name = 'tempdb';
+
+--select name as [db_name], state_desc, delayed_durability_desc from sys.databases where state_desc <> 'ONLINE';
 
 declare @start_time datetime, @end_time datetime, @err_msg_1 nvarchar(256) = null, @err_msg_2 nvarchar(256) = null;
 --set @start_time = '2021-05-17 18:00:00.000' --  August 22, 2020 05:16:00
 --set @time = DATEADD(HOUR,-1,getdate());
-set @start_time = DATEADD(MINUTE,-60*24,getdate());
+set @start_time = DATEADD(MINUTE,-20*1,getdate());
 --set @end_time = '2021-04-23 00:00:00.000';
 set @end_time = --DATEADD(HOUR,-11,getdate()); 
 				GETDATE()
@@ -52,7 +53,8 @@ select lower(convert(varchar,SERVERPROPERTY('MachineName'))) as ServerName,
 		ROW_NUMBER()over(order by LogDate asc) as id,
 		datediff(minute,LogDate,getdate()) as [-Time(min)],
 			--master.dbo.time2duration(LogDate,'datetime') as [Log-Duration],
-				*
+		LogDate, ProcessInfo, 
+		[************************************* TEXT *********************************************************************************] = Text
 --select left(Text,45) as Text, max(LogDate) as LogDate_max, min(LogDate) as LogDate_min, COUNT(*) as occurrences
 from #errorlog as e
 where 1 = 1
