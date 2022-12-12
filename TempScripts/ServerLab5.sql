@@ -9,6 +9,11 @@ CTFP -> 50 -> 100
 
 */
 
+USE [master]
+GO
+ALTER DATABASE [StackOverflow] SET READ_COMMITTED_SNAPSHOT ON WITH NO_WAIT
+go
+
 exec sp_BlitzIndex @DatabaseName = 'StackOverflow' , @Mode = 4
 
 EXEC dbo.sp_BlitzIndex @DatabaseName='StackOverflow', @SchemaName='dbo', @TableName='Badges';
@@ -148,37 +153,6 @@ CREATE INDEX [IX_VoteTypeId] ON [StackOverflow].[dbo].[Votes] ( [VoteTypeId] ) W
 go
 
 
-
-create or alter procedure #usp_GetAuditData (
-			@PageNumber int,
-			@PageSize int,
-			@EndDate date,
-			@StartDate date,
-			@FieldName varchar(128),
-			@TableName varchar(128))
-as begin
-SELECT *
-  FROM dbo.Audit
-  WHERE (TableName = @TableName OR @TableName IS NULL)
-    AND (FieldName = @FieldName OR @FieldName IS NULL)
-	AND (UpdateDate >= @StartDate OR @StartDate IS NULL)
-	AND (UpdateDate <= @EndDate OR @EndDate IS NULL)
-  ORDER BY UpdateDate, FieldName
-  OFFSET ((@PageNumber - 1) * @PageSize) ROWS
-  FETCH NEXT @PageSize ROWS ONLY
-end
-go
-
-declare @PageNumber int = 1
-declare @PageSize int = 100
-declare @EndDate date = '2018-12-31'
-declare @StartDate date = '2018-01-01'
-declare @FieldName varchar(128) = N'Text'
-declare @TableName varchar(128) = N'Comments'
-
-exec #usp_GetAuditData @PageNumber, @PageSize, @EndDate, @StartDate, @FieldName, @TableName
-go
-
 create nonclustered index nci_FieldName_TableName_UpdateDate on StackOverflow.dbo.Audit (FieldName, TableName, UpdateDate)
 	with (fillfactor=80, data_compression=page, maxdop=4)
 go
@@ -235,11 +209,13 @@ DECLARE @bit INT ,
        @fieldname VARCHAR(128) ,
        @TableName VARCHAR(128) ,
        @PKCols VARCHAR(1000) ,
-       @sql NVARCHAR(max), 
-       @UpdateDate datetime ,
+       @sql NVARCHAR(max), -- Ajay: NVARCHAR for sp_executesql
+       @UpdateDate datetime , -- Ajay: Datatime change
        @UserName VARCHAR(128) ,
        @Type CHAR(1) ,
        @PKSelect VARCHAR(1000)
+
+-- Ajay: Define parameters
 DECLARE @params nvarchar(max);
 set @params = N'@bit INT, @field INT, @maxfield INT, @char INT, @fieldname VARCHAR(128), @TableName VARCHAR(128), @PKCols VARCHAR(1000), @UpdateDate datetime, @UserName VARCHAR(128), @Type CHAR(1), @PKSelect VARCHAR(100)'
 
@@ -312,6 +288,8 @@ BEGIN
                        FROM INFORMATION_SCHEMA.COLUMNS 
                        WHERE TABLE_NAME = @TableName 
                        AND ORDINAL_POSITION = @field
+
+				-- Ajay: Parameterize query using sp_executesql
                SELECT @sql = '
 insert Audit ( Type, TableName, PK, FieldName, OldValue, NewValue, UpdateDate, UserName )
 select @Type, @TableName, @PKSelect, @fieldname, convert(varchar(1000),d.'+@fieldname+'), convert(varchar(1000),i.'+@fieldname+'), @UpdateDate, @UserName '
