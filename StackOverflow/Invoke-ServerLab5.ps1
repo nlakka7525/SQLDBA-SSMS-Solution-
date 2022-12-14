@@ -15,7 +15,8 @@ Param (
 )
 
 $startTime = Get-Date
-Import-Module dbatools, PoshRSJob;
+"$(Get-Date -Format yyyyMMMdd_HHmm) {0,-10} {1}" -f 'INFO:', "Import dbatools module.."
+Import-Module dbatools
 
 $ErrorActionPreference = "Stop"
 
@@ -24,13 +25,19 @@ if ([String]::IsNullOrEmpty($SqlCredential)) {
 }
 
 $loops = 1..$($NoOfThreads*$NoOfIterations)
-$scriptBlock = {
-    Param ($SqlInstance, $Database, $SqlCredential, $DelayBetweenQueriesMS)
+
+"$(Get-Date -Format yyyyMMMdd_HHmm) {0,-10} {1}" -f 'INFO:', "Using ForEach-Object, open $NoOfThreads parallel threads with $NoOfIterations iterations on each..."
+$jobs = @() 
+$jobs += $loops | ForEach-Object -Parallel {
+    $SqlInstance = $Using:SqlInstance
+    $Database = $Using:Database
+    $SqlCredential = $Using:SqlCredential
+    $DelayBetweenQueriesMS = $Using:DelayBetweenQueriesMS
     
     # Import-Module dbatools
-    $id1 = Get-Random
-    $id2 = Get-Random
-    $id3 = Get-Random
+    $id1 = Get-Random -Maximum 10000001
+    $id2 = Get-Random -Maximum 10000001
+    $id3 = Get-Random -Maximum 10000001
 
     # Set application/program name
     $appName = switch ($Id1 % 5) {
@@ -99,14 +106,12 @@ $scriptBlock = {
     $r = Invoke-DbaQuery -SqlInstance $con -Query "WHILE (@@TRANCOUNT > 0) BEGIN COMMIT	END"
 
     Start-Sleep -Milliseconds $DelayBetweenQueriesMS
-}
-$jobs = $loops | Start-RSJob -Name {"IndexLab6__$_"} -ScriptBlock $scriptBlock -Throttle $NoOfThreads -ModulesToImport dbatools `
-            -ArgumentList $SqlInstance, $Database, $SqlCredential, $DelayBetweenQueriesMS
+} -ThrottleLimit $NoOfThreads -AsJob
 
-# Get all the jobs
-$jobs | Wait-RSJob -ShowProgress
+$jobs | Receive-Job -Wait
+$jobs | Remove-Job -Force
 
-$jobs | Remove-RSJob -Force;
+"$(Get-Date -Format yyyyMMMdd_HHmm) {0,-10} {1}" -f 'INFO:', "Finished execution."
 
 $endTime = Get-Date
 
@@ -116,19 +121,12 @@ $elapsedTime = New-TimeSpan -Start $startTime -End $endTime
 
 
 <#
+Start-Process pwsh
+
 cd $env:USERPROFILE\documents\Lab-Load-Generator\
 #$SqlCredential = Get-Credential -UserName 'SQLQueryStress' -Message 'SQLQueryStress'
 
-$params = @{
-    SqlInstance = 'SqlPractice'
-    Database = 'StackOverflow'
-    NoOfIterations = 10000
-    NoOfThreads = 100
-    DelayBetweenQueriesMS = 100
-    SqlCredential = $SqlCredential
-}
-
 cls
-Import-Module dbatools, PoshRSJob;
-.\Invoke-ServerLab5.ps1 @params
+Import-Module dbatools;
+./Invoke-ServerLab5.ps1 -SqlInstance SqlPractice -SqlCredential $SqlCredential
 #>

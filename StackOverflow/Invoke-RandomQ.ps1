@@ -24,7 +24,9 @@ $scriptBlock = {
     Param ($SqlInstance, $Database, $SqlCredential)
     
     #Import-Module dbatools;
-    $id1 = Get-Random
+    $id1 = Get-Random -Maximum 10000000
+    $id2 = Get-Random -Maximum 10000000
+    $id3 = Get-Random -Maximum 10000000
 
     # Set application/program name
     $appName = switch ($id1 % 5) {
@@ -57,9 +59,11 @@ $scriptBlock = {
     elseif (($id1 % 10) -eq 0) { # 1/10 chance
         $r = Invoke-DbaQuery -SqlInstance $con  -Query usp_Q466 -SqlParameter @{ UserId = $id1 } -CommandType StoredProcedure
     }
+    <#
     elseif (($id1 % 9) -eq 0) {
         $r = Invoke-DbaQuery -SqlInstance $con -Query "EXEC usp_Q6627 $id1;"
     }
+    #>
     elseif (($id1 % 8) -eq 0) {
         $r = Invoke-DbaQuery -SqlInstance $con  -Query usp_Q6772 -SqlParameter @{ UserId = $id1 } -CommandType StoredProcedure
     }
@@ -121,6 +125,5 @@ $params = @{
 
 cls
 Import-Module dbatools, PoshRSJob;
-#.\Invoke-ServerLab2.ps1 @params
 .\Invoke-RandomQ.ps1 @params
 #>

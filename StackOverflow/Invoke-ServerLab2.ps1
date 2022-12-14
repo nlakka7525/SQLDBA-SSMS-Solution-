@@ -24,7 +24,9 @@ $scriptBlock = {
     Param ($SqlInstance, $Database, $SqlCredential)
     
     #Import-Module dbatools;
-    $Id1 = Get-Random
+    $Id1 = Get-Random -Maximum 10000001
+    $id2 = Get-Random -Maximum 10000001
+    $id3 = Get-Random -Maximum 10000001
 
     # Set application/program name
     $appName = switch ($Id1 % 5) {
