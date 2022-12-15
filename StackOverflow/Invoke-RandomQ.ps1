@@ -47,7 +47,7 @@ $scriptBlock = {
     }
 
     # Call various procedures
-    if (($id1 % 30) -eq 0) { # 1/30 chance
+    if (($id1 % 20) -eq 0) { # 1/30 chance
         $r = Invoke-DbaQuery -SqlInstance $con -Query "select top 250 * from dbo.Posts order by LastEditDate desc;" -ErrorAction Stop
     }
     elseif (($id1 % 12) -eq 0) { # 1/12 chance
