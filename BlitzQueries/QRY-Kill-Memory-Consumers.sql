@@ -5,6 +5,7 @@ declare @login_not_in varchar(100) = 'Lab\SQLServices';
 declare @kill_string nvarchar(200);
 declare @memory_threshold_mb int = 1000;
 declare @include_open_tran bit = 1;
+declare @only_blocked_sessions bit = 0;
 
 declare @sql nvarchar(max);
 declare @params nvarchar(2000);
@@ -26,11 +27,10 @@ select [memory_gb] = convert(numeric(20,2),der.granted_query_memory*8.0/1024/102
 from sys.dm_exec_requests der join sys.dm_exec_sessions des
 	on des.session_id = der.session_id
 where der.granted_query_memory >= (@memory_threshold_mb*1024/8)
-and (	@include_open_tran = 1 
-	or (der.open_transaction_count = 0 and des.open_transaction_count = 0) 
-	)
-and des.login_name <> @my_login
-and des.login_name <> @login_not_in
+"+(case when @include_open_tran = 1 then '-- ' else '' end)+"and (der.open_transaction_count = 0 and des.open_transaction_count = 0)
+"+(case when @my_login is null then '-- ' else '' end)+"and des.login_name <> @my_login
+"+(case when @login_not_in is null then '-- ' else '' end)+"and des.login_name <> @login_not_in
+"+(case when @only_blocked_sessions = 0 then '-- ' else '' end)+"and der.blocking_session_id > 0 
 order by granted_query_memory desc;	
 "
 set quoted_identifier on;

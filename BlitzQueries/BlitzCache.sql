@@ -9,7 +9,8 @@ EXEC master..sp_BlitzCache @Top = 30, @SortOrder = 'memory grant' -- Queries usi
 exec master..sp_BlitzCache @SortOrder = 'spills', @Top = 30 -- Queries spilling to disk
 exec master..sp_BlitzCache @SortOrder = 'unused grant', @Top = 30 -- Queries asking for huge memory grant, but simply wasting it.
 exec master..sp_BlitzCache @SortOrder = 'xpm', @Top = 30 -- Queries with High executions
-exec master..sp_BlitzCache @SortOrder = 'recent compilations', @Top = 200, @SkipAnalysis = 1 -- Recently compiled queries that may need parametization
+exec master..sp_BlitzCache @SortOrder = 'recent compilations', @Top = 2000, @SkipAnalysis = 1 -- Recently compiled queries that may need parametization
+					,@OutputDatabaseName = 'DBA_Admin', @OutputSchemaName = 'dbo', @OutputTableName = 'BlitzCache_RecentCompilations_20221221'
 
 EXEC master..sp_BlitzCache @Top = 30, @SortOrder = 'reads', @IgnoreSystemDBs = 0,
 					@OutputDatabaseName = 'DBA_Admin', @OutputSchemaName = 'dbo', @OutputTableName = 'BlitzCache'
