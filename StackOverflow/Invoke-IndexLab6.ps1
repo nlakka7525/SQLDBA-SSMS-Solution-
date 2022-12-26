@@ -18,6 +18,7 @@ $startTime = Get-Date
 Import-Module dbatools, PoshRSJob;
 
 $ErrorActionPreference = "Stop"
+"`n`n`n`n`n`nStart Time => $($startTime.ToString('yyyy-MM-dd hh:mm.ss'))"
 
 if ([String]::IsNullOrEmpty($SqlCredential)) {
     "Kindly provide `$SqlCredential " | Write-Error
@@ -141,10 +142,10 @@ $jobs | Wait-RSJob -ShowProgress
 $jobs | Remove-RSJob -Force;
 
 $endTime = Get-Date
-
+"End Time => $($endTime.ToString('yyyy-MM-dd hh:mm.ss'))"
 $elapsedTime = New-TimeSpan -Start $startTime -End $endTime
 
-"Total time taken = $("{0:N0}" -f $elapsedTime.TotalHours) hours $($elapsedTime.Minutes) minutes $($elapsedTime.Seconds) seconds" | Write-Host -ForegroundColor Yellow
+"Total Time Taken => `n`n$elapsedTime" | Write-Host -ForegroundColor Yellow
 
 
 <#
@@ -165,12 +166,10 @@ $params = @{
 
 cls
 Import-Module dbatools, PoshRSJob;
-$startTime = Get-Date
+$counter = 1
+while ($counter -lt 24) {
 .\Invoke-IndexLab6.ps1 @params
-$endTime = Get-Date
-$timeElapsed = New-TimeSpan $startTime $endTime
-
-"Start Time => $($startTime -f 'YYYY-MM-DD hh:mm.ss')"
-"End Time => $($endTime -f 'YYYY-MM-DD hh:mm.ss')"
-"Total Time Taken => `n`n$timeElapsed" | Write-Host -ForegroundColor Yellow
+Start-Sleep -Seconds 600
+$counter = $counter + 1
+}
 #>
