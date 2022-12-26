@@ -26,7 +26,7 @@ if ([String]::IsNullOrEmpty($SqlCredential)) {
 $loops = 1..$($NoOfThreads*$NoOfIterations)
 $scriptBlock = {
     Param ($SqlInstance, $Database, $SqlCredential, $DelayBetweenQueriesMS)
-    
+
     # Import-Module dbatools
     $id1 = Get-Random -Maximum 10000001
     $id2 = Get-Random -Maximum 10000001
@@ -50,82 +50,86 @@ $scriptBlock = {
     }
 
     if (($id1 % 30) -eq 24) {
-        $r = Invoke-DbaQuery -SqlInstance $con -Query "EXEC dbo.usp_Q1718 @UserId = $id1;"
+        $sql = "EXEC dbo.usp_Q1718 @UserId = $id1;"
     }
     elseif (($id1 % 30) -eq 23) {
-        $r = Invoke-DbaQuery -SqlInstance $con -CommandType StoredProcedure -Query usp_Q2777
+        $sql = "EXEC dbo.usp_Q2777;"
     }
     elseif (($id1 % 30) -eq 22) {
-        $r = Invoke-DbaQuery -SqlInstance $con -Query "EXEC dbo.usp_Q181756 @Score = $id1, @Gold = $id2, @Silver = $id3;"
+        $sql = "EXEC dbo.usp_Q181756 @Score = $id1, @Gold = $id2, @Silver = $id3;"
     }
     elseif (($id1 % 30) -eq 21) {
-        $r = Invoke-DbaQuery -SqlInstance $con -Query usp_Q69607 -CommandType StoredProcedure -SqlParameter @{ UserId = $id1 }
+        $sql = "EXEC usp_Q69607 @UserId = $id1;"
     }
     elseif (($id1 % 30) -eq 20) {
-        $r = Invoke-DbaQuery -SqlInstance $con -Query usp_Q8553 -CommandType StoredProcedure -SqlParameter @{ UserId = $id1 }
+        $sql = "EXEC usp_Q8553 @UserId = $id1;"
     }
     elseif (($id1 % 30) -eq 19) {
-        $r = Invoke-DbaQuery -SqlInstance $con -Query usp_Q10098 -CommandType StoredProcedure -SqlParameter @{ UserId = $id1 }
+        $sql = "EXEC usp_Q10098 @UserId = $id1;"
     }
     elseif (($id1 % 30) -eq 18) {
-        $r = Invoke-DbaQuery -SqlInstance $con -Query usp_Q17321 -CommandType StoredProcedure -SqlParameter @{ UserId = $id1 }
+        $sql = "EXEC usp_Q17321 @UserId = $id1;"
     }
     elseif (($id1 % 30) -eq 17) {
-        $r = Invoke-DbaQuery -SqlInstance $con -Query usp_Q25355 -CommandType StoredProcedure -SqlParameter @{ MyId = $id1; TheirId = $id2 }
+        $sql = "EXEC usp_Q25355 @MyId = $id1, TheirId = $id2;"
     }
     elseif (($id1 % 30) -eq 16) {
-        $r = Invoke-DbaQuery -SqlInstance $con -Query usp_Q74873 -CommandType StoredProcedure -SqlParameter @{ UserId = $id1 }
+        $sql = "EXEC usp_Q74873 @UserId = $id1;"
     }
     elseif (($id1 % 30) -eq 15) {
-        $r = Invoke-DbaQuery -SqlInstance $con -Query "EXEC dbo.usp_Q9900 @UserId = $id1;"
+        $sql = "EXEC dbo.usp_Q9900 @UserId = $id1;"
     }
     elseif (($id1 % 30) -eq 14) {
-        $r = Invoke-DbaQuery -SqlInstance $con -Query usp_Q49864 -CommandType StoredProcedure -SqlParameter @{ UserId = $id1 }
+        $sql = "EXEC usp_Q49864 @UserId = $id1;"
     }
     elseif (($id1 % 30) -eq 13) {
-        $r = Invoke-DbaQuery -SqlInstance $con -Query usp_Q283566 -CommandType StoredProcedure
+        $sql = "EXEC usp_Q283566;"
     }
     elseif (($id1 % 30) -eq 12) {
-        $r = Invoke-DbaQuery -SqlInstance $con -Query usp_Q66093 -CommandType StoredProcedure -SqlParameter @{ UserId = $id1 }
-    }
-    elseif (($id1 % 30) -eq 11) {
-        $r = Invoke-DbaQuery -SqlInstance $con -Query usp_Q66093 -CommandType StoredProcedure -SqlParameter @{ UserId = $id1 }
+        $sql = "EXEC usp_Q66093 @UserId = $id1;"
     }
     elseif (($id1 % 30) -eq 10) {
-        $r = Invoke-DbaQuery -SqlInstance $con -Query "EXEC dbo.usp_SearchUsers @DisplayNameLike = 'Brent', @LocationLike = NULL, @WebsiteUrlLike = 'Google', @SortOrder = 'Age';"
+        $sql = "EXEC dbo.usp_SearchUsers @DisplayNameLike = 'Brent', @LocationLike = NULL, @WebsiteUrlLike = 'Google', @SortOrder = 'Age';"
     }
     elseif (($id1 % 30) -eq 9) {
-        $r = Invoke-DbaQuery -SqlInstance $con -Query "EXEC dbo.usp_SearchUsers @DisplayNameLike = NULL, @LocationLike = 'Chicago', @WebsiteUrlLike = NULL, @SortOrder = 'Location';"
+        $sql = "EXEC dbo.usp_SearchUsers @DisplayNameLike = NULL, @LocationLike = 'Chicago', @WebsiteUrlLike = NULL, @SortOrder = 'Location';"
     }
     elseif (($id1 % 30) -eq 8) {
-        $r = Invoke-DbaQuery -SqlInstance $con -Query "EXEC dbo.usp_SearchUsers @DisplayNameLike = NULL, @LocationLike = NULL, @WebsiteUrlLike = 'BrentOzar.com', @SortOrder = 'Reputation';"
+        $sql = "EXEC dbo.usp_SearchUsers @DisplayNameLike = NULL, @LocationLike = NULL, @WebsiteUrlLike = 'BrentOzar.com', @SortOrder = 'Reputation';"
     }
     elseif (($id1 % 30) -eq 7) {
-        $r = Invoke-DbaQuery -SqlInstance $con -Query usp_SearchUsers -CommandType StoredProcedure -SqlParameter `
-                    @{ DisplayNameLike = 'Brent'; LocationLike = 'Chicago'; WebsiteUrlLike = 'BrentOzar.com'; SortOrder = 'DownVotes'; } 
+        $sql = "EXEC usp_SearchUsers @DisplayNameLike = 'Brent', LocationLike = 'Chicago', WebsiteUrlLike = 'BrentOzar.com', SortOrder = 'DownVotes';"
     }
     elseif (($id1 % 30) -eq 6) {
-        $r = Invoke-DbaQuery -SqlInstance $con -Query usp_FindInterestingPostsForUser -CommandType StoredProcedure -SqlParameter `
-                    @{ UserId = $id1; SinceDate = '2017/06/10'; }
+        $sql = "EXEC usp_FindInterestingPostsForUser @UserId = $id1, SinceDate = '2017/06/10';"
     }
     elseif (($id1 % 30) -eq 5) {
-        $r = Invoke-DbaQuery -SqlInstance $con -Query usp_CheckForVoterFraud -CommandType StoredProcedure -SqlParameter @{ UserId = $id1 }
+        $sql = "EXEC usp_CheckForVoterFraud @UserId = $id1;"
     }
     elseif (($id1 % 30) -eq 4) {
-        $r = Invoke-DbaQuery -SqlInstance $con -Query usp_AcceptedAnswersByUser -CommandType StoredProcedure -SqlParameter @{ UserId = $id1 }
+        $sql = "EXEC usp_AcceptedAnswersByUser @UserId = $id1;"
     }
     elseif (($id1 % 30) -eq 3) {
-        $r = Invoke-DbaQuery -SqlInstance $con -Query usp_AcceptedAnswersByUser -CommandType StoredProcedure -SqlParameter @{ UserId = $id3 }
+        $sql = "EXEC usp_AcceptedAnswersByUser @UserId = $id3;"
     }
     elseif (($id1 % 30) -eq 2) {
-        $r = Invoke-DbaQuery -SqlInstance $con -Query usp_BadgeAward -CommandType StoredProcedure -SqlParameter @{ Name = 'Loud Talker'; UserId = 26837 }
+        $sql = "EXEC usp_BadgeAward @Name = 'Loud Talker', UserId = 26837;"
     }
     elseif (($id1 % 30) -eq 1) {
-        $r = Invoke-DbaQuery -SqlInstance $con -Query usp_Q43336 -CommandType StoredProcedure
+        $sql = "EXEC usp_Q43336;"
     }
     else {
-        $r = Invoke-DbaQuery -SqlInstance $con -Query usp_Q40304 -CommandType StoredProcedure
+        $sql = "EXEC usp_Q40304;"
     }
+
+    $sql = $sql + @"
+
+WHILE @@TRANCOUNT > 0
+	BEGIN
+	COMMIT
+    END
+"@
+    $r = Invoke-DbaQuery -SqlInstance $con -Query $sql -ErrorAction Stop
     Start-Sleep -Milliseconds $DelayBetweenQueriesMS
 }
 $jobs = $loops | Start-RSJob -Name {"IndexLab6__$_"} -ScriptBlock $scriptBlock -Throttle $NoOfThreads -ModulesToImport dbatools `
@@ -147,16 +151,26 @@ $elapsedTime = New-TimeSpan -Start $startTime -End $endTime
 cd $env:USERPROFILE\documents\Lab-Load-Generator\
 #$SqlCredential = Get-Credential -UserName 'SQLQueryStress' -Message 'SQLQueryStress'
 
+# Restart Computer to reset IO Stats
+Restart-Computer -ComputerName SqlPractice -Force -Wait -Verbose
+
 $params = @{
     SqlInstance = 'SqlPractice'
     Database = 'StackOverflow'
-    NoOfIterations = 20
+    NoOfIterations = 500
     NoOfThreads = 6
-    DelayBetweenQueriesMS = 1000
+    DelayBetweenQueriesMS = 100
     SqlCredential = $SqlCredential
 }
 
 cls
 Import-Module dbatools, PoshRSJob;
+$startTime = Get-Date
 .\Invoke-IndexLab6.ps1 @params
+$endTime = Get-Date
+$timeElapsed = New-TimeSpan $startTime $endTime
+
+"Start Time => $($startTime -f 'YYYY-MM-DD hh:mm.ss')"
+"End Time => $($endTime -f 'YYYY-MM-DD hh:mm.ss')"
+"Total Time Taken => `n`n$timeElapsed" | Write-Host -ForegroundColor Yellow
 #>
