@@ -56,14 +56,14 @@
           <FullPath>Create [dbo].[PostTags] table.sql</FullPath>
         </FileNode>
         <FileNode Name="Generate Workloads.sql">
-          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:SqlPractice:True</AssociatedConnectionMoniker>
-          <AssociatedConnSrvName>SqlPractice</AssociatedConnSrvName>
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:localhost:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>localhost</AssociatedConnSrvName>
           <AssociatedConnUserName />
           <FullPath>Generate Workloads.sql</FullPath>
         </FileNode>
         <FileNode Name="Help.sql">
-          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:SqlPractice:True</AssociatedConnectionMoniker>
-          <AssociatedConnSrvName>SqlPractice</AssociatedConnSrvName>
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:localhost:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>localhost</AssociatedConnSrvName>
           <AssociatedConnUserName />
           <FullPath>Help.sql</FullPath>
         </FileNode>
