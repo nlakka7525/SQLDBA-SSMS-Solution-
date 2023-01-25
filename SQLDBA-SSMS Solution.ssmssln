@@ -87,29 +87,15 @@ Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "SQLMonitor", "SQLMonitor\SQ
 EndProject
 Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "Audit-n-LogOn-Trigger", "Audit-n-LogOn-Trigger\Audit-n-LogOn-Trigger.ssmssqlproj", "{428AB281-827E-41A5-B117-8106AACECE00}"
 EndProject
-Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "Org-Project-167-Queries", "Org-Project-167-Queries\Org-Project-167-Queries.ssmssqlproj", "{B1DE93FE-0CFD-47A6-9D6B-8D49D7A707F9}"
-EndProject
-Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "Org-Project-LogOn-Trigger", "Org-Project-LogOn-Trigger\Org-Project-LogOn-Trigger.ssmssqlproj", "{DD1C9FB4-C2B2-42E6-B94A-1096C0D5A2A9}"
-EndProject
-Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "Org-Project-132-Queries", "Org-Project-132-Queries\Org-Project-132-Queries.ssmssqlproj", "{E05EB8F9-4CBA-46F6-A80F-0590DB8C90D6}"
-EndProject
-Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "Org-Project-195", "Org-Project-195\Org-Project-195.ssmssqlproj", "{3E8382EC-202B-49F0-BF05-F367C37A36DF}"
-EndProject
-Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "Org-Project-EOD-Process-Optimization", "Org-Project-EOD-Process-Optimization\Org-Project-EOD-Process-Optimization.ssmssqlproj", "{E854A3D1-8B5E-44BD-8FFA-3E564B8C9161}"
-EndProject
-Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "Org-Project-196", "Org-Project-196\Org-Project-196.ssmssqlproj", "{0AF3B217-FF63-4870-A54B-B0258D300EE7}"
-EndProject
-Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "Org-Project-16.57", "Org-Project-16.57\Org-Project-16.57.ssmssqlproj", "{4D399C25-B5C0-4FC5-BFBB-F7E31985BF11}"
-EndProject
 Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "Columnstore", "Columnstore\Columnstore.ssmssqlproj", "{23CF5D08-2C58-49AD-8650-B2FD8588864F}"
 EndProject
-Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "Volatile", "Volatile\Volatile.ssmssqlproj", "{E11DEEDD-A9C7-42C5-948F-F723FCAE53D7}"
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "Private", "Private\Private.ssmssqlproj", "{87873558-1ED6-4DB3-A05F-5E553322E23B}"
 EndProject
-Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "Work", "Work\Work.ssmssqlproj", "{7C74F770-4C5C-4D97-B666-3F99108ABCD3}"
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "Sensitive", "Sensitive\Sensitive.ssmssqlproj", "{353F549F-B415-423C-B799-7BBB860D2E52}"
 EndProject
-Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "Private", "Private\Private.ssmssqlproj", "{177702E8-82C1-44A4-9D5F-D0D7E236BAF2}"
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "Volatile", "Volatile\Volatile.ssmssqlproj", "{9C2E9B51-E79B-4A75-8A65-3535FB29A9CD}"
 EndProject
-Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "Sensitive", "Sensitive\Sensitive.ssmssqlproj", "{AE26DE57-E1F7-429B-861C-2FE90C2E1D6F}"
+Project("{4F2E2C19-372F-40D8-9FA7-9D2138C6997A}") = "Work", "Work\Work.ssmssqlproj", "{EC149E26-4049-41BA-B92C-571631FDFA0D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -158,19 +144,11 @@ Global
 		{25AF6842-FB5B-4988-8A25-FF9C85EDAC5D}.Default|Default.ActiveCfg = Default
 		{CF71F247-710E-49B9-A4EB-B2977FE49579}.Default|Default.ActiveCfg = Default
 		{428AB281-827E-41A5-B117-8106AACECE00}.Default|Default.ActiveCfg = Default
-		{B1DE93FE-0CFD-47A6-9D6B-8D49D7A707F9}.Default|Default.ActiveCfg = Default
-		{DD1C9FB4-C2B2-42E6-B94A-1096C0D5A2A9}.Default|Default.ActiveCfg = Default
-		{E05EB8F9-4CBA-46F6-A80F-0590DB8C90D6}.Default|Default.ActiveCfg = Default
-		{3E8382EC-202B-49F0-BF05-F367C37A36DF}.Default|Default.ActiveCfg = Default
-		{E854A3D1-8B5E-44BD-8FFA-3E564B8C9161}.Default|Default.ActiveCfg = Default
-		{0AF3B217-FF63-4870-A54B-B0258D300EE7}.Default|Default.ActiveCfg = Default
-		{4D399C25-B5C0-4FC5-BFBB-F7E31985BF11}.Default|Default.ActiveCfg = Default
 		{23CF5D08-2C58-49AD-8650-B2FD8588864F}.Default|Default.ActiveCfg = Default
-		{1C0278B3-25D4-4142-883A-1708F2204F3B}.Default|Default.ActiveCfg = Default
-		{E11DEEDD-A9C7-42C5-948F-F723FCAE53D7}.Default|Default.ActiveCfg = Default
-		{7C74F770-4C5C-4D97-B666-3F99108ABCD3}.Default|Default.ActiveCfg = Default
-		{177702E8-82C1-44A4-9D5F-D0D7E236BAF2}.Default|Default.ActiveCfg = Default
-		{AE26DE57-E1F7-429B-861C-2FE90C2E1D6F}.Default|Default.ActiveCfg = Default
+		{87873558-1ED6-4DB3-A05F-5E553322E23B}.Default|Default.ActiveCfg = Default
+		{353F549F-B415-423C-B799-7BBB860D2E52}.Default|Default.ActiveCfg = Default
+		{9C2E9B51-E79B-4A75-8A65-3535FB29A9CD}.Default|Default.ActiveCfg = Default
+		{EC149E26-4049-41BA-B92C-571631FDFA0D}.Default|Default.ActiveCfg = Default
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
