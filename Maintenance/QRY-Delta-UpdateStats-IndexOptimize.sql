@@ -8,7 +8,7 @@ set lock_timeout 60000; -- 60 seconds
 
 declare @execute_indexoptimize bit = 1
 declare @p_db_name sysname 
---set @p_db_name = 'distribution'
+--set @p_db_name = 'CMS'
 
 if object_id('tempdb..#stats') is not null
 	drop table #stats;
@@ -70,6 +70,7 @@ begin
 			select db_name, db_name+'.'+table_name as [@Indexes]
 			from #stats
 			where (db_name = @p_db_name or @p_db_name is null)
+			and db_name <> 'tempdb'
 			group by db_name, table_name
 			order by max(order_id) desc;
 
@@ -78,23 +79,34 @@ begin
 
 	while @@FETCH_STATUS = 0
 	begin
-		EXECUTE dbo.IndexOptimize
-								@Databases = @db_name,
-								--@Databases = 'AVAILABILITY_GROUP_DATABASES',
-								@FragmentationLow = NULL,
-								@FragmentationMedium = NULL,
-								@FragmentationHigh = NULL,
-								@UpdateStatistics = 'ALL',
-								@OnlyModifiedStatistics = 'Y',
-								--@StatisticsSample = 100,
-								@PartitionLevel = 'Y',
-								@LogToTable = 'N',
-								@SortInTempdb = 'Y',
-								@MSShippedObjects = 'Y',
-								--@MaxDOP = 4,
-								/* Run parallel update stats for each table */
-								@Indexes = @indexes
-								,@Execute = 'Y';
+		begin try
+			EXECUTE dbo.IndexOptimize
+									@Databases = @db_name,
+									--@Databases = 'AVAILABILITY_GROUP_DATABASES',
+									@FragmentationLow = NULL,
+									@FragmentationMedium = NULL,
+									@FragmentationHigh = NULL,
+									@UpdateStatistics = 'ALL',
+									@OnlyModifiedStatistics = 'Y',
+									--@StatisticsSample = 100,
+									@PartitionLevel = 'Y',
+									@LogToTable = 'N',
+									@SortInTempdb = 'Y',
+									@MSShippedObjects = 'Y',
+									--@MaxDOP = 4,
+									/* Run parallel update stats for each table */
+									@Indexes = @indexes
+									,@Execute = 'Y';
+		end try
+		begin catch
+			print '*************************************************************************************'
+			print '*************************************************************************************'
+			print '@db_name = '+quotename(@db_name);
+			print '@Indexes = '''+@indexes+'''';
+			print ERROR_MESSAGE();
+			print '*************************************************************************************'
+			print '*************************************************************************************'
+		end catch
 
 		fetch next from cur_stats into @db_name, @indexes;
 	end

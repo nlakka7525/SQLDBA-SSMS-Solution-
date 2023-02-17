@@ -147,7 +147,7 @@
           <ConnectionProtocol>NotSpecified</ConnectionProtocol>
           <ApplicationName>Microsoft SQL Server Management Studio - Query</ApplicationName>
         </ConnectionNode>
-        <ConnectionNode Name="localhost:LAB\adwivedi">
+        <ConnectionNode Name="localhost:21L-LTPABL-1187\Ajay">
           <Created>2022-03-21T09:43:12.9215372+05:30</Created>
           <Type>SQL</Type>
           <Server>localhost</Server>
@@ -159,7 +159,7 @@
           <ConnectionProtocol>NotSpecified</ConnectionProtocol>
           <ApplicationName>Microsoft SQL Server Management Studio - Query</ApplicationName>
         </ConnectionNode>
-        <ConnectionNode Name="SQLPRACTICE:LAB\adwivedi">
+        <ConnectionNode Name="SQLPRACTICE:21L-LTPABL-1187\Ajay">
           <Created>2022-08-15T12:45:12.4456752+05:30</Created>
           <Type>SQL</Type>
           <Server>SQLPRACTICE</Server>
@@ -224,8 +224,8 @@
           <FullPath>Ola-Maintenance-Solution-Github.sql</FullPath>
         </FileNode>
         <FileNode Name="QRY-Delta-UpdateStats-IndexOptimize.sql">
-          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:196.1.115.167:False:E84947</AssociatedConnectionMoniker>
-          <AssociatedConnSrvName>196.1.115.167</AssociatedConnSrvName>
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:196.1.115.207:False:E84947</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>196.1.115.207</AssociatedConnSrvName>
           <AssociatedConnUserName>E84947</AssociatedConnUserName>
           <FullPath>QRY-Delta-UpdateStats-IndexOptimize.sql</FullPath>
         </FileNode>
