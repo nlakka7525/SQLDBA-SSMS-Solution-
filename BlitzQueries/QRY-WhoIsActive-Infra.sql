@@ -59,7 +59,9 @@ t_queries as (
 	from t_queries w
 	--where [used_memory_mb] > @memory_threshold_mb
 )
-select top 1000 [collection_time], [dd hh:mm:ss.mss], [query_identifier],[capture_interval_sec],
+select top 1000 [collection_time], --[dd hh:mm:ss.mss], 
+		[dd hh:mm:ss.mss] = right('0000'+convert(varchar, duration_ms/86400000),3)+ ' '+convert(varchar,dateadd(MILLISECOND,duration_ms,'1900-01-01 00:00:00'),114),
+		[query_identifier],[capture_interval_sec],
 		--[qry_time_min(~)] = ceiling([query_hash_count]*[capture_interval_sec]/60), 
 		[query_hash_count],
 		[session_id], [blocking_session_id], [command_type], [sql_text], [query_hash], 
