@@ -343,6 +343,12 @@
           <AssociatedConnUserName />
           <FullPath>Setup-IndexLab6.sql</FullPath>
         </FileNode>
+        <FileNode Name="Setup-Job-[Restore StackOverflow n StackOverflow2013].sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:localhost:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>localhost</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>Setup-Job-[Restore StackOverflow n StackOverflow2013].sql</FullPath>
+        </FileNode>
         <FileNode Name="Setup-Job-Run-High-MemoryGrant-Query.sql">
           <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:(local):True</AssociatedConnectionMoniker>
           <AssociatedConnSrvName>(local)</AssociatedConnSrvName>
