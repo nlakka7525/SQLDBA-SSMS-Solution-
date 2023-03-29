@@ -1,1 +1,0 @@
-exec sp_HumanEvents @event_type = 'query', @query_duration_ms = 1, @seconds_sample = 60
