@@ -51,6 +51,18 @@
           <ConnectionProtocol>NotSpecified</ConnectionProtocol>
           <ApplicationName>Microsoft SQL Server Management Studio - Query</ApplicationName>
         </ConnectionNode>
+        <ConnectionNode Name="196.1.115.207:E84947">
+          <Created>2023-03-21T21:44:31.8063277+05:30</Created>
+          <Type>SQL</Type>
+          <Server>196.1.115.207</Server>
+          <UserName>E84947</UserName>
+          <Authentication>SQL</Authentication>
+          <InitialDB>master</InitialDB>
+          <LoginTimeout>30</LoginTimeout>
+          <ExecutionTimeout>0</ExecutionTimeout>
+          <ConnectionProtocol>NotSpecified</ConnectionProtocol>
+          <ApplicationName>Microsoft SQL Server Management Studio - Query</ApplicationName>
+        </ConnectionNode>
         <ConnectionNode Name="localhost:21L-LTPABL-1187\Ajay">
           <Created>2022-07-21T09:22:28.6634537+05:30</Created>
           <Type>SQL</Type>
@@ -68,9 +80,9 @@
     <LogicalFolder Name="Queries" Type="0" Sorted="true">
       <Items>
         <FileNode Name="QRY-RC-Workload-Delta-By-CPU.sql">
-          <AssociatedConnectionMoniker />
-          <AssociatedConnSrvName />
-          <AssociatedConnUserName />
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:196.1.115.207:False:E84947</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>196.1.115.207</AssociatedConnSrvName>
+          <AssociatedConnUserName>E84947</AssociatedConnUserName>
           <FullPath>QRY-RC-Workload-Delta-By-CPU.sql</FullPath>
         </FileNode>
         <FileNode Name="QRY-RC-Workload-Delta-By-Reads.sql">
@@ -84,6 +96,12 @@
           <AssociatedConnSrvName>localhost</AssociatedConnSrvName>
           <AssociatedConnUserName />
           <FullPath>QRY-resource_consumption-infra.sql</FullPath>
+        </FileNode>
+        <FileNode Name="QRY-ResourceConsumption-Infra-Normalized.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:196.1.115.207:False:E84947</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>196.1.115.207</AssociatedConnSrvName>
+          <AssociatedConnUserName>E84947</AssociatedConnUserName>
+          <FullPath>QRY-ResourceConsumption-Infra-Normalized.sql</FullPath>
         </FileNode>
         <FileNode Name="QRY-top-login-program.sql">
           <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:localhost:True</AssociatedConnectionMoniker>

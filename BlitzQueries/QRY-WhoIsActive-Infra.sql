@@ -1,14 +1,15 @@
-USE [DBA]
+USE [DBA_Admin]
 -- Find long running statements of session
 declare @table_name nvarchar(225) --= 'BillMatch';
 declare @no_of_days tinyint = 7;
-declare @database_name nvarchar(255) = 'MSAJAG';
-declare @login_name nvarchar(255) = 'Lab\SQLServices';
-declare @program_name nvarchar(255) = 'SQL Job = Daily Calculation PNL';
+declare @database_name nvarchar(255) = 'angelcs';
+declare @login_name nvarchar(255) = 'ANGELBROKING\sqluser';
+declare @program_name nvarchar(255) = 'SQL Job = UpAngelClient';
 declare @index_name nvarchar(255);
 declare @duration_threshold_minutes smallint = 0;
 declare @memory_threshold_mb smallint = 10;
 declare @sql nvarchar(max);
+declare @order_by varchar(50) = 'cpu'; /* cpu, reads, counts */
 
 declare @crlf nvarchar(10) = char(13)+char(10);
 set quoted_identifier off;
@@ -60,7 +61,7 @@ t_queries as (
 	--where [used_memory_mb] > @memory_threshold_mb
 )
 select top 1000 [collection_time], --[dd hh:mm:ss.mss], 
-		[dd hh:mm:ss.mss] = right('0000'+convert(varchar, duration_ms/86400000),3)+ ' '+convert(varchar,dateadd(MILLISECOND,duration_ms,'1900-01-01 00:00:00'),114),
+		[dd hh:mm:ss.mss] = right('0000'+convert(varchar, duration_minutes*60*1000/86400000),3)+ ' '+convert(varchar,dateadd(MILLISECOND,duration_minutes*60*1000,'1900-01-01 00:00:00'),114),
 		[query_identifier],[capture_interval_sec],
 		--[qry_time_min(~)] = ceiling([query_hash_count]*[capture_interval_sec]/60), 
 		[query_hash_count],
@@ -69,9 +70,13 @@ select top 1000 [collection_time], --[dd hh:mm:ss.mss],
 		[status], [wait_info], [sql_command], [blocked_session_count], [reads], [writes], [tempdb_allocations], [tasks], [query_plan], 
 		[query_plan_hash], [NonParallelPlanReason], [host_name], [additional_info], [program_name], [login_name], [database_name], [duration_minutes],
 		[batch_start_time] = [start_time]
+		,[estimated_cpu] = [CPU]*[query_hash_count]
+		,[estimated_reads] = [reads]*[query_hash_count]
 from top_queries,t_capture_interval
 where [query_identifier_rowid] = 1
-order by [query_hash_count] desc
+"+(case when @order_by = 'cpu' then '' else '--' end)+"order by [estimated_cpu] desc, [query_hash_count] desc
+"+(case when @order_by = 'counts' then '' else '--' end)+"order by [query_hash_count] desc, [estimated_cpu] desc
+"+(case when @order_by = 'reads' then '' else '--' end)+"order by [estimated_reads] desc, [query_hash_count] desc
 option (recompile);
 "
 set quoted_identifier on;

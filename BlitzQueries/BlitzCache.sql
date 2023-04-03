@@ -19,8 +19,7 @@ exec master..sp_BlitzCache @SortOrder = 'recent compilations', @Top = 2000, @Ski
 select top 500 * from DBA_Admin.dbo.BlitzCache
 
 --	Analyze using Procedure Name
-exec master..sp_BlitzCache @StoredProcName = 'usp_rm_get_source_logo_gaps_Ajay'
-exec master..sp_BlitzCache @StoredProcName = 'usp_rm_get_source_logo_gaps'
+exec master..sp_BlitzCache @StoredProcName = 'Upangelclienttest'
 
 --	Analyze using Query Hash in case SQL Code is not procedure
 exec tempdb..sp_BlitzCache @OnlyQueryHashes = '0x998533A642130191'

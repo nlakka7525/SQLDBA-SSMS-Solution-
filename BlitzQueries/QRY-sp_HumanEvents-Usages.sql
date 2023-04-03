@@ -4,7 +4,7 @@
 exec dbo.sp_HumanEvents @event_type = 'compilations', @seconds_sample = 600;
 
 -- Setup XEvent for Compilations
-exec dbo.sp_HumanEvents @event_type = N'compilations', @keep_alive = 1;
+exec dbo.sp_HumanEvents @event_type = N'compilations', @keep_alive = 0;
 
 -- Save the data into Tables
 exec dbo.sp_HumanEvents @output_database_name = N'DBA_Admin', @output_schema_name = N'dbo';
