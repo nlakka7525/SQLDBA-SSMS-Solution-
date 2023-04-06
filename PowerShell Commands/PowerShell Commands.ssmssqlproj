@@ -15,7 +15,7 @@
           <ConnectionProtocol>NotSpecified</ConnectionProtocol>
           <ApplicationName>Microsoft SQL Server Management Studio - Query</ApplicationName>
         </ConnectionNode>
-        <ConnectionNode Name="(local):LAB\adwivedi">
+        <ConnectionNode Name="(local):21L-LTPABL-1187\Ajay">
           <Created>2022-10-16T07:14:11.8045333+05:30</Created>
           <Type>SQL</Type>
           <Server>(local)</Server>
@@ -27,7 +27,19 @@
           <ConnectionProtocol>NotSpecified</ConnectionProtocol>
           <ApplicationName>Microsoft SQL Server Management Studio - Query</ApplicationName>
         </ConnectionNode>
-        <ConnectionNode Name="SqlPractice:LAB\adwivedi">
+        <ConnectionNode Name="172.31.16.57:E84947">
+          <Created>2023-04-06T19:07:22.9716626+05:30</Created>
+          <Type>SQL</Type>
+          <Server>172.31.16.57</Server>
+          <UserName>E84947</UserName>
+          <Authentication>SQL</Authentication>
+          <InitialDB>master</InitialDB>
+          <LoginTimeout>30</LoginTimeout>
+          <ExecutionTimeout>0</ExecutionTimeout>
+          <ConnectionProtocol>NotSpecified</ConnectionProtocol>
+          <ApplicationName>Microsoft SQL Server Management Studio - Query</ApplicationName>
+        </ConnectionNode>
+        <ConnectionNode Name="SqlPractice:21L-LTPABL-1187\Ajay">
           <Created>2022-05-28T15:45:16.8877592+05:30</Created>
           <Type>SQL</Type>
           <Server>SqlPractice</Server>
@@ -205,11 +217,17 @@
           <AssociatedConnUserName />
           <FullPath>Save-Credentials.sql</FullPath>
         </FileNode>
-        <FileNode Name="ScriptOut-Database-Objects.sql">
-          <AssociatedConnectionMoniker />
-          <AssociatedConnSrvName />
-          <AssociatedConnUserName />
-          <FullPath>ScriptOut-Database-Objects.sql</FullPath>
+        <FileNode Name="ScriptOut-Database-Objects-AllCombinedFile.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:172.31.16.57:False:E84947</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>172.31.16.57</AssociatedConnSrvName>
+          <AssociatedConnUserName>E84947</AssociatedConnUserName>
+          <FullPath>ScriptOut-Database-Objects-AllCombinedFile.sql</FullPath>
+        </FileNode>
+        <FileNode Name="ScriptOut-Database-Objects-EachInOwnFile.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:172.31.16.57:False:E84947</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>172.31.16.57</AssociatedConnSrvName>
+          <AssociatedConnUserName>E84947</AssociatedConnUserName>
+          <FullPath>ScriptOut-Database-Objects-EachInOwnFile.sql</FullPath>
         </FileNode>
       </Items>
     </LogicalFolder>

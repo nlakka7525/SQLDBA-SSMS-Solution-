@@ -1,4 +1,4 @@
-use ACCOUNT ;
+use ACCOUNT_AB ;
 --	Find used/free space in Database Files
 select	SERVERPROPERTY('MachineName') AS srv_name,
 		DB_NAME() AS [db_name], f.type_desc, fg.name as file_group, f.name, f.physical_name, 
