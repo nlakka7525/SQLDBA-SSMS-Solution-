@@ -9,7 +9,7 @@ cls
 $startTime = Get-Date
 $timeString = ($startTime.ToString("yyyyMMdd_HHmm"))
 $ServerName = "localhost" #If you have a named instance, you should put the name. 
-$path = "C:\Users\Ajay\Documents\Scriptout-Testing\"+"$timeString"
+$path = "D:\Ajay\$ServerName"+"__"+"$timeString"
 
 "$(Get-Date -Format yyyyMMMdd_HHmm) {0,-10} {1}" -f 'INFO:', "Creating SMO for SqlInstance '$ServerName'.."
 [System.Reflection.Assembly]::LoadWithPartialName('Microsoft.SqlServer.SMO') | Out-Null
