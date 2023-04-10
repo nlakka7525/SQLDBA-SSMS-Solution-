@@ -91,6 +91,12 @@
           <AssociatedConnUserName />
           <FullPath>QRY-Logon-Trigger-Body-Testing.sql</FullPath>
         </FileNode>
+        <FileNode Name="QRY-SCH-dbo.trigger_audit.sql">
+          <AssociatedConnectionMoniker />
+          <AssociatedConnSrvName />
+          <AssociatedConnUserName />
+          <FullPath>QRY-SCH-dbo.trigger_audit.sql</FullPath>
+        </FileNode>
         <FileNode Name="QRY-SqlServer-ErrorLog.sql">
           <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:Localhost\SQL2014:True</AssociatedConnectionMoniker>
           <AssociatedConnSrvName>Localhost\SQL2014</AssociatedConnSrvName>
