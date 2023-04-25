@@ -3,6 +3,18 @@
   <Items>
     <LogicalFolder Name="Connections" Type="2" Sorted="true">
       <Items>
+        <ConnectionNode Name="172.31.25.106:E84947">
+          <Created>2023-04-17T08:50:34.9337398+05:30</Created>
+          <Type>SQL</Type>
+          <Server>172.31.25.106</Server>
+          <UserName>E84947</UserName>
+          <Authentication>SQL</Authentication>
+          <InitialDB />
+          <LoginTimeout>30</LoginTimeout>
+          <ExecutionTimeout>0</ExecutionTimeout>
+          <ConnectionProtocol>NotSpecified</ConnectionProtocol>
+          <ApplicationName>Microsoft SQL Server Management Studio - Query</ApplicationName>
+        </ConnectionNode>
         <ConnectionNode Name="196.1.115.196:E84947">
           <Created>2022-08-26T19:33:12.3351535+05:30</Created>
           <Type>SQL</Type>
@@ -92,9 +104,9 @@
           <FullPath>QRY-Logon-Trigger-Body-Testing.sql</FullPath>
         </FileNode>
         <FileNode Name="QRY-SCH-dbo.trigger_audit.sql">
-          <AssociatedConnectionMoniker />
-          <AssociatedConnSrvName />
-          <AssociatedConnUserName />
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:172.31.25.106:False:E84947</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>172.31.25.106</AssociatedConnSrvName>
+          <AssociatedConnUserName>E84947</AssociatedConnUserName>
           <FullPath>QRY-SCH-dbo.trigger_audit.sql</FullPath>
         </FileNode>
         <FileNode Name="QRY-SqlServer-ErrorLog.sql">

@@ -1,16 +1,17 @@
 --	Check-SQLServerAvailability
 SET nocount on;
 
---select @@servername as srv, [Uptime (hh:mm:ss)] = convert(varchar,getdate()-d.create_date,108), create_date
---FROM sys.databases as d 
---WHERE d.state_desc <> 'ONLINE'
+select @@servername as srv, d.name as [database_name], state_desc
+		--,[Uptime (hh:mm:ss)] = convert(varchar,getdate()-d.create_date,108), create_date
+FROM sys.databases as d 
+WHERE d.state_desc NOT IN ('ONLINE','OFFLINE')
 
 --select name as [db_name], state_desc, delayed_durability_desc from sys.databases where state_desc <> 'ONLINE';
 
 declare @start_time datetime, @end_time datetime, @err_msg_1 nvarchar(256) = null, @err_msg_2 nvarchar(256) = null;
 --set @start_time = '2021-05-17 18:00:00.000' --  August 22, 2020 05:16:00
 --set @time = DATEADD(HOUR,-1,getdate());
-set @start_time = DATEADD(MINUTE,-60*1,getdate());
+set @start_time = DATEADD(MINUTE,-60*4,getdate());
 --set @end_time = '2021-04-23 00:00:00.000';
 set @end_time = --DATEADD(HOUR,-11,getdate()); 
 				GETDATE()

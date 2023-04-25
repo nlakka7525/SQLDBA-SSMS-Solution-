@@ -1,4 +1,4 @@
-use ACCOUNT_AB ;
+use DBA ;
 --	Find used/free space in Database Files
 select	SERVERPROPERTY('MachineName') AS srv_name,
 		DB_NAME() AS [db_name], f.type_desc, fg.name as file_group, f.name, f.physical_name, 
@@ -9,7 +9,7 @@ select	SERVERPROPERTY('MachineName') AS srv_name,
 		,CASE WHEN f.type_desc = 'LOG' THEN (select d.log_reuse_wait_desc from sys.databases as d where d.name = DB_NAME()) ELSE NULL END as log_reuse_wait_desc
 --into tempdb..db_size_details
 from sys.database_files f left join sys.filegroups fg on fg.data_space_id = f.data_space_id
---WHERE f.type_desc = 'LOG'
+WHERE f.type_desc = 'LOG'
 --where fg.name like '2021%_M'
 --where f.physical_name like 'G:\data\risk%'
 --and ((size/128.0 -CAST(FILEPROPERTY(f.name,'SpaceUsed') AS INT)/128.0)/1024) > 5.0

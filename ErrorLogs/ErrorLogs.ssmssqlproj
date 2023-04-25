@@ -3,6 +3,18 @@
   <Items>
     <LogicalFolder Name="Connections" Type="2" Sorted="true">
       <Items>
+        <ConnectionNode Name="(local):21L-LTPABL-1187\Ajay">
+          <Created>2023-04-17T08:50:43.2362854+05:30</Created>
+          <Type>SQL</Type>
+          <Server>(local)</Server>
+          <UserName />
+          <Authentication>Windows Authentication</Authentication>
+          <InitialDB />
+          <LoginTimeout>30</LoginTimeout>
+          <ExecutionTimeout>0</ExecutionTimeout>
+          <ConnectionProtocol>NotSpecified</ConnectionProtocol>
+          <ApplicationName>Microsoft SQL Server Management Studio - Query</ApplicationName>
+        </ConnectionNode>
         <ConnectionNode Name="172.31.16.173:E84947">
           <Created>2022-12-19T12:53:45.2209187+05:30</Created>
           <Type>SQL</Type>
@@ -86,9 +98,9 @@
           <FullPath>PS-Search-SystemEventLogs.sql</FullPath>
         </FileNode>
         <FileNode Name="QRY-Search-ErrorLog.sql">
-          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:196.1.115.196:False:E84947</AssociatedConnectionMoniker>
-          <AssociatedConnSrvName>196.1.115.196</AssociatedConnSrvName>
-          <AssociatedConnUserName>E84947</AssociatedConnUserName>
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:(local):True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>(local)</AssociatedConnSrvName>
+          <AssociatedConnUserName />
           <FullPath>QRY-Search-ErrorLog.sql</FullPath>
         </FileNode>
         <FileNode Name="QRY-SqlCluster-Failover-Time.sql">
