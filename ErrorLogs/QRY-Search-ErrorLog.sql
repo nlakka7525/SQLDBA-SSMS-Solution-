@@ -1,12 +1,13 @@
 --	Check-SQLServerAvailability
 SET nocount on;
 
-select @@servername as srv, d.name as [database_name], state_desc
-		--,[Uptime (hh:mm:ss)] = convert(varchar,getdate()-d.create_date,108), create_date
-FROM sys.databases as d 
-WHERE d.state_desc NOT IN ('ONLINE','OFFLINE')
-
---select name as [db_name], state_desc, delayed_durability_desc from sys.databases where state_desc <> 'ONLINE';
+if exists (select * from sys.databases d where d.state_desc NOT IN ('ONLINE','OFFLINE'))
+begin
+	select @@servername as srv, d.name as [database_name], state_desc
+			--,[Uptime (hh:mm:ss)] = convert(varchar,getdate()-d.create_date,108), create_date
+	FROM sys.databases as d 
+	WHERE d.state_desc NOT IN ('ONLINE','OFFLINE')
+end
 
 declare @start_time datetime, @end_time datetime, @err_msg_1 nvarchar(256) = null, @err_msg_2 nvarchar(256) = null;
 --set @start_time = '2021-05-17 18:00:00.000' --  August 22, 2020 05:16:00
@@ -23,6 +24,7 @@ set @end_time = --DATEADD(HOUR,-11,getdate());
 
 --EXEC master.dbo.xp_enumerrorlogs
 declare @NumErrorLogs int;
+declare @ErrorLogPath varchar(2000);
 begin try
 	exec master.dbo.xp_instance_regread N'HKEY_LOCAL_MACHINE', 
 								N'Software\Microsoft\MSSQLServer\MSSQLServer',
@@ -34,17 +36,42 @@ end catch
 if OBJECT_ID('tempdb..#errorlog') is not null	drop table #errorlog;
 create table #errorlog (LogDate datetime2 not null, ProcessInfo varchar(200) not null, Text varchar(2000) not null);
 
-declare @counter int = isnull(@NumErrorLogs,6);
-while @counter >= 0
+insert #errorlog
+exec sp_readerrorlog 0,1,'Log\ERRORLOG','-e'
+
+select @ErrorLogPath = REPLACE(LTRIM(RTRIM(REPLACE(REPLACE(SUBSTRING(Text, CHARINDEX('-e ',Text)+3, CHARINDEX('-l ', Text)-CHARINDEX('-e ',Text)-3),CHAR(10),''),CHAR(13),''))), '\ERRORLOG','')
+from #errorlog;
+
+truncate table #errorlog;
+--SET  @ErrorLogPath = REPLACE(@ErrorLogPath, '\ERRORLOG','');
+
+if object_id('tempdb..#log_folder_files') is not null
+	drop table #log_folder_files;
+create table #log_folder_files (subdirectory varchar(255), depth tinyint, [is_file] tinyint);
+
+insert #log_folder_files
+exec xp_dirtree @ErrorLogPath, 1, 1;
+
+select @NumErrorLogs = isnull(@NumErrorLogs,COUNT(*)+1) from #log_folder_files
+where subdirectory like 'ERRORLOG.%'
+
+print char(13)+'[@ErrorLogPath] = '''+@ErrorLogPath+'''';
+print '[@NumErrorLogs] = '+convert(varchar,@NumErrorLogs);
+
+set @NumErrorLogs = ISNULL(@NumErrorLogs,6);
+
+declare @counter int = 0;
+while @counter < @NumErrorLogs
 begin
 	begin try
-	insert #errorlog
-	EXEC master.dbo.xp_readerrorlog @counter, 1, @err_msg_1, @err_msg_2, @start_time, @end_time, "asc";
+		insert #errorlog
+		EXEC master.dbo.xp_readerrorlog @counter, 1, @err_msg_1, @err_msg_2, @start_time, @end_time, "asc";
+		--print 'EXEC master.dbo.xp_readerrorlog '+cast(@counter as varchar)+', 1, '+isnull(''''+@err_msg_1+'''','NULL')+', '+isnull(''''+@err_msg_1+'''','NULL')+', @start_time, @end_time, "asc"';
 	end try
 	begin catch
 		print 'error'
 	end catch
-	set @counter -= 1;
+	set @counter += 1;
 
 	if exists (select * from #errorlog where LogDate > @end_time)
 		break;
