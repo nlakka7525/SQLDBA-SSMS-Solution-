@@ -110,3 +110,11 @@ AND start_execution_date is not null
 AND stop_execution_date is null
 AND (UPPER(j.name) = UPPER(@job_name) OR @job_name IS NULL)
 ORDER BY ja.start_execution_date
+
+
+--SELECT [JobName], [Instance_Id], [Total_Executions], [Total_Success_Count], [Total_Stopped_Count], [Total_Failed_Count], 
+--	[Continous_Failures], [Last_Successful_ExecutionTime], [Running_Since], [Running_StepName], 
+--	[Running_Since_Min], [Next_RunTime], [<10-Min], [10-Min], [30-Min], [1-Hrs], [2-Hrs], [3-Hrs], 
+--	[6-Hrs], [9-Hrs], [12-Hrs], [18-Hrs], [24-Hrs], [36-Hrs], [48-Hrs], [UpdatedDate]
+--FROM dbo.sql_agent_job_stats as sajs
+
