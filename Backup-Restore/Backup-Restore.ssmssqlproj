@@ -75,6 +75,18 @@
           <ConnectionProtocol>NotSpecified</ConnectionProtocol>
           <ApplicationName>Microsoft SQL Server Management Studio - Query</ApplicationName>
         </ConnectionNode>
+        <ConnectionNode Name="172.31.25.106:E84947">
+          <Created>2023-05-17T09:48:29.6714435+05:30</Created>
+          <Type>SQL</Type>
+          <Server>172.31.25.106</Server>
+          <UserName>E84947</UserName>
+          <Authentication>SQL</Authentication>
+          <InitialDB />
+          <LoginTimeout>30</LoginTimeout>
+          <ExecutionTimeout>0</ExecutionTimeout>
+          <ConnectionProtocol>NotSpecified</ConnectionProtocol>
+          <ApplicationName>Microsoft SQL Server Management Studio - Query</ApplicationName>
+        </ConnectionNode>
         <ConnectionNode Name="196.1.115.132:E84947">
           <Created>2022-05-09T13:07:23.8712517+05:30</Created>
           <Type>SQL</Type>
@@ -234,6 +246,12 @@
           <AssociatedConnSrvName />
           <AssociatedConnUserName />
           <FullPath>8) Fix Orphan Logins for All DBs.sql</FullPath>
+        </FileNode>
+        <FileNode Name="Database Mirroring - Certificate Based.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:172.31.25.106:False:E84947</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>172.31.25.106</AssociatedConnSrvName>
+          <AssociatedConnUserName>E84947</AssociatedConnUserName>
+          <FullPath>Database Mirroring - Certificate Based.sql</FullPath>
         </FileNode>
         <FileNode Name="Get-LatestBackups.sql">
           <AssociatedConnectionMoniker />

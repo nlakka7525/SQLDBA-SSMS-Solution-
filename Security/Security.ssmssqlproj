@@ -15,14 +15,32 @@
           <ConnectionProtocol>NotSpecified</ConnectionProtocol>
           <ApplicationName>Microsoft SQL Server Management Studio - Query</ApplicationName>
         </ConnectionNode>
+        <ConnectionNode Name="172.31.25.106:E84947">
+          <Created>2023-05-17T10:01:21.8534032+05:30</Created>
+          <Type>SQL</Type>
+          <Server>172.31.25.106</Server>
+          <UserName>E84947</UserName>
+          <Authentication>SQL</Authentication>
+          <InitialDB />
+          <LoginTimeout>30</LoginTimeout>
+          <ExecutionTimeout>0</ExecutionTimeout>
+          <ConnectionProtocol>NotSpecified</ConnectionProtocol>
+          <ApplicationName>Microsoft SQL Server Management Studio - Query</ApplicationName>
+        </ConnectionNode>
       </Items>
     </LogicalFolder>
     <LogicalFolder Name="Queries" Type="0" Sorted="true">
       <Items>
-        <FileNode Name="TDE.sql">
+        <FileNode Name="SCH-[usp_setup_tde].sql">
           <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:(local):True</AssociatedConnectionMoniker>
           <AssociatedConnSrvName>(local)</AssociatedConnSrvName>
           <AssociatedConnUserName />
+          <FullPath>SCH-[usp_setup_tde].sql</FullPath>
+        </FileNode>
+        <FileNode Name="TDE.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:172.31.25.106:False:E84947</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>172.31.25.106</AssociatedConnSrvName>
+          <AssociatedConnUserName>E84947</AssociatedConnUserName>
           <FullPath>TDE.sql</FullPath>
         </FileNode>
       </Items>
