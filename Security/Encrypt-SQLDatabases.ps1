@@ -44,6 +44,8 @@ $ErrorActionPreference = "Stop"
 $scriptOutfile = New-TemporaryFile
 $horizontalLine = "`n/* " + ('*' * 50) + " */"
 
+"-- ***** Implement Transparent Data Encryption (TDE) on server [$SqlInstanceToEncrypt]`n`n" | Out-File -FilePath $scriptOutfile
+
 "$(Get-Date -Format yyyyMMMdd_HHmm) {0,-10} {1}" -f 'START:', "Working on server [$SqlInstanceToEncrypt]." | Write-Host -ForegroundColor Yellow
 
 "$(Get-Date -Format yyyyMMMdd_HHmm) {0,-10} {1}" -f 'INFO:', "[Connect-DbaInstance] Create connection for InventoryServer '$InventoryServer'.."
@@ -102,18 +104,22 @@ if(-not $backupDirectory.EndsWith('\')) {
 }
 
 
-# Set Encryption Password
+# Get Encryption Password
 "$(Get-Date -Format yyyyMMMdd_HHmm) {0,-10} {1}" -f 'INFO:', "Fetch Encryption Password from Credential Manager.."
 $sqlFetchPassword = @"
+-- Get Encryption Password for [$SqlInstanceToEncrypt]
 select	top 1 server_ip, server_name, [user_name], 
 		[password] = cast(DecryptByPassPhrase(cast(salt as varchar),password_hash ,1, server_ip) as varchar)
 from dbo.credential_manager cm
 where cm.server_ip = '$SqlInstanceToEncrypt'
 and user_name = 'master key'
 "@
+
+"`n`n-- Execute below on [$CredentialManagerServer].[$CredentialManagerDatabase]`n" + $sqlFetchPassword + "`nGO`n" | Out-File -FilePath $scriptOutfile -Append
 $resultFetchPassword = @()
 $resultFetchPassword += Invoke-DbaQuery -SqlInstance $conCredentialManagerServer -Database $CredentialManagerDatabase -Query $sqlFetchPassword
 
+# If password does not exist, then create a new one
 if($resultFetchPassword.Count -eq 0) {
     "$(Get-Date -Format yyyyMMMdd_HHmm) {0,-10} {1}" -f 'INFO:', "Generate Encryption Password as not found in Credential Manager."
     $encryptionPassword = -Join("ABCDabcd&@#$%1234".tochararray() | Get-Random -Count 10 | % {[char]$_})
@@ -138,6 +144,18 @@ if($resultFetchPassword.Count -eq 0)
             -Query usp_add_credential -SqlParameter $params -CommandType StoredProcedure
 }
 
+$sqlAddEncryptionPasswordOnCredentialManager = @"
+-- Save Encryption Key on Credential Manager
+exec dbo.usp_add_credential
+			@server_ip = '$SqlInstanceToEncrypt',
+			@server_name = '$serverName',
+			@user_name = 'master key',
+			@password_string = '$encryptionPassword',
+			@remarks = 'Database Master Key';
+"@
+"`n`n-- Execute below on [$CredentialManagerServer].[$CredentialManagerDatabase]`n" + $sqlAddEncryptionPasswordOnCredentialManager + "`nGO`n" | Out-File -FilePath $scriptOutfile -Append
+
+
 # Initialize Derived Variables
 $certificatePath = $backupDirectory + $certificateName + '.crt'
 $masterKeyPath = $backupDirectory + $serverName + '__master_key.key'
@@ -157,7 +175,7 @@ else
 "@
 
 "$(Get-Date -Format yyyyMMMdd_HHmm) {0,-10} {1}" -f 'INFO:', "Create Master Key.."
-$sqlCreateMasterKey + "`nGO`n" | Out-File -FilePath $scriptOutfile 
+$sqlCreateMasterKey + "`nGO`n" | Out-File -FilePath $scriptOutfile -Append
 if($DryRun) {
     $sqlCreateMasterKey | Write-Host -ForegroundColor Magenta
 }
@@ -411,3 +429,13 @@ $horizontalLine + "`n" + $sqlRestoreCertificate | Write-Host -ForegroundColor Ma
 "$(Get-Date -Format yyyyMMMdd_HHmm) {0,-10} {1}" -f 'INFO:', "Opening scriptout file '$scriptOutfile'.."
 notepad $scriptOutfile
 
+<#
+Import-Module dbatools
+
+# $DomainCredential = Get-Credential -UserName 'Lab\SQLServices' -Message 'AD Account'
+# $saAdmin = Get-Credential -UserName 'sa' -Message 'sa'
+# $localAdmin = Get-Credential -UserName 'Administrator' -Message 'Local Admin'
+# $personal = Get-Credential -UserName 'E84947' -Message 'E84947'
+
+D:\GitHub-Personal\SQLMonitor\Work\Encrypt-SQLDatabases.ps1 -SqlInstanceToEncrypt '172.31.39.70' -SqlCredential $personal
+#>
