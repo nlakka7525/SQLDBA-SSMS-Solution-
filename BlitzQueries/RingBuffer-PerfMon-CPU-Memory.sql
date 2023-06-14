@@ -166,6 +166,7 @@ select  'Memory-Status' as RunningQuery, [Domain] = DEFAULT_DOMAIN(), [ServerNam
 		[CPU Count] = (select count(*) from sys.dm_os_schedulers as dos where dos.status IN ('VISIBLE ONLINE')),
 		cast(sm.total_physical_memory_kb * 1.0 / 1024 / 1024 as numeric(20,0)) as total_box_memory_gb, 
 		cast(sm.available_physical_memory_kb * 1.0 / 1024 / 1024 as numeric(20,2)) as available_physical_memory_gb, 
+		convert(numeric(20,2),(sm.total_physical_memory_kb-sm.available_physical_memory_kb)*100/sm.total_physical_memory_kb) as [% Memory Used],
 		cast((sm.total_page_file_kb - sm.available_page_file_kb) * 1.0 / 1024 / 1024 as numeric(20,0)) as used_page_file_gb,
 		cast(sm.system_cache_kb * 1.0 / 1024 /1024 as numeric(20,2)) as system_cache_gb, 
 		cast((sm.available_physical_memory_kb - sm.system_cache_kb) * 1.0 / 1024 as numeric(20,2)) as free_memory_mb,
