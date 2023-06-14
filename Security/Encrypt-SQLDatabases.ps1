@@ -34,6 +34,9 @@ Param (
     [String]$RemoteBackupDirectory = 'D:\Work',
 
     [Parameter(Mandatory=$false)]
+    [String]$EncryptionPassword,
+
+    [Parameter(Mandatory=$false)]
     [bool]$DryRun = $true
 )
 
@@ -68,7 +71,8 @@ select	srv_name = '$SqlInstanceToEncrypt',
 		domain = default_domain(),
 		server_host_name = SERVERPROPERTY('ComputerNamePhysicalNetBIOS'),
 		total_database_count = (select count(*) from sys.databases d where d.state_desc = 'ONLINE' and is_read_only = 0 and d.database_id > 4),
-		error_log_file = SERVERPROPERTY('ErrorLogFileName')
+		error_log_file = SERVERPROPERTY('ErrorLogFileName'),
+        master_key_exists = convert(bit,case when exists (select * from sys.symmetric_keys where name LIKE '%DatabaseMasterKey%') then 1 else 0 end)
 "@
 
 $resultBasicDetails = Invoke-DbaQuery -SqlInstance $conSqlInstanceToEncrypt -Database master -Query $sqlBasicDetails
@@ -80,6 +84,8 @@ $serverHostName = $resultBasicDetails.server_host_name
 $totalDatabaseCount = $resultBasicDetails.total_database_count
 $certificateName = $serverName+'__Certificate'
 $certificateSubject = $serverName+' Certificate'
+$masterKeyExists = $resultBasicDetails.master_key_exists
+$saveEncryptionPassword = $false
 
 
 "$(Get-Date -Format yyyyMMMdd_HHmm) {0,-10} {1}" -f 'INFO:', "Configure Local Backup Directory.."
@@ -119,29 +125,56 @@ and user_name = 'master key'
 $resultFetchPassword = @()
 $resultFetchPassword += Invoke-DbaQuery -SqlInstance $conCredentialManagerServer -Database $CredentialManagerDatabase -Query $sqlFetchPassword
 
-# If password does not exist, then create a new one
+# If password does not exist in credential manager
 if($resultFetchPassword.Count -eq 0) {
-    "$(Get-Date -Format yyyyMMMdd_HHmm) {0,-10} {1}" -f 'INFO:', "Generate Encryption Password as not found in Credential Manager."
-    $encryptionPassword = -Join("ABCDabcd&@#$%1234".tochararray() | Get-Random -Count 10 | % {[char]$_})
+    $saveEncryptionPassword = $true
+    "$(Get-Date -Format yyyyMMMdd_HHmm) {0,-10} {1}" -f 'INFO:', "Password not found in Credential Manager."
+
+    if([String]::IsNullOrEmpty($EncryptionPassword)) {
+        "$(Get-Date -Format yyyyMMMdd_HHmm) {0,-10} {1}" -f 'INFO:', "EncryptionPassword parameter is null."
+
+        if($masterKeyExists) {
+            "$(Get-Date -Format yyyyMMMdd_HHmm) {0,-10} {1}" -f 'ERROR:', "Master Key on $SqlInstanceToEncrypt exists."
+            "$(Get-Date -Format yyyyMMMdd_HHmm) {0,-10} {1}" -f 'ERROR:', "But existing Encryption Password not found in Credential Manager or Parameter."
+            "Kindly rectify above error" | Write-Error
+        }
+        else {
+            "$(Get-Date -Format yyyyMMMdd_HHmm) {0,-10} {1}" -f 'INFO:', "Generate Encryption Password.."
+            $EncryptionPassword = -Join("ABCDabcd&@#$%1234".tochararray() | Get-Random -Count 25 | % {[char]$_})
+        }
+    }
 }
 else {
     "$(Get-Date -Format yyyyMMMdd_HHmm) {0,-10} {1}" -f 'INFO:', "Encryption Password found in Credential Manager."
+
+    if( ([String]::IsNullOrEmpty($EncryptionPassword) -eq $false) -and ($EncryptionPassword -ne $resultFetchPassword[0].password) ) {
+        "$(Get-Date -Format yyyyMMMdd_HHmm) {0,-10} {1}" -f 'ERROR:', "Encryption Password in Credential Manager & Parameter value does not match." | Write-Host -ForegroundColor Red
+        "Kindly rectify above error" | Write-Error
+    }
+
+    if( [String]::IsNullOrEmpty($EncryptionPassword) ) {
+        $EncryptionPassword = $resultFetchPassword[0].password
+    }
 }
 
 
-# Save Encryption Password
-if($resultFetchPassword.Count -eq 0) 
+# Save Encryption Password if newly generated
+if($saveEncryptionPassword -and ([String]::IsNullOrEmpty($EncryptionPassword) -eq $false) ) 
 {
     "$(Get-Date -Format yyyyMMMdd_HHmm) {0,-10} {1}" -f 'INFO:', "Save Encryption Password in Credential Manager.."
     $params = @{
                     server_ip = $SqlInstanceToEncrypt
                     server_name = $serverName
                     user_name = 'master key'
-                    password_string = $encryptionPassword
+                    password_string = $EncryptionPassword
                     remarks = 'Database Master Key'
             }
     Invoke-DbaQuery -SqlInstance $conCredentialManagerServer -Database $CredentialManagerDatabase `
             -Query usp_add_credential -SqlParameter $params -CommandType StoredProcedure
+}
+elseif ($saveEncryptionPassword -and [String]::IsNullOrEmpty($EncryptionPassword) ) {
+    "$(Get-Date -Format yyyyMMMdd_HHmm) {0,-10} {1}" -f 'ERROR:', "Encryption Password could not be fetched or initialized." | Write-Host -ForegroundColor Red
+        "Kindly rectify above error" | Write-Error
 }
 
 $sqlAddEncryptionPasswordOnCredentialManager = @"
@@ -150,7 +183,7 @@ exec dbo.usp_add_credential
 			@server_ip = '$SqlInstanceToEncrypt',
 			@server_name = '$serverName',
 			@user_name = 'master key',
-			@password_string = '$encryptionPassword',
+			@password_string = '$EncryptionPassword',
 			@remarks = 'Database Master Key';
 "@
 "`n`n-- Execute below on [$CredentialManagerServer].[$CredentialManagerDatabase]`n" + $sqlAddEncryptionPasswordOnCredentialManager + "`nGO`n" | Out-File -FilePath $scriptOutfile -Append
@@ -167,7 +200,7 @@ $sqlCreateMasterKey = @"
 -- Create master key
 if not exists (select * from sys.symmetric_keys where name LIKE '%DatabaseMasterKey%')
 begin    
-	exec ('use master; create master key encryption by password = ''$encryptionPassword'';');
+	exec ('use master; create master key encryption by password = ''$EncryptionPassword'';');
     print 'DMK created';
 end
 else
@@ -298,7 +331,7 @@ EXEC (@cmd); -- remove private key file
 */
 
 -- Backup master key
-set @sql = 'use master; backup master key to file = ''$masterKeyPath'' encryption by password = ''$encryptionPassword''';
+set @sql = 'use master; backup master key to file = ''$masterKeyPath'' encryption by password = ''$EncryptionPassword''';
 exec (@sql);
 
 -- Backup certificate
@@ -306,7 +339,7 @@ set @sql = 'use master; backup certificate [$certificateName]
 	to file = ''$certificatePath''
 	with private key (
 		file = ''$privateKeyPath'',
-		encryption by password = ''$encryptionPassword''
+		encryption by password = ''$EncryptionPassword''
 	)';
 exec (@sql);
 
@@ -419,7 +452,7 @@ create certificate [$certificateName] /* Step 2: Details similar to Source Serve
 	from file = '$certificatePath'
 	with private key (
 		file = '$privateKeyPath',
-		decryption by password = '$encryptionPassword'
+		decryption by password = '$EncryptionPassword'
 	);
 "@
 $horizontalLine + "`n" + $sqlRestoreCertificate + "`nGO`n" | Out-File -FilePath $scriptOutfile -Append
