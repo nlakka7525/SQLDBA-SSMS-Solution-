@@ -186,7 +186,7 @@ exec dbo.usp_add_credential
 			@password_string = '$EncryptionPassword',
 			@remarks = 'Database Master Key';
 "@
-"`n`n-- Execute below on [$CredentialManagerServer].[$CredentialManagerDatabase]`n" + $sqlAddEncryptionPasswordOnCredentialManager + "`nGO`n" | Out-File -FilePath $scriptOutfile -Append
+"`n`n-- Execute below on [$CredentialManagerServer].[$CredentialManagerDatabase]`n" + $sqlAddEncryptionPasswordOnCredentialManager + "`nGO`n`n" | Out-File -FilePath $scriptOutfile -Append
 
 
 # Initialize Derived Variables
@@ -208,7 +208,7 @@ else
 "@
 
 "$(Get-Date -Format yyyyMMMdd_HHmm) {0,-10} {1}" -f 'INFO:', "Create Master Key.."
-$sqlCreateMasterKey + "`nGO`n" | Out-File -FilePath $scriptOutfile -Append
+$sqlCreateMasterKey + "`nGO`n`n" | Out-File -FilePath $scriptOutfile -Append
 if($DryRun) {
     $sqlCreateMasterKey | Write-Host -ForegroundColor Magenta
 }
@@ -239,72 +239,13 @@ else
 "@
 
 "$(Get-Date -Format yyyyMMMdd_HHmm) {0,-10} {1}" -f 'INFO:', "Create Certificate.."
-$sqlCreateCertificate + "`nGO`n" | Out-File -FilePath $scriptOutfile -Append
+$sqlCreateCertificate + "`nGO`n`n" | Out-File -FilePath $scriptOutfile -Append
 if($DryRun) {
     $sqlCreateCertificate | Write-Host -ForegroundColor Magenta
 }
 else {
     Invoke-DbaQuery -SqlInstance $conSqlInstanceToEncrypt -Database master -Query $sqlCreateCertificate `
                     -MessagesToOutput | Write-Host -ForegroundColor Cyan
-}
-
-
-# List databases to Encrypt
-$sqlGetAllUserDatabases = @"
-select [database_name] = d.name 
-from sys.databases d 
-where 1=1
-    and d.state_desc = 'ONLINE' 
-    and is_read_only = 0 
-    and d.database_id > 4
-	and d.is_encrypted = 0
-	and d.source_database_id is null
-"@
-
-"$(Get-Date -Format yyyyMMMdd_HHmm) {0,-10} {1}" -f 'INFO:', "Get list of dbs to Encrypt.."
-$resultGetAllUserDatabases = @()
-$resultGetAllUserDatabases += Invoke-DbaQuery -SqlInstance $conSqlInstanceToEncrypt -Database master `
-                                -Query $sqlGetAllUserDatabases | Select-Object -ExpandProperty database_name
-
-
-# Loop through each database, and generate encryption key
-"$(Get-Date -Format yyyyMMMdd_HHmm) {0,-10} {1}" -f 'INFO:', "Loop through each database & generate Encryption Key.."
-foreach($database in $resultGetAllUserDatabases)
-{
-    $sqlGenerateEncryptionKey = @"
-declare @sql nvarchar(max);
-declare @thumbprint varbinary(64);
-
-use [master];
--- Get certificate thumbprint
-select @thumbprint = c.thumbprint from sys.certificates c 
-	where issuer_name = '$certificateSubject' and name = '$certificateName';
-
-use [$database];
--- Create encryption key
-if not exists (select * from sys.dm_database_encryption_keys dek where dek.database_id = DB_ID()
-					and dek.encryptor_type = 'CERTIFICATE' and dek.key_length = 128 
-					and dek.encryptor_thumbprint = @thumbprint )
-begin
-	set @sql = 'use '+quotename(DB_NAME())+'; '
-                +char(9)+'create database encryption key with algorithm = aes_128 '
-	            +char(9)+char(9)+'encryption by server certificate [$certificateName];';
-	exec (@sql);
-    print 'Encryption Key created on [$database].'
-end
-else
-	print 'Database Encryption key exists';
-"@
-    
-    "$(Get-Date -Format yyyyMMMdd_HHmm) {0,-10} {1}" -f 'INFO:', "Working on [$database].."
-    $sqlGenerateEncryptionKey + "`nGO`n" | Out-File -FilePath $scriptOutfile -Append
-    if($DryRun) {
-        $sqlGenerateEncryptionKey | Write-Host -ForegroundColor Magenta
-    }
-    else {
-        Invoke-DbaQuery -SqlInstance $conSqlInstanceToEncrypt -Database master -Query $sqlGenerateEncryptionKey `
-                    -MessagesToOutput | Write-Host -ForegroundColor Cyan
-    }
 }
 
 
@@ -348,7 +289,7 @@ exec (@sql);
 "@
 
 "$(Get-Date -Format yyyyMMMdd_HHmm) {0,-10} {1}" -f 'INFO:', "Backup certificate & Master Key to [$backupDirectory] on $SqlInstanceToEncrypt.."
-$sqlBackupCertificate + "`nGO`n" | Out-File -FilePath $scriptOutfile -Append
+$sqlBackupCertificate + "`nGO`n`n" | Out-File -FilePath $scriptOutfile -Append
 if($DryRun) {
     $sqlBackupCertificate | Write-Host -ForegroundColor Magenta
 }
@@ -358,9 +299,122 @@ else {
 }
 
 
+# List databases to Encrypt
+$sqlGetAllUserDatabases = @"
+select [database_name] = d.name, d.state_desc, d.is_read_only, 
+		d.is_in_standby, d.is_published, d.is_subscribed,
+		rs.is_local, rs.replica_server_name, rs.role_desc
+		,dm.mirroring_role_desc
+from sys.databases d 
+outer apply (select top 1 rs.is_local, ar.replica_server_name, rs.role_desc
+			from sys.availability_replicas ar
+			join sys.dm_hadr_availability_replica_states rs
+			on rs.replica_id = ar.replica_id and rs.group_id = ar.group_id
+			where ar.replica_id = d.replica_id
+			) rs
+outer apply (select top 1 dm.mirroring_role_desc
+			from sys.database_mirroring dm
+			where dm.database_id = d.database_id
+				and dm.mirroring_role_desc is not null
+			) dm
+where 1=1
+    and d.state_desc = 'ONLINE' 
+    and is_read_only = 0 
+    and d.database_id > 4
+	and d.is_encrypted = 0
+	and d.source_database_id is null
+"@
+
+"$(Get-Date -Format yyyyMMMdd_HHmm) {0,-10} {1}" -f 'INFO:', "Get list of dbs to Encrypt.."
+$resultGetAllUserDatabases = @()
+$resultGetAllUserDatabases += Invoke-DbaQuery -SqlInstance $conSqlInstanceToEncrypt -Database master `
+                                -Query $sqlGetAllUserDatabases
+
+$UserDatabasesToEncrypt = @()
+$UserDatabasesToEncrypt += $resultGetAllUserDatabases | Where-Object {($_.role_desc -eq 'PRIMARY') -or ($_.mirroring_role_desc -eq 'PRINCIPAL') -or [String]::IsNullOrEmpty($_.role_desc)} |
+                                Select-Object -ExpandProperty database_name
+
+$hadrDatabases = @()
+$hadrDatabases += $resultGetAllUserDatabases | Where-Object {([String]::IsNullOrEmpty($_.role_desc) -eq $false) -or ([String]::IsNullOrEmpty($_.mirroring_role_desc) -eq $false)} |
+                                Select-Object -ExpandProperty database_name
+
+
+if($hadrDatabases.Count -gt 0) 
+{
+    # Scripts to Restore Certificate/Private Key
+    "$(Get-Date -Format yyyyMMMdd_HHmm) {0,-10} {1}" -f 'INFO:', "Kindly use below query to Restore Certificate/Private Key.."
+    $sqlRestoreCertificate = @"
+USE [master];
+
+/*  ****************************************************
+    For Restore Scenario (AG/Mirroring/LogShipping/Backup-Restore)
+
+    HADR Databases => $( ($hadrDatabases | % {"'$_'"}) -join ', ' )
+*   **************************************************** */
+
+
+-- Execute "Encrypt-SQLDatabases.ps1" for HADR Partner server also.
+create master key encryption by /* Step 1: Unique to Destination Server */
+	password = '<<Some Very Strong Password Here. Unique to each server>>';
+
+-- For Restore Scenario (AG/Mirroring/LogShipping/Backup-Restore)
+    -- Restore the certificates of each partner on every other partner before proceeding.
+create certificate [$certificateName] /* Step 2: Details similar to Source Server */
+	from file = '$certificatePath'
+	with private key (
+		file = '$privateKeyPath',
+		decryption by password = '$EncryptionPassword'
+	);
+"@
+    $horizontalLine + "`n" + $sqlRestoreCertificate + "`nGO`n`n" | Out-File -FilePath $scriptOutfile -Append
+    $horizontalLine + "`n" + $sqlRestoreCertificate | Write-Host -ForegroundColor Magenta
+}
+
+
+# Loop through each database, and generate encryption key
+"$(Get-Date -Format yyyyMMMdd_HHmm) {0,-10} {1}" -f 'INFO:', "Loop through each database & generate Encryption Key.."
+foreach($database in $UserDatabasesToEncrypt)
+{
+    $sqlGenerateEncryptionKey = @"
+declare @sql nvarchar(max);
+declare @thumbprint varbinary(64);
+
+use [master];
+-- Get certificate thumbprint
+select @thumbprint = c.thumbprint from sys.certificates c 
+	where issuer_name = '$certificateSubject' and name = '$certificateName';
+
+use [$database];
+-- Create encryption key
+if not exists (select * from sys.dm_database_encryption_keys dek where dek.database_id = DB_ID()
+					and dek.encryptor_type = 'CERTIFICATE' and dek.key_length = 128 
+					and dek.encryptor_thumbprint = @thumbprint )
+begin
+	set @sql = 'use '+quotename(DB_NAME())+'; '
+                +char(9)+'create database encryption key with algorithm = aes_128 '
+	            +char(9)+char(9)+'encryption by server certificate [$certificateName];';
+	exec (@sql);
+    print 'Encryption Key created on [$database].'
+end
+else
+	print 'Database Encryption key exists';
+"@
+    
+    "$(Get-Date -Format yyyyMMMdd_HHmm) {0,-10} {1}" -f 'INFO:', "Working on [$database].."
+    $sqlGenerateEncryptionKey + "`nGO`n`n" | Out-File -FilePath $scriptOutfile -Append
+    if($DryRun) {
+        $sqlGenerateEncryptionKey | Write-Host -ForegroundColor Magenta
+    }
+    else {
+        Invoke-DbaQuery -SqlInstance $conSqlInstanceToEncrypt -Database master -Query $sqlGenerateEncryptionKey `
+                    -MessagesToOutput | Write-Host -ForegroundColor Cyan
+    }
+}
+
+
 # Loop through each database, and Encrypt it
 "$(Get-Date -Format yyyyMMMdd_HHmm) {0,-10} {1}" -f 'INFO:', "Loop through each database to Encrypt.."
-foreach($database in $resultGetAllUserDatabases)
+foreach($database in $UserDatabasesToEncrypt)
 {
     $sqlEncryptDatabase = @"
 -- Enable Encryption
@@ -392,8 +446,8 @@ begin
 		    [server_name] = '$serverName', 
 		    [domain] = '$domain', 
 		    [server_host_name] = '$serverHostName', 
-		    [encrypted_databases] = $($resultGetAllUserDatabases.Count), 
-		    [total_database_count] = $($resultGetAllUserDatabases.Count), 
+		    [encrypted_databases] = $($UserDatabasesToEncrypt.Count), 
+		    [total_database_count] = $($UserDatabasesToEncrypt.Count), 
 		    [encryption_start_time] = SYSDATETIME(), 
 		    [encryption_end_time] = null, 
 		    [local_backup_directory] = '$backupDirectory', 
